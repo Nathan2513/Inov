@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2E6D3">
+<title>Kapi</title>
+<style>
+/* =====================================================
+   COQUE DE L'APPLI (index.html)
+   Les 3 modules restent dans leurs fichiers séparés :
+   on les charge simplement dans des iframes.
+   ===================================================== */
+:root{
+  --bg:#F2E6D3; --surface:#FFFFFF; --ink:#2A1C12; --muted:#A89C87;
+  --orange:#F2661B; --orange-soft:#FFE2CC; --line:#E3D6C2; --deep:#3A2618;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#E9DCC7;
+  display:grid;place-items:center;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* Téléphone (affiché uniquement sur ordinateur) */
+.phone{width:390px;height:844px;border-radius:54px;background:#1A120C;padding:12px;flex:none;
+  box-shadow:0 40px 80px -30px rgba(40,22,8,.55),inset 0 0 0 2px #3a2a1e;transform-origin:center}
+.app{position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:var(--bg);
+  display:flex;flex-direction:column}
+
+/* Sur un vrai téléphone : plein écran, sans cadre */
+@media (max-width:500px){
+  body{display:block}
+  .phone{width:100%;height:100vh;height:100dvh;border-radius:0;padding:0;box-shadow:none;transform:none!important}
+  .app{border-radius:0}
+}
+
+/* Zone des écrans */
+.stage{position:relative;flex:1;min-height:0;background:var(--bg)}
+.screen{position:absolute;inset:0;display:none;background:var(--bg)}
+.screen.on{display:block}
+iframe{width:100%;height:100%;border:0;display:block;background:var(--bg)}
+
+/* Barre de navigation commune */
+.tabbar{flex:none;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);
+  border-top:1px solid var(--line);padding:8px 6px calc(12px + env(safe-area-inset-bottom,0px))}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--muted)}
+.tab svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tab.on{color:var(--orange)}
+
+/* Écran d'accueil (à remplacer par ta vraie page d'accueil) */
+.home{padding:calc(env(safe-area-inset-top,0px) + 26px) 20px 20px;overflow-y:auto;height:100%}
+.home h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.home p.sub{color:#806A54;margin:6px 0 22px;font-size:15px}
+.cards{display:grid;gap:12px}
+.hcard{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);
+  border-radius:22px;padding:16px}
+.hcard i{width:50px;height:50px;border-radius:16px;background:var(--orange-soft);color:var(--orange);
+  display:grid;place-items:center;flex:none}
+.hcard i svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hcard b{display:block;font-size:17px}
+.hcard small{color:#806A54;font-size:13px}
+.hcard.main{background:var(--orange);color:#fff}
+.hcard.main i{background:rgba(255,255,255,.2);color:#fff}
+.hcard.main small{color:rgba(255,255,255,.85)}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <div class="app">
+
+    <div class="stage" id="stage">
+      <!-- Accueil -->
+      <section class="screen on" id="screen-home">
+        <div class="home">
+          <h1>Salut !<br>Ton argent, simplement.</h1>
+          <p class="sub">Choisis par où commencer.</p>
+          <div class="cards">
+            <button class="hcard main" data-go="invest">
+              <i><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M5 16l5-5 4 3 6-7"/></svg></i>
+              <span><b>Apprendre &amp; investir</b><small>Leçons, quiz et simulateur</small></span>
+            </button>
+            <button class="hcard" data-go="budget">
+              <i><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9h18"/></svg></i>
+              <span><b>Mon budget</b><small>Comptes, dépenses, économies</small></span>
+            </button>
+            <button class="hcard" data-go="feed">
+              <i><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></i>
+              <span><b>Feed des bons plans</b><small>Offres des marques et de la communauté</small></span>
+            </button>
+            <button class="hcard" data-go="plans">
+              <i><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg></i>
+              <span><b>Bons plans autour de moi</b><small>La carte des offres du moment</small></span>
+            </button>
+          </div>
+        </div>
+      </section>
+      <!-- Les modules sont ajoutés ici par le script (chargés au premier clic) -->
+    </div>
+
+    <nav class="tabbar" id="tabbar">
+      <button class="tab on" data-go="home">
+        <svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Accueil
+      </button>
+      <button class="tab" data-go="feed">
+        <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>Feed
+      </button>
+      <button class="tab" data-go="plans">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>Carte
+      </button>
+      <button class="tab" data-go="budget">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9h18"/><path d="M8 13h2M8 17h2M14 13h2M14 17h2"/></svg>Budget
+      </button>
+      <button class="tab" data-go="invest">
+        <svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M5 16l5-5 4 3 6-7"/></svg>Invest
+      </button>
+    </nav>
+
+  </div>
+</div>
+
+<script>
+/* =====================================================
+   CONFIGURATION : un module = un fichier HTML séparé.
+   Pour changer un nom de fichier, modifie seulement "src".
+   ===================================================== */
+const MODULES = {
+  feed:   { src: 'feed.html' },
+  plans:  { src: 'carte-bons-plans.html' },
+  budget: { src: 'budget.html' },
+  invest: { src: 'invest.html' }
+};
+
+/* CSS injecté dans chaque module (sans modifier ses fichiers) pour :
+   - retirer sa barre du bas (la coque a la sienne)
+   - retirer le faux cadre de téléphone du module Budget */
+const COMMON = `.tabbar{display:none!important}`;
+const INJECT = {
+  /* Feed : on garde seulement le bouton + (publier), le reste de sa barre est remplacé par celle de la coque */
+  feed: COMMON + `
+    .nav > button:not(.plus){display:none!important}
+    .nav{background:none!important;border:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+      pointer-events:none!important;justify-content:flex-start!important;padding:0 0 18px 16px!important}
+    .nav .plus{pointer-events:auto!important;margin:0!important;border-color:transparent!important}
+    .bot{bottom:20px!important}
+    .bot-panel{bottom:86px!important}`,
+  plans:  COMMON,
+  invest: COMMON,
+  budget: COMMON + `
+    html,body{height:100%!important}
+    body{display:block!important;padding:0!important;overflow:hidden!important}
+    .phone-wrap{width:100%!important;height:100%!important}
+    .phone{width:100%!important;height:100%!important;transform:none!important;padding:0!important;
+      border-radius:0!important;box-shadow:none!important;background:none!important}
+    .screen{border-radius:0!important}
+    .notch,.statusbar{display:none!important}
+    .app-header{padding-top:18px!important}`
+};
+
+const stage = document.getElementById('stage');
+const tabs  = document.querySelectorAll('.tab');
+let current = 'home';
+
+function mount(key){
+  const m = MODULES[key];
+  if (m.el) return;
+  const sec = document.createElement('section');
+  sec.className = 'screen';
+  sec.id = 'screen-' + key;
+  const f = document.createElement('iframe');
+  f.title = key;
+  f.addEventListener('load', () => tweak(f, key));
+  f.src = m.src;
+  sec.appendChild(f);
+  stage.appendChild(sec);
+  m.el = sec;
+}
+
+/* Fonctionne quand le site est servi en http(s) (GitHub Pages, serveur local). */
+function tweak(frame, key){
+  try{
+    const d = frame.contentDocument;
+    const st = d.createElement('style');
+    st.textContent = INJECT[key] || '';
+    d.head.appendChild(st);
+    // Un lien vers index.html dans un module ramène à l'accueil de la coque
+    d.addEventListener('click', e => {
+      const a = e.target.closest && e.target.closest('a[href="index.html"]');
+      if (a){ e.preventDefault(); go('home'); }
+    }, true);
+  }catch(err){ /* ouverture en file:// : injection impossible */ }
+}
+
+function go(key){
+  if (key !== 'home') mount(key);
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  const target = key === 'home' ? document.getElementById('screen-home') : MODULES[key].el;
+  target.classList.add('on');
+  tabs.forEach(t => t.classList.toggle('on', t.dataset.go === key));
+  current = key;
+  try{ history.replaceState(null, '', key === 'home' ? location.pathname : '#' + key); }catch(e){}
+}
+
+/* Les modules peuvent demander un changement d'écran : parent.postMessage({go:'budget'}) */
+const ALIAS = { carte:'plans', budget:'budget', feed:'feed', invest:'invest', home:'home' };
+addEventListener('message', e => {
+  const k = e.data && ALIAS[e.data.go];
+  if (k) go(k);
+});
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-go]');
+  if (b) go(b.dataset.go);
+});
+
+/* Cadre téléphone mis à l'échelle sur ordinateur */
+function fit(){
+  const p = document.getElementById('phone');
+  if (innerWidth <= 500){ p.style.transform = ''; return; }
+  p.style.transform = `scale(${Math.min(1,(innerHeight-40)/868,(innerWidth-40)/414)})`;
+}
+addEventListener('resize', fit); fit();
+
+/* Ouverture directe : monsite/#budget */
+const first = location.hash.slice(1);
+if (MODULES[first]) go(first);
+</script>
+</body>
+</html>

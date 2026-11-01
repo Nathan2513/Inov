@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Capstone · Feed bons plans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#E8672A; --orange-dk:#C9531B; --orange-soft:#FCE3D2; --orange-50:#FFF4EC;
+  --beige:#F6EFE6; --beige-2:#EFE4D6; --sand:#E3D3BF;
+  --white:#FFFFFF; --ink:#2B211B; --ink-2:#5B4D42; --muted:#8C7D70; --line:#EADFD2;
+  --green:#2E9E5B; --red:#E2552B; --dark:#1F1A17;
+  --shadow:0 6px 20px rgba(91,60,30,.09);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);
+  background:radial-gradient(1200px 700px at 20% 10%,#FBF6F0 0%,#F1E6D8 55%,#E9DBC8 100%);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+input,textarea,select{font:inherit;color:inherit}
+.ic{width:22px;height:22px;flex:none;display:block}
+
+/* ---------- Cadre téléphone ---------- */
+.phone{position:relative;width:390px;height:844px;max-height:calc(100vh - 40px);background:var(--beige);
+  border-radius:50px;border:11px solid #1E1814;box-shadow:0 30px 80px rgba(60,35,15,.28);
+  overflow:hidden;display:flex;flex-direction:column}
+.statusbar{height:40px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:8px 28px 0;font-size:14px;font-weight:700;background:var(--white)}
+.sb-icons{display:flex;align-items:center;gap:6px;font-size:12px}
+.sig{display:flex;align-items:flex-end;gap:2px;height:11px}.sig i{width:3px;background:var(--ink);border-radius:1px}
+.sig i:nth-child(1){height:4px}.sig i:nth-child(2){height:6px}.sig i:nth-child(3){height:8px}.sig i:nth-child(4){height:11px}
+.bat{width:24px;height:12px;border:1.5px solid var(--ink);border-radius:4px;padding:1.5px;position:relative}
+.bat::after{content:'';position:absolute;right:-4px;top:3px;width:2px;height:4px;background:var(--ink);border-radius:1px}
+.bat i{display:block;height:100%;width:72%;background:var(--ink);border-radius:2px}
+@media (max-width:520px){
+  body{padding:0;display:block}
+  .phone{width:100%;height:100vh;height:100dvh;max-height:none;border:0;border-radius:0;box-shadow:none}
+  .statusbar{display:none}
+}
+
+/* ---------- Barre du haut ---------- */
+.topbar{position:relative;flex:none;background:var(--white);padding:10px 14px 12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);z-index:15}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px;letter-spacing:-.02em}
+.logo-mark{width:32px;height:32px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-weight:800;font-size:16px;box-shadow:0 4px 10px rgba(232,103,42,.35)}
+.city-wrap{position:relative;margin-left:auto}
+.city-btn{display:flex;align-items:center;gap:5px;background:var(--orange-50);border:1.5px solid var(--orange-soft);color:var(--orange-dk);padding:7px 10px 7px 9px;border-radius:999px;font-size:13px;font-weight:700}
+.city-btn .ic{width:15px;height:15px}
+.city-menu{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border-radius:18px;box-shadow:0 14px 34px rgba(60,35,15,.2);padding:6px;min-width:210px;display:none}
+.city-menu.show{display:block;animation:fadeIn .15s ease}
+.city-menu button{display:flex;width:100%;align-items:center;gap:11px;padding:10px 12px;border-radius:12px;font-size:14px;font-weight:700}
+.city-menu button:hover{background:var(--beige)}
+.city-menu button.on{background:var(--orange-50);color:var(--orange-dk)}
+.city-menu small{display:block;font-size:11.5px;font-weight:500;color:var(--muted)}
+.city-menu .e{font-size:18px;width:24px;text-align:center}
+.icon-btn{position:relative;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--beige)}
+.icon-btn .ic{width:19px;height:19px}
+.count{position:absolute;top:-3px;right:-3px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--orange);color:#fff;font-size:10.5px;font-weight:800;display:grid;place-items:center;border:2px solid #fff}
+
+/* ---------- Zone défilante ---------- */
+.scroll{position:relative;flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;padding-bottom:110px;scroll-behavior:auto}
+.scroll::-webkit-scrollbar,.hs::-webkit-scrollbar,.page-b::-webkit-scrollbar,.sheet-b::-webkit-scrollbar{display:none}
+
+.savings{margin:12px 14px 2px;background:var(--white);border-radius:18px;padding:11px 12px;display:flex;align-items:center;gap:11px;box-shadow:var(--shadow)}
+.sv-ic{width:38px;height:38px;border-radius:12px;background:var(--orange-soft);display:grid;place-items:center;font-size:19px;flex:none}
+.sv-txt{font-size:12.5px;color:var(--ink-2);line-height:1.35;flex:1;min-width:0}
+.sv-txt b{color:var(--orange-dk);font-size:14.5px}
+.bar{height:5px;background:var(--beige-2);border-radius:5px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#F2A65A,var(--orange));border-radius:5px;transition:width .5s}
+.sv-link{display:flex;align-items:center;gap:2px;font-size:12px;font-weight:700;color:var(--orange-dk);white-space:nowrap}
+.sv-link .ic{width:14px;height:14px}
+
+.stories{display:flex;gap:12px;overflow-x:auto;padding:14px 14px 6px;scrollbar-width:none}
+.story{flex:none;width:66px;text-align:center;font-size:11px;font-weight:600;color:var(--ink-2)}
+.ring{width:62px;height:62px;border-radius:50%;padding:2.5px;background:conic-gradient(from 200deg,#F2A65A,var(--orange),#B85A2E,#F2A65A);margin:0 auto 5px;display:block}
+.ring.seen{background:var(--sand)}
+.av-in{width:100%;height:100%;border-radius:50%;border:2.5px solid var(--beige);display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px;overflow:hidden}
+.av-in img{width:100%;height:100%;object-fit:contain;background:#fff}
+.story.add .ring{background:none;border:2px dashed var(--orange);padding:3px}
+.story.add .av-in{background:var(--orange-50);color:var(--orange);border:0}
+.story.add .ic{width:24px;height:24px;stroke-width:2.6}
+.lbl{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- Contrôles (onglets + filtres) ---------- */
+.controls{position:sticky;top:0;z-index:6;background:var(--beige);padding:10px 0 8px;transition:transform .25s ease;box-shadow:0 8px 12px -12px rgba(91,60,30,.35)}
+.controls.hid{transform:translateY(-110%)}
+.seg{margin:0 14px;background:var(--white);border:1.5px solid var(--orange-soft);border-radius:999px;display:flex;padding:4px;position:relative}
+.seg button{flex:1;padding:9px 0;border-radius:999px;font-weight:700;font-size:14px;color:var(--ink-2);z-index:1;transition:color .2s;text-align:center}
+.seg button.on{color:#fff}
+.seg .thumb{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:var(--orange);border-radius:999px;transition:transform .28s cubic-bezier(.3,.8,.3,1);box-shadow:0 4px 10px rgba(232,103,42,.35)}
+.seg.right .thumb{transform:translateX(100%)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 14px 0;scrollbar-width:none}
+.chip{flex:none;display:flex;align-items:center;gap:6px;padding:8px 13px;border-radius:999px;background:var(--white);border:1.5px solid var(--line);font-size:13px;font-weight:600;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
+.chip.on{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 4px 10px rgba(232,103,42,.28)}
+.chip.student{border-color:var(--dark)}
+.chip.student.on{background:var(--dark);border-color:var(--dark);color:#fff;box-shadow:none}
+.chip.big.on{background:linear-gradient(90deg,#F08A3E,var(--red));border-color:transparent}
+.chip.sort{padding:6px 10px 6px 11px;gap:4px;margin-left:auto}
+.chip.sort .ic{width:15px;height:15px;color:var(--orange-dk)}
+.chip.sort select{border:0;background:transparent;font-weight:700;font-size:13px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;padding-right:2px}
+
+/* ---------- Posts ---------- */
+.feed{padding:4px 0 0}
+.post{background:var(--white);margin:12px 12px 14px;border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+.post.fresh{animation:fresh 1.8s ease}
+@keyframes fresh{0%{box-shadow:0 0 0 3px var(--orange),var(--shadow)}70%{box-shadow:0 0 0 3px var(--orange),var(--shadow)}100%{box-shadow:var(--shadow)}}
+.post-head{display:flex;align-items:center;gap:10px;padding:11px 12px}
+.av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;flex:none;letter-spacing:-.02em;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:contain}
+.who{min-width:0;flex:1}
+.nm{font-weight:700;font-size:14px;display:flex;align-items:center;gap:4px}
+.sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.lk{font-weight:700;color:var(--ink-2)}
+.open{color:var(--green);font-weight:700}.closed{color:var(--muted);font-weight:600}
+.vb{width:15px;height:15px;border-radius:50%;background:var(--orange);display:inline-grid;place-items:center;flex:none}
+.vb svg{width:9px;height:9px}
+.kind{flex:none;font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:999px;background:var(--orange-50);color:var(--orange-dk);border:1px solid var(--orange-soft);max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kind.perso{background:var(--beige);color:var(--ink-2);border-color:var(--line)}
+
+.media{position:relative;aspect-ratio:1/1;overflow:hidden;user-select:none;-webkit-user-select:none;cursor:pointer;background:var(--beige-2)}
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.visual{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 26px 46px;overflow:hidden}
+.visual::before,.visual::after{content:'';position:absolute;border-radius:50%;background:rgba(255,255,255,.38)}
+.visual::before{width:240px;height:240px;top:-70px;right:-80px}
+.visual::after{width:170px;height:170px;bottom:-60px;left:-50px;background:rgba(255,255,255,.26)}
+.v-emoji{font-size:100px;line-height:1;filter:drop-shadow(0 14px 18px rgba(120,60,20,.22));position:relative;z-index:1}
+.v-title{margin-top:16px;font-size:21px;font-weight:800;letter-spacing:-.02em;position:relative;z-index:1;line-height:1.2}
+.v-sub{font-size:13px;color:var(--ink-2);margin-top:5px;position:relative;z-index:1}
+.v-brand{margin-top:10px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-dk);position:relative;z-index:1}
+.v-courses{background:linear-gradient(145deg,#FFF1E4,#F7C9A3)}
+.v-mode{background:linear-gradient(145deg,#F8ECE2,#E6C3AA)}
+.v-sport{background:linear-gradient(145deg,#FFEEDC,#F3B98A)}
+.v-tech{background:linear-gradient(145deg,#F3ECE4,#D8C2AB)}
+.v-beaute{background:linear-gradient(145deg,#FDEBE4,#F1BDA9)}
+.v-maison{background:linear-gradient(145deg,#F8F0E3,#E5CFAE)}
+.m-pct{position:absolute;top:12px;left:12px;background:var(--orange);color:#fff;font-weight:800;font-size:15px;padding:6px 11px;border-radius:12px;z-index:2;box-shadow:0 6px 14px rgba(232,103,42,.35)}
+.m-student{position:absolute;top:12px;right:12px;background:var(--dark);color:#fff;font-size:12px;font-weight:700;padding:6px 11px;border-radius:999px;z-index:2}
+.m-bottom{position:absolute;left:12px;right:12px;bottom:12px;display:flex;gap:6px;flex-wrap:wrap;z-index:2}
+.m-chip{background:rgba(255,255,255,.93);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-size:11.5px;font-weight:700;padding:6px 10px;border-radius:999px;display:flex;align-items:center;gap:5px}
+.m-chip .ic{width:13px;height:13px}
+.m-chip.hot{color:var(--red)}
+.heart-pop{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:4;opacity:0}
+.heart-pop .ic{width:100px;height:100px;fill:#fff;stroke:#fff;filter:drop-shadow(0 6px 18px rgba(0,0,0,.25))}
+.media.pop .heart-pop{animation:pop .85s ease}
+@keyframes pop{0%{opacity:0;transform:scale(.3)}15%{opacity:1;transform:scale(1.18)}30%{transform:scale(.94)}45%{transform:scale(1)}80%{opacity:1}100%{opacity:0}}
+
+/* Ticket de caisse (posts communauté) */
+.receipt-bg{position:absolute;inset:0;display:grid;place-items:center;
+  background:radial-gradient(circle at 1px 1px,rgba(176,137,104,.28) 1px,transparent 0) 0 0/16px 16px,linear-gradient(160deg,#FAF1E6,#EED9C2)}
+.receipt{width:70%;background:#fff;padding:18px 16px 20px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#3a2f28;transform:rotate(-2.5deg);box-shadow:0 16px 30px rgba(90,55,25,.2);position:relative}
+.receipt::after{content:'';position:absolute;left:0;right:0;bottom:-8px;height:8px;background:radial-gradient(circle at 6px 8px,transparent 6px,#fff 6.5px) 0 0/12px 8px repeat-x}
+.stamp{position:absolute;top:-16px;right:-16px;width:56px;height:56px;border-radius:50%;background:var(--orange);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:14px;display:grid;place-items:center;transform:rotate(14deg);box-shadow:0 6px 14px rgba(232,103,42,.4);border:3px dashed rgba(255,255,255,.55)}
+.r-store{text-align:center;font-weight:700;letter-spacing:.1em;font-size:12px}
+.r-date{text-align:center;color:#8c7d70;font-size:10px;margin:3px 0 10px}
+.r-line{display:flex;justify-content:space-between;gap:8px;margin:4px 0}
+.r-line .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.r-line span:last-child{white-space:nowrap}
+.r-line s{color:#b3a394;margin-right:5px}
+.r-sep{border-top:1.5px dashed #cbb9a6;margin:9px 0}
+.r-total{display:flex;justify-content:space-between;font-weight:700}
+.r-saved{margin-top:10px;text-align:center;background:var(--orange-50);border-radius:8px;padding:7px 6px 6px}
+.r-saved small{display:block;font-size:9px;letter-spacing:.14em;color:var(--orange-dk);font-weight:700}
+.r-saved b{font-family:'Plus Jakarta Sans',sans-serif;font-size:23px;color:var(--orange);letter-spacing:-.02em}
+
+.actions{display:flex;align-items:center;gap:15px;padding:10px 12px 2px 13px}
+.act .ic{width:25px;height:25px}
+.act.liked .ic{fill:var(--red);stroke:var(--red)}
+.act.bump{animation:bump .35s ease}
+@keyframes bump{40%{transform:scale(1.3)}100%{transform:scale(1)}}
+.save-btn{margin-left:auto;display:flex;align-items:center;gap:6px;padding:8px 13px 8px 11px;border-radius:999px;border:1.5px solid var(--orange);color:var(--orange-dk);font-weight:700;font-size:13px;transition:background .15s}
+.save-btn .ic{width:16px;height:16px}
+.save-btn.on{background:var(--orange);color:#fff}
+.save-btn.on .ic{fill:#fff}
+.likes{padding:4px 14px 0;font-weight:700;font-size:13.5px}
+.price-row{display:flex;align-items:baseline;gap:8px;padding:6px 14px 0;flex-wrap:wrap}
+.price{font-size:25px;font-weight:800;color:var(--orange);letter-spacing:-.02em}
+.old{font-size:14px;color:var(--muted);text-decoration:line-through}
+.pct{font-size:12px;font-weight:800;color:#fff;background:var(--red);padding:3px 7px;border-radius:7px;align-self:center}
+.prod{margin-left:auto;font-size:12px;font-weight:600;color:var(--ink-2);max-width:45%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;align-self:center}
+.caption{padding:5px 14px 0;margin:0;font-size:13.5px;line-height:1.45}
+.u{font-weight:700;margin-right:2px}
+.hashtag{color:var(--orange-dk);font-weight:600}
+.hint{margin:8px 14px 0;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;line-height:1.35}
+.hint .ic{width:14px;height:14px;color:var(--orange)}
+.hint b{color:var(--ink-2);font-weight:700}
+.saved-row{margin:8px 14px 0;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.money{background:var(--orange-50);border:1.5px solid var(--orange-soft);color:var(--orange-dk);font-weight:800;font-size:14px;padding:5px 10px;border-radius:12px}
+.verified{font-size:11.5px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:4px;background:#E8F5EC;padding:5px 9px;border-radius:999px}
+.verified .ic{width:13px;height:13px;stroke-width:3}
+.doc{margin:8px 14px 0;display:inline-flex;align-items:center;gap:6px;background:var(--beige);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:12.5px;font-weight:600}
+.cmt-prev{padding:6px 14px 0;font-size:13px;line-height:1.4}
+.view-cmts{display:block;padding:4px 14px 0;font-size:13px;color:var(--muted)}
+.ago{padding:5px 14px 14px;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.info{margin:10px 14px 0;background:var(--orange-50);border:1.5px solid var(--orange-soft);color:var(--orange-dk);border-radius:14px;padding:10px 12px;font-size:12.5px;font-weight:600}
+.empty{text-align:center;padding:40px 28px;color:var(--muted);font-size:13.5px}
+.empty .e{font-size:44px;margin-bottom:8px}
+.empty b{color:var(--ink);font-size:15px}
+.empty p{margin:6px 0 14px}
+.btn-sec{border:1.5px solid var(--orange);color:var(--orange-dk);font-weight:700;padding:9px 16px;border-radius:999px;font-size:13px}
+.end{text-align:center;padding:14px 30px 10px;color:var(--muted);font-size:12.5px;line-height:1.5}
+
+/* ---------- Navigation bas ---------- */
+.nav{position:absolute;left:0;right:0;bottom:0;padding:8px 6px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;align-items:flex-end;justify-content:space-around;z-index:10}
+.nav > button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:var(--muted);width:62px}
+.nav > button .ic{width:23px;height:23px}
+.nav > button.on{color:var(--orange)}
+.nav .plus{width:56px;height:56px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;margin-top:-28px;box-shadow:0 10px 22px rgba(232,103,42,.45);border:4px solid var(--beige)}
+.nav .plus .ic{width:26px;height:26px;stroke-width:2.6}
+
+/* ---------- Chatbot ---------- */
+.bot{position:absolute;right:14px;bottom:92px;width:52px;height:52px;border-radius:50%;background:var(--dark);color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px rgba(31,26,23,.35);z-index:11}
+.bot .ic{width:24px;height:24px;color:#F6A35E}
+.bot{transition:transform .25s ease,opacity .25s ease}
+.bot.hid{transform:scale(.4);opacity:0;pointer-events:none}
+.bot::after{content:'';position:absolute;top:4px;right:4px;width:11px;height:11px;border-radius:50%;background:var(--orange);border:2px solid var(--dark)}
+.bot-panel{position:absolute;right:12px;left:12px;bottom:156px;background:#fff;border-radius:24px;box-shadow:0 20px 50px rgba(60,35,15,.28);z-index:12;padding:14px;transform-origin:bottom right;transform:scale(.92) translateY(10px);opacity:0;pointer-events:none;transition:.2s ease}
+.bot-panel.show{opacity:1;transform:none;pointer-events:auto}
+.bp-h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bp-h .av{width:34px;height:34px;background:var(--dark)}
+.bp-h .av .ic{width:18px;height:18px;color:#F6A35E}
+.bp-h b{font-size:14.5px;display:block}
+.bp-h small{font-size:11.5px;color:var(--green);font-weight:600}
+.bp-h .ib{margin-left:auto}
+.bp-msgs{max-height:190px;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column}
+.msg{background:var(--beige);padding:9px 12px;border-radius:16px 16px 16px 4px;font-size:13px;margin-bottom:8px;max-width:88%;line-height:1.4}
+.msg.me{background:var(--orange);color:#fff;margin-left:auto;border-radius:16px 16px 4px 16px}
+.bp-sugs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:2px 0 10px}
+.bp-sugs .chip{padding:7px 11px;font-size:12px}
+.bp-form{display:flex;gap:8px}
+.bp-form input{flex:1;border:1.5px solid var(--line);border-radius:999px;padding:10px 14px;background:var(--beige);outline:none;font-size:13.5px}
+.bp-form input:focus{border-color:var(--orange)}
+.bp-form button{width:40px;height:40px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;flex:none}
+.bp-form .ic{width:18px;height:18px}
+
+/* ---------- Superpositions ---------- */
+#layer{position:absolute;inset:0;pointer-events:none;z-index:20}
+.ov{position:absolute;inset:0;pointer-events:auto}
+.backdrop{position:absolute;inset:0;background:rgba(43,33,27,.4);opacity:0;transition:opacity .25s}
+.ov.show .backdrop{opacity:1}
+.sheet{position:absolute;left:0;right:0;bottom:0;max-height:88%;background:var(--white);border-radius:28px 28px 0 0;transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;overflow:hidden}
+.ov.show .sheet{transform:none}
+.grab{width:42px;height:5px;border-radius:3px;background:var(--sand);margin:9px auto 2px;flex:none}
+.sheet-h{display:flex;align-items:center;padding:6px 12px 10px;border-bottom:1px solid var(--line);flex:none}
+.sheet-h h3{margin:0;font-size:16px;font-weight:800;flex:1;text-align:center}
+.sheet-b{overflow-y:auto;flex:1;padding:14px 16px 20px;scrollbar-width:none}
+.page{position:absolute;inset:0;background:var(--beige);transform:translateX(100%);transition:transform .32s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.ov.show .page{transform:none}
+.page-h{background:var(--white);display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line);flex:none}
+.page-h h3{margin:0;font-size:16px;font-weight:800;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page-b{flex:1;overflow-y:auto;scrollbar-width:none;padding-bottom:30px}
+.ib{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none}
+.ib:hover{background:var(--beige)}
+
+/* Commentaires */
+.cmt{display:flex;gap:10px;margin-bottom:15px}
+.cmt .av{width:32px;height:32px;font-size:11px}
+.cmt p{margin:0;font-size:13.5px;line-height:1.4}
+.cmt .meta{font-size:11px;color:var(--muted);margin-top:3px;font-weight:600}
+.emo-row{display:flex;justify-content:space-around;padding:8px 10px;border-top:1px solid var(--line);flex:none}
+.emo-row button{font-size:22px;padding:2px 6px;border-radius:10px}
+.emo-row button:hover{background:var(--beige)}
+.cmt-input{flex:none;padding:8px 12px 14px;display:flex;gap:8px;align-items:center;background:#fff}
+.cmt-input .av{width:32px;height:32px;font-size:11px}
+.cmt-input input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:10px 14px;background:var(--beige);outline:none;font-size:13.5px}
+.cmt-input input:focus{border-color:var(--orange)}
+.send{color:var(--orange);font-weight:800;font-size:14px;padding:0 4px}
+
+/* Profils */
+.prof{background:var(--white);padding:16px 16px 18px;border-radius:0 0 26px 26px;box-shadow:var(--shadow)}
+.prof-top{display:flex;align-items:center;gap:16px}
+.prof .av.big{width:80px;height:80px;font-size:25px;box-shadow:0 0 0 3px #fff,0 0 0 5.5px var(--orange)}
+.stats{flex:1;display:grid;grid-template-columns:repeat(3,1fr);text-align:center}
+.stats b{display:block;font-size:16px;font-weight:800}
+.stats span{font-size:11px;color:var(--muted);font-weight:600}
+.prof h4{margin:14px 0 2px;font-size:16px;font-weight:800;display:flex;align-items:center;gap:6px}
+.prof p{margin:4px 0 0;font-size:13px;color:var(--ink-2);line-height:1.45}
+.badge-top{display:inline-block;margin-top:8px;font-size:11.5px;font-weight:700;background:var(--orange-50);color:var(--orange-dk);border:1px solid var(--orange-soft);border-radius:999px;padding:4px 10px}
+.prof-btns{display:flex;gap:8px;margin-top:14px}
+.btn-main{flex:1;background:var(--orange);color:#fff;font-weight:700;font-size:14px;padding:10px;border-radius:12px;text-align:center}
+.btn-main.on{background:var(--beige);color:var(--ink);border:1.5px solid var(--line)}
+.btn-out{flex:1;border:1.5px solid var(--line);font-weight:700;font-size:14px;padding:10px;border-radius:12px;text-align:center;background:#fff}
+.sec-t{font-size:13px;font-weight:800;margin:18px 16px 8px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em}
+.stores{margin:0 12px;background:#fff;border-radius:18px;padding:4px 14px;box-shadow:var(--shadow)}
+.store-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13px}
+.store-row:last-child{border-bottom:0}
+.store-row b{display:block;font-size:13.5px}
+.store-row small{color:var(--muted);font-weight:500}
+.store-row .d{margin-left:auto;font-weight:700;color:var(--orange-dk);white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:0 12px}
+.tile{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;display:grid;place-items:center;font-size:38px}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile .tp{position:absolute;top:6px;left:6px;background:var(--orange);color:#fff;font-size:10.5px;font-weight:800;padding:2px 6px;border-radius:6px}
+.tile .tc{position:absolute;bottom:6px;left:6px;right:6px;font-size:9.5px;font-weight:700;color:var(--ink-2);background:rgba(255,255,255,.85);border-radius:6px;padding:2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.t-commu{background:radial-gradient(circle at 1px 1px,rgba(176,137,104,.3) 1px,transparent 0) 0 0/12px 12px,linear-gradient(160deg,#FAF1E6,#EED9C2);flex-direction:column;font-size:13px;font-weight:800;color:var(--orange-dk);text-align:center;display:flex;justify-content:center;gap:2px}
+.t-commu small{font-size:9.5px;color:var(--ink-2);font-weight:600}
+
+/* Mes bons plans */
+.sv-sum{background:linear-gradient(135deg,var(--orange),#F2A65A);color:#fff;border-radius:18px;padding:14px 16px;margin-bottom:14px}
+.sv-sum small{font-size:12px;font-weight:600;opacity:.9}
+.sv-sum b{display:block;font-size:28px;font-weight:800;letter-spacing:-.02em}
+.sv-sum span{font-size:12px;opacity:.92}
+.sv-item{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+.sv-thumb{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;font-size:28px;flex:none;overflow:hidden;position:relative}
+.sv-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sv-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;font-size:12px;color:var(--muted)}
+.sv-info b{font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sv-p{color:var(--ink-2);font-weight:600}
+.sv-p s{color:var(--muted);font-weight:500}
+.sv-p em{font-style:normal;color:var(--orange-dk);font-weight:800}
+.sv-end{color:var(--red);font-weight:700;font-size:11px}
+.sv-rm{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--muted);flex:none}
+.sv-rm .ic{width:16px;height:16px}
+
+/* Publication */
+.pub-b{padding:14px 16px 24px}
+.pub-q{margin:4px 0 10px;font-weight:800;font-size:15px}
+.role{background:#fff;border:2px solid var(--line);border-radius:18px;padding:13px 14px;display:flex;gap:12px;align-items:center;width:100%;margin-bottom:10px;transition:border-color .15s,background .15s}
+.role.on{border-color:var(--orange);background:var(--orange-50)}
+.role-ic{font-size:26px;width:44px;height:44px;border-radius:14px;background:var(--beige);display:grid;place-items:center;flex:none}
+.role.on .role-ic{background:#fff}
+.role b{display:block;font-size:15px}
+.role small{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+.radio{margin-left:auto;width:20px;height:20px;border-radius:50%;border:2px solid var(--sand);flex:none}
+.role.on .radio{border:6px solid var(--orange)}
+.divider{height:1px;background:var(--line);margin:16px 0}
+.field{margin-bottom:14px}
+.field > label,.flabel{display:block;font-size:12.5px;font-weight:700;color:var(--ink-2);margin-bottom:6px}
+.inp{width:100%;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:11px 13px;outline:none;font-size:14px}
+.inp:focus{border-color:var(--orange)}
+textarea.inp{resize:none;min-height:84px;line-height:1.4}
+select.inp{-webkit-appearance:none;appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23C9531B' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 13px center}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pick{display:flex;flex-wrap:wrap;gap:7px}
+.pick .chip{padding:7px 12px;font-size:12.5px}
+.calc{background:var(--orange-50);border:1.5px solid var(--orange-soft);border-radius:14px;padding:10px 13px;font-size:13px;color:var(--orange-dk);font-weight:700;margin:-2px 0 14px}
+.calc.warn{background:#FDECE8;border-color:#F6C6B8;color:var(--red)}
+.calc.idle{background:var(--beige);border-color:var(--line);color:var(--muted);font-weight:600}
+.toggle-row{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:11px 13px;margin-bottom:10px;font-size:13.5px;font-weight:600;width:100%}
+.toggle-row small{display:block;font-size:11.5px;color:var(--muted);font-weight:500}
+.switch{margin-left:auto;width:44px;height:26px;border-radius:13px;background:var(--sand);position:relative;transition:.2s;flex:none}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on{background:var(--orange)}
+.switch.on::after{transform:translateX(18px)}
+.dz{display:block;border:2px dashed var(--sand);border-radius:16px;padding:18px;text-align:center;background:#fff;cursor:pointer;color:var(--muted);font-size:13px;line-height:1.45}
+.dz:hover{border-color:var(--orange)}
+.dz.has{border-style:solid;border-color:var(--orange);padding:10px}
+.dz .ic{width:28px;height:28px;margin:0 auto 6px;color:var(--orange)}
+.dz img{width:100%;max-height:200px;object-fit:cover;border-radius:10px;display:block}
+.dz b{color:var(--ink)}
+.emo-pick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.emo-pick button{width:40px;height:40px;border-radius:12px;background:#fff;border:1.5px solid var(--line);font-size:20px;display:grid;place-items:center}
+.emo-pick button.on{border-color:var(--orange);background:var(--orange-50)}
+.pub-foot{flex:none;padding:10px 16px 16px;background:var(--white);border-top:1px solid var(--line)}
+.pub-err{font-size:11.5px;color:var(--muted);text-align:center;margin-bottom:8px;min-height:15px}
+.btn-primary{width:100%;background:var(--orange);color:#fff;font-weight:800;font-size:15px;padding:14px;border-radius:999px;box-shadow:0 8px 18px rgba(232,103,42,.35);text-align:center;transition:opacity .15s}
+.btn-primary:disabled{opacity:.45;box-shadow:none;cursor:not-allowed}
+
+/* Toast */
+.toast{position:absolute;left:50%;bottom:100px;transform:translate(-50%,16px);background:var(--dark);color:#fff;padding:11px 16px;border-radius:14px;font-size:13px;font-weight:600;opacity:0;transition:.25s ease;z-index:40;width:max-content;max-width:86%;text-align:center;pointer-events:none;line-height:1.35}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone">
+  <div class="statusbar">
+    <span id="clock">9:41</span>
+    <span class="sb-icons"><span class="sig"><i></i><i></i><i></i><i></i></span>5G<span class="bat"><i></i></span></span>
+  </div>
+
+  <header class="topbar">
+    <div class="logo"><span class="logo-mark">C</span>Capstone</div>
+    <div class="city-wrap">
+      <button class="city-btn" data-action="city"><i data-ic="pin"></i><span id="cityLabel">Lille</span><i data-ic="chev"></i></button>
+      <div class="city-menu" id="cityMenu">
+        <button data-action="setcity" data-city="Lille"><span class="e">🏙️</span><span>Lille<small>Autour de la Grand Place</small></span></button>
+        <button data-action="setcity" data-city="Paris"><span class="e">🗼</span><span>Paris<small>Autour de Châtelet</small></span></button>
+        <button data-action="setcity" data-city="near"><span class="e">📍</span><span>Près de moi<small>Utilise ta position</small></span></button>
+      </div>
+    </div>
+    <button class="icon-btn" data-action="saved" aria-label="Mes bons plans sauvegardés"><i data-ic="bookmark"></i><span class="count" id="savedCount"></span></button>
+  </header>
+
+  <main class="scroll" id="scroll">
+    <div class="savings" id="savings"></div>
+    <div class="stories hs" id="stories"></div>
+    <div id="ctrlAnchor"></div>
+    <div class="controls" id="controls"></div>
+    <div class="feed" id="feed"></div>
+  </main>
+
+  <button class="bot" data-action="bot" aria-label="Assistant"><i data-ic="spark"></i></button>
+  <div class="bot-panel" id="botPanel">
+    <div class="bp-h">
+      <span class="av"><i data-ic="spark"></i></span>
+      <div><b>Assistant Capstone</b><small>● En ligne</small></div>
+      <button class="ib" data-action="bot" aria-label="Fermer"><i data-ic="x"></i></button>
+    </div>
+    <div class="bp-msgs" id="botMsgs"></div>
+    <div class="bp-sugs hs">
+      <button class="chip" data-action="botsug">🛒 Courses pas chères</button>
+      <button class="chip" data-action="botsug">🎓 Offres prix étudiant</button>
+      <button class="chip" data-action="botsug">🔥 -50 % et plus</button>
+      <button class="chip" data-action="botsug">📍 Près de moi</button>
+    </div>
+    <form class="bp-form" id="botForm">
+      <input type="text" placeholder="Ex. un bon plan sport à Paris…" maxlength="120" autocomplete="off">
+      <button type="submit" aria-label="Envoyer"><i data-ic="send"></i></button>
+    </form>
+  </div>
+
+  <nav class="nav">
+    <button class="on" data-action="top"><i data-ic="home"></i>Feed</button>
+    <button data-action="nav" data-nav="carte"><i data-ic="map"></i>Carte</button>
+    <button class="plus" data-action="publish" aria-label="Publier un bon plan"><i data-ic="plus"></i></button>
+    <button data-action="nav" data-nav="budget"><i data-ic="pie"></i>Budget</button>
+    <button data-action="nav" data-nav="profil"><i data-ic="user"></i>Profil</button>
+  </nav>
+
+  <div id="layer"></div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* =========================================================
+   CONFIG : liens vers les pages du groupe
+   Mettre le nom du fichier quand la page existe, sinon null
+   (Dans l'appli complète, index.html gère la navigation :
+    ces liens ne servent que si feed.html est ouvert seul.)
+   ========================================================= */
+const NAV_LINKS = { carte: 'carte-bons-plans.html', budget: 'budget.html', profil: null };
+
+/* Budget mensuel estimé par catégorie (sera alimenté par le questionnaire) */
+const BUDGET = { Courses: 200, Mode: 60, Sport: 35, Tech: 50, 'Beauté': 30, Maison: 40 };
+const BUDGET_TOTAL = Object.values(BUDGET).reduce((a, b) => a + b, 0);
+
+const CATS = [['Tout','✨'],['Courses','🛒'],['Mode','👕'],['Sport','👟'],['Tech','💻'],['Beauté','💄'],['Maison','🛋️']];
+const CAT_SLUG = { Courses:'courses', Mode:'mode', Sport:'sport', Tech:'tech', 'Beauté':'beaute', Maison:'maison' };
+const CAT_EMOJI = { Courses:'🛒', Mode:'👕', Sport:'👟', Tech:'🎧', 'Beauté':'💄', Maison:'🛋️' };
+const CITY_REF = { Lille:{ lat:50.6370, lng:3.0633 }, Paris:{ lat:48.8584, lng:2.3470 } };
+const PALETTE = ['#E8672A','#2B211B','#B85A2E','#A47551','#7A5C45','#D9894F','#5E4636','#C9531B'];
+const ME = 'mon.profil';
+
+/* =========================================================
+   ENSEIGNES
+   logo : chemin optionnel vers un fichier image (ex. 'logos/lidl.png').
+   Laisser vide pour afficher les initiales.
+   ========================================================= */
+const BRANDS = {
+  lidl:      { name:'Lidl',           ini:'LI', logo:'', followers:48200, bio:"Les arrivages de la semaine près de chez toi. Nouveautés chaque mercredi et dimanche." },
+  carrefour: { name:'Carrefour City', ini:'CC', logo:'', followers:31500, bio:"Tes courses du quotidien, ouvert tard, même le dimanche matin." },
+  leclerc:   { name:'E.Leclerc',      ini:'EL', logo:'', followers:27800, bio:"Les prix bas toute l'année, et des promos en plus chaque semaine." },
+  auchan:    { name:'Auchan',         ini:'AU', logo:'', followers:22100, bio:"Lots, offres 2+1 et anti-gaspi : remplis ton placard sans vider ton compte." },
+  monoprix:  { name:'Monoprix',       ini:'MP', logo:'', followers:19400, bio:"Le petit plus du centre-ville, à prix doux cette semaine." },
+  picard:    { name:'Picard',         ini:'PI', logo:'', followers:15900, bio:"Le surgelé qui sauve les soirs de semaine. Offres renouvelées tous les lundis." },
+  decathlon: { name:'Decathlon',      ini:'DE', logo:'', followers:56300, bio:"Le sport accessible au plus grand nombre. Bons plans running, fitness et outdoor." },
+  basicfit:  { name:'Basic-Fit',      ini:'BF', logo:'', followers:21700, bio:"Ta salle de sport à prix étudiant, ouverte tôt et tard." },
+  fnac:      { name:'Fnac',           ini:'FN', logo:'', followers:44800, bio:"Tech, livres et culture : les offres du moment et les prix étudiants." },
+  boulanger: { name:'Boulanger',      ini:'BO', logo:'', followers:18600, bio:"High-tech et électroménager, les bonnes affaires de la semaine." },
+  sephora:   { name:'Sephora',        ini:'SE', logo:'', followers:62400, bio:"Beauté et soin : les promos à ne pas rater." },
+  primark:   { name:'Primark',        ini:'PR', logo:'', followers:39100, bio:"La mode à petits prix, nouvelles pièces chaque semaine." },
+  uniqlo:    { name:'Uniqlo',         ini:'UQ', logo:'', followers:28900, bio:"Les essentiels du quotidien, offres à durée limitée." },
+  action:    { name:'Action',         ini:'AC', logo:'', followers:47500, bio:"Déco, rangement, bricolage : le petit prix sur tout." },
+  ikea:      { name:'IKEA',           ini:'IK', logo:'', followers:52700, bio:"Équipe ton premier appart sans te ruiner." }
+};
+Object.keys(BRANDS).forEach((k, i) => { BRANDS[k].key = k; BRANDS[k].color = PALETTE[i % PALETTE.length]; });
+
+/* =========================================================
+   OFFRES DES ENSEIGNES (données de démo)
+   ========================================================= */
+let SEQ = 0;
+function offer(brand, city, place, lat, lng, cat, product, detail, emoji, old, price, end, o = {}) {
+  return { id:'b' + (++SEQ), type:'brand', brand, city, place, lat, lng, cat, product, detail, emoji, old, price, end,
+    student: !!o.student, stock: o.stock || 0, hours: o.hours || [9, 20], likes: o.likes || 0, ago: o.ago ?? 5,
+    caption: o.caption || '', tags: o.tags || [], comments: [], photo: null, doc: null };
+}
+const OFFERS = [
+  // Lille
+  offer('lidl','Lille','Wazemmes',50.6280,3.0480,'Courses','Avocats mûrs à point','Filet de 4','🥑',2.99,1.79,2,{hours:[8,21],likes:412,ago:2,caption:"Arrivage du jour 🥑 Filet de 4 avocats mûrs à point, parfaits pour tes toasts de la semaine.",tags:['arrivage','fruitsetlegumes']}),
+  offer('fnac','Lille','Grand Place',50.6366,3.0635,'Tech','Casque Bluetooth','Réduction de bruit, 30 h d\'autonomie','🎧',79,39,1,{student:true,stock:6,hours:[10,20],likes:1284,ago:3,caption:"Prix étudiant sur notre casque Bluetooth à réduction de bruit : 39 € au lieu de 79 €. Présente ta carte étudiante en caisse.",tags:['prixetudiant','tech']}),
+  offer('carrefour','Lille','Gare Lille Flandres',50.6365,3.0705,'Courses','Formule déjeuner','Sandwich + boisson + dessert','🥪',7.90,4.99,5,{student:true,hours:[7,22],likes:286,ago:4,caption:"Ta pause déj' à moins de 5 € avec ta carte étudiante. Valable tous les jours de 11h à 15h.",tags:['dejeuner','etudiant']}),
+  offer('auchan','Lille',"Villeneuve-d'Ascq V2",50.6430,3.1430,'Courses','Pâtes Panzani 1 kg','Lot de 3, 2 achetés = 1 offert','🍝',5.67,3.78,3,{hours:[8.5,21],likes:309,ago:5,caption:"2 paquets achetés, le 3e offert. De quoi tenir jusqu'à la fin du mois 🍝",tags:['2plus1','placard']}),
+  offer('decathlon','Lille',"Villeneuve-d'Ascq Campus",50.6440,3.1350,'Sport','Chaussures de running','Kalenji Jogflow, du 36 au 46','👟',49.99,29.99,6,{stock:14,hours:[9,20],likes:731,ago:6,caption:"Prêt pour la rentrée sportive ? Les Jogflow passent à 29,99 € jusqu'à dimanche, dans la limite des stocks.",tags:['running','rentreesportive']}),
+  offer('picard','Lille','Vieux-Lille',50.6420,3.0630,'Courses','Pizzas 4 fromages','Lot de 2, surgelées','🍕',7.98,4.79,3,{hours:[9,20],likes:178,ago:7,caption:"Le combo soirée colocs est de retour : 2 pizzas pour 4,79 €.",tags:['soireecoloc']}),
+  offer('sephora','Lille','Rue Neuve',50.6355,3.0640,'Beauté','Crème hydratante','Sephora Collection, 50 ml','🧴',12.99,6.49,4,{hours:[10,20],likes:358,ago:9,caption:"-50 % sur notre crème hydratante best-seller. L'indispensable de l'hiver ❄️",tags:['skincare','hiver']}),
+  offer('lidl','Lille','Roubaix',50.6905,3.1780,'Courses','Café moulu pur arabica','Lot de 4 x 250 g','☕',9.96,5.98,2,{hours:[8,21],likes:201,ago:11,caption:"Le carburant des partiels à prix mini ☕",tags:['cafe','partiels']}),
+  offer('primark','Lille','Centre',50.6345,3.0615,'Mode','Sweat à capuche oversize','6 coloris, du XS au XXL','👕',16,10,8,{hours:[9,20],likes:522,ago:12,caption:"Le sweat oversize qu'on voit partout, maintenant à 10 €.",tags:['mode','petitprix']}),
+  offer('uniqlo','Lille','Centre',50.6352,3.0628,'Mode','Doudoune ultra légère','Se range dans sa pochette','🧥',59.90,39.90,5,{hours:[10,20],likes:388,ago:15,caption:"Offre à durée limitée sur la doudoune ultra légère, jusqu'à jeudi.",tags:['hiver','essentiels']}),
+  offer('leclerc','Lille','Moulins',50.6230,3.0690,'Courses',"Huile d'olive vierge extra",'Bouteille 1 L','🫒',10.49,6.99,9,{hours:[8.5,20],likes:233,ago:18,caption:"L'huile d'olive a pris cher ces dernières années, on fait un geste : 6,99 € le litre.",tags:['courses','prixbas']}),
+  offer('action','Lille','Fives',50.6300,3.0900,'Maison','Guirlande LED 10 m','Blanc chaud, 100 LED','✨',5.95,2.99,10,{hours:[9,19],likes:197,ago:20,caption:"Rends ta chambre plus cosy pour moins de 3 € ✨",tags:['deco','cosy']}),
+  offer('boulanger','Lille','Euralille',50.6370,3.0760,'Tech','Écran 24 pouces Full HD','75 Hz, HDMI','🖥️',129,89,7,{student:true,hours:[10,20],likes:256,ago:22,caption:"Un deuxième écran pour tes révisions à 89 €. Offre étudiante sur présentation de ta carte.",tags:['setup','revisions']}),
+  offer('ikea','Lille','Lomme',50.6480,2.9850,'Maison','Plaid polaire','130 x 170 cm','🛏️',9.99,5.99,12,{hours:[10,20],likes:244,ago:26,caption:"Les soirées fraîches arrivent : le plaid passe à 5,99 € avec la carte IKEA Family.",tags:['maison','premierappart']}),
+  offer('monoprix','Lille','Centre',50.6375,3.0598,'Beauté','Gel douche bio','Lot de 2 x 250 ml','🧼',5.80,2.90,6,{hours:[8.5,21],likes:142,ago:28,caption:"Le lot de 2 gels douche bio à moitié prix cette semaine.",tags:['beaute','bio']}),
+  offer('basicfit','Lille','République',50.6310,3.0600,'Sport','Abonnement Comfort','1er mois, sans engagement','🏋️',29.99,14.99,14,{student:true,hours:[6,23],likes:463,ago:30,caption:"Ton premier mois à -50 % sur présentation de ta carte étudiante 💪",tags:['fitness','prixetudiant']}),
+  // Paris
+  offer('lidl','Paris','Oberkampf',48.8650,2.3750,'Courses','Croissants pur beurre','Sachet de 6','🥐',2.49,1.49,1,{hours:[8,21.5],likes:377,ago:1,caption:"Petit-déj de la semaine à 1,49 € 🥐 Cuits sur place toute la journée.",tags:['petitdej','boulangerie']}),
+  offer('carrefour','Paris','Quartier Latin',48.8460,2.3460,'Courses','Panier anti-gaspi','3 kg de fruits et légumes','🧺',9,3.99,0,{student:true,stock:5,hours:[7,23],likes:892,ago:2,caption:"Fruits et légumes parfaitement bons mais un peu moches : 3 kg pour 3,99 €. Dernier jour !",tags:['antigaspi','etudiant']}),
+  offer('sephora','Paris','Champs-Élysées',48.8710,2.3030,'Beauté','Palette fards à paupières','12 teintes nude','🎨',39,19.50,2,{stock:9,hours:[10,23],likes:1045,ago:4,caption:"Notre palette 12 teintes à -50 % pendant 48 h seulement ✨",tags:['makeup','flashsale']}),
+  offer('fnac','Paris','Montparnasse',48.8430,2.3230,'Tech','Liseuse 6 pouces','Éclairage réglable, étanche','📚',149.99,109.99,4,{student:true,hours:[10,20],likes:604,ago:5,caption:"Tous tes livres de cours et de détente dans la poche. -40 € avec le prix étudiant.",tags:['lecture','prixetudiant']}),
+  offer('monoprix','Paris','Saint-Germain',48.8530,2.3330,'Courses','Salade composée + boisson','Formule déjeuner','🥗',6.50,3.90,3,{hours:[8,22],likes:254,ago:6,caption:"Ta formule salade à 3,90 € tous les midis de la semaine.",tags:['dejeuner','healthy']}),
+  offer('decathlon','Paris','Madeleine',48.8700,2.3240,'Sport','Tapis de yoga','8 mm, antidérapant','🧘',19.99,11.99,6,{hours:[10,20],likes:315,ago:10,caption:"Le yoga à la maison commence ici. 11,99 € seulement cette semaine.",tags:['yoga','home']}),
+  offer('uniqlo','Paris','Opéra',48.8710,2.3320,'Mode','Jean coupe droite','Denim stretch, 3 coloris','👖',39.90,29.90,5,{hours:[10,20.5],likes:298,ago:14,caption:"Le jean qui va avec tout, 10 € de moins jusqu'à jeudi.",tags:['denim','essentiels']}),
+  offer('primark','Paris','Les 4 Temps',48.8910,2.2380,'Mode','Pyjama polaire','Haut + bas, 4 coloris','🧸',18,12,7,{hours:[10,20],likes:219,ago:16,caption:"Le pyjama douillet pour l'hiver à 12 €.",tags:['cocooning']}),
+  offer('action','Paris','Place d\'Italie',48.8300,2.3560,'Maison','Boîtes de rangement','Lot de 6, empilables','📦',7.49,3.99,10,{hours:[9,20],likes:166,ago:19,caption:"Optimise ton 18 m² avec ce lot de 6 boîtes à 3,99 € 📦",tags:['rangement','studio']}),
+  offer('ikea','Paris','Madeleine',48.8705,2.3255,'Maison','Lampe de bureau LED','Bras articulé, 3 intensités','💡',24.99,14.99,8,{student:true,hours:[10,20],likes:412,ago:24,caption:"Une bonne lumière pour réviser sans t'abîmer les yeux. 14,99 € avec le prix étudiant.",tags:['bureau','revisions']}),
+  offer('boulanger','Paris','Bercy',48.8350,2.3860,'Maison','Bouilloire électrique','1,7 L, arrêt automatique','🫖',39.99,19.99,5,{hours:[10,20],likes:131,ago:27,caption:"Thé, café, nouilles instantanées : la bouilloire à 19,99 € 🫖",tags:['coloc','cuisine']}),
+  offer('basicfit','Paris','République',48.8670,2.3630,'Sport','Abonnement Comfort','1er mois, sans engagement','🏋️',29.99,19.99,12,{student:true,hours:[6,23],likes:287,ago:33,caption:"-10 € sur ton premier mois avec le tarif étudiant.",tags:['fitness']})
+];
+
+/* =========================================================
+   POSTS DE LA COMMUNAUTÉ (données de démo)
+   ========================================================= */
+let CSEQ = 0;
+function post(user, city, brand, place, lat, lng, cat, mood, paid, normal, o = {}) {
+  return { id:'c' + (++CSEQ), type:'community', user, city, brand, place, lat, lng, cat, mood, paid, normal,
+    verified: !!o.verified, likes: o.likes || 0, ago: o.ago ?? 5, text: o.text || '', lines: o.lines || null,
+    item: o.item || (o.lines ? o.lines[0][0] : 'Bon plan'), tags: o.tags || [], student: /étudiant/i.test(mood),
+    comments: [], photo: null, doc: null };
+}
+const POSTS = [
+  post('emma.rsl','Lille','fnac','Grand Place',50.6366,3.0635,'Tech','🎓 Spécial étudiant',39,79,{verified:true,likes:468,ago:2,item:'Casque Bluetooth',text:"Casque à 39 € avec le prix étudiant, il était à 79 € la semaine dernière. La réduction de bruit est top pour réviser à la BU 🎧",tags:['prixetudiant']}),
+  post('lea.mrt','Lille','lidl','Wazemmes',50.6280,3.0480,'Courses','🛒 Courses malines',31.60,55.00,{verified:true,likes:238,ago:3,lines:[['Avocats x4',1.79,2.99],['Poulet fermier',4.99,7.49],['Café arabica x4',5.98,9.96],['Yaourts grecs x6',1.99,3.49]],item:'Courses de la semaine',text:"Courses de la semaine à 31,60 € au lieu de 55 € 😱 J'ai suivi les arrivages repérés ici + les promos de l'appli. Fini les pâtes au beurre tous les soirs.",tags:['courses','budgetetudiant']}),
+  post('theo_budget','Lille','decathlon',"Villeneuve-d'Ascq Campus",50.6440,3.1350,'Sport','🔥 Pépite',29.99,49.99,{verified:true,likes:412,ago:5,item:'Chaussures de running',text:"Vu l'offre ici hier soir, j'y suis allé ce matin et il restait ma pointure 🏃‍♂️ 20 € d'économisés, ça paie l'inscription au semi.",tags:['running']}),
+  post('ines.dlc','Lille','picard','Vieux-Lille',50.6420,3.0630,'Courses','🍕 Soirée colocs',9.58,15.96,{likes:131,ago:8,lines:[['Pizzas 4 fromages x2',4.79,7.98],['Pizzas 4 fromages x2',4.79,7.98]],item:'Pizzas pour la coloc',text:"Soirée pizza entre colocs pour moins de 10 € à quatre. Le lot de 2 à 4,79 €, c'est vraiment rentable.",tags:['soireecoloc']}),
+  post('chloe.rbt','Lille','primark','Centre',50.6345,3.0615,'Mode','🔥 Pépite',20,32,{likes:175,ago:14,lines:[['Sweat oversize',10,16],['Sweat oversize',10,16]],item:'2 sweats oversize',text:"Deux sweats oversize pour 20 € 🙌 Un pour moi, un pour ma sœur.",tags:['mode']}),
+  post('hugo.fvr','Lille','action','Fives',50.6300,3.0900,'Maison','✨ Déco',18.40,32.90,{likes:189,ago:26,lines:[['Guirlande LED 10 m',2.99,5.95],['Cadres photo x3',4.47,8.97],['Coussins x2',6.98,11.98],['Bougies x4',3.96,6.00]],item:'Déco de chambre',text:"Déco complète de ma chambre étudiante pour 18,40 € : guirlande, cadres, coussins. Tout chez Action après avoir vu le post 😍",tags:['deco','chambreetudiante']}),
+  post('manon.ptt','Lille','basicfit','République',50.6310,3.0600,'Sport','🎓 Spécial étudiant',14.99,29.99,{likes:204,ago:30,item:'Abonnement 1er mois',text:"Premier mois à 14,99 € avec le tarif étudiant 💪 Objectif : tenir plus longtemps que l'an dernier.",tags:['fitness']}),
+  post('jade.lfv','Lille','auchan',"Villeneuve-d'Ascq V2",50.6430,3.1430,'Courses','🛒 Courses malines',7.56,11.34,{likes:88,ago:40,lines:[['Pâtes 1 kg x3',3.78,5.67],['Pâtes 1 kg x3',3.78,5.67]],item:'Stock de pâtes',text:"Stock de pâtes pour le mois grâce au 2+1. 6 kg pour 7,56 €, mes colocs me remercient 🍝",tags:['2plus1']}),
+  post('sarah.eco','Paris','carrefour','Quartier Latin',48.8460,2.3460,'Courses','🌱 Anti-gaspi',3.99,9,{verified:true,likes:527,ago:2,item:'Panier anti-gaspi 3 kg',text:"3 kg de fruits et légumes pour 3,99 €. Tout était bon, juste quelques pommes un peu cabossées. Soupe pour 4 jours 🥕",tags:['antigaspi']}),
+  post('camille_lst','Paris','sephora','Champs-Élysées',48.8710,2.3030,'Beauté','🔥 Pépite',19.50,39,{verified:true,likes:642,ago:4,item:'Palette 12 teintes',text:"La palette à 19,50 € au lieu de 39 € 💄 Foncez, il n'en restait plus que quelques-unes cet après-midi.",tags:['makeup']}),
+  post('yanis.bk','Paris','fnac','Montparnasse',48.8430,2.3230,'Tech','🎓 Spécial étudiant',109.99,149.99,{verified:true,likes:356,ago:6,item:'Liseuse 6 pouces',text:"Liseuse achetée avec le prix étudiant, 40 € de moins. Pensez à prendre votre carte, ils vérifient en caisse 📚",tags:['lecture']}),
+  post('lucas.mrn','Paris','lidl','Oberkampf',48.8650,2.3750,'Courses','🛒 Courses malines',6.12,10.32,{verified:true,likes:158,ago:9,lines:[['Croissants x6',1.49,2.49],['Croissants x6',1.49,2.49],["Jus d'orange 1 L",1.15,1.89],['Café moulu 250 g',1.99,3.45]],item:'Petit-déj de la semaine',text:"Petit-déj pour toute la semaine à 6,12 € : croissants, café, jus d'orange. Merci la communauté pour les plans 🙏",tags:['petitdej']}),
+  post('maxime_ghr','Paris','uniqlo','Opéra',48.8710,2.3320,'Mode','🔥 Pépite',29.90,39.90,{likes:74,ago:18,item:'Jean coupe droite',text:"Jean pris à 29,90 €, la coupe droite tombe parfaitement. Bon plan validé ✅",tags:['denim']}),
+  post('adam.sll','Paris','ikea','Madeleine',48.8705,2.3255,'Maison','🎓 Spécial étudiant',14.99,24.99,{likes:96,ago:21,item:'Lampe de bureau LED',text:"Lampe de bureau pour les révisions, enfin je ne travaille plus à la lumière du plafonnier 😅",tags:['revisions']})
+];
+
+/* Commentaires de démo */
+const CB = ["Encore dispo ce soir ?","Merci, je passe demain 🙏","Il en restait plein ce midi 👌","Prix confirmé en caisse ✅","Parfait pour la fin du mois 😅","Ajouté à mes bons plans 🔖","Enfin une vraie promo 🔥","Je viens d'y aller, top 👍"];
+const CC = ["Merci pour le plan 🙏","Ça fait du bien au budget 😮‍💨","Je savais pas que c'était aussi bas !","J'y vais ce week-end","Bravo, tu m'inspires 👏","Trop bien, je note 📝","Respect l'organisation 💪","Validé, j'ai eu le même prix ✅"];
+const NAMES = ['theo_budget','ines.dlc','hugo.fvr','sarah.eco','lucas.mrn','manon.ptt','chloe.rbt','adam.sll','jade.lfv','emma.rsl','lea.mrt','yanis.bk','camille_lst','maxime_ghr','louis.prd','zoe.mrc'];
+const CAGO = ['8 min','25 min','1 h','2 h','5 h'];
+[...OFFERS, ...POSTS].forEach((p, i) => {
+  const pool = p.type === 'brand' ? CB : CC;
+  const n = (i * 7) % 4 + (p.likes > 400 ? 2 : 1);
+  for (let k = 0; k < n; k++) {
+    const u = NAMES[(i * 3 + k * 5) % NAMES.length];
+    if (u === p.user) continue;
+    p.comments.push({ u, t: pool[(i + k * 3) % pool.length], ago: CAGO[k % CAGO.length] });
+  }
+});
+
+/* =========================================================
+   ÉTAT
+   ========================================================= */
+const S = { tab:'brands', city:'Lille', pos:null, cat:'Tout', student:false, big:false, sort:'pertinence',
+  saved:new Set(), liked:new Set(), follow:new Set(['decathlon','lidl']), followU:new Set(), seen:new Set(), monthSaved:47.30 };
+
+/* =========================================================
+   OUTILS
+   ========================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const now = new Date();
+function eur(n) {
+  const v = Math.round(n * 100) / 100;
+  return (Number.isInteger(v) ? v.toLocaleString('fr-FR') : v.toLocaleString('fr-FR', { minimumFractionDigits:2, maximumFractionDigits:2 })) + '\u00a0€';
+}
+const num = n => n.toLocaleString('fr-FR');
+const fmtK = n => n >= 1000 ? (n / 1000).toLocaleString('fr-FR', { maximumFractionDigits:1 }) + ' k' : String(n);
+const pctOf = (old, price) => Math.round((old - price) / old * 100);
+const hash = s => { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) | 0; return Math.abs(h); };
+const colorFor = u => PALETTE[hash(u) % PALETTE.length];
+const initials = s => String(s).split(/[\s._\-]+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || '?';
+const get = id => OFFERS.find(p => p.id === id) || POSTS.find(p => p.id === id);
+const saving = p => p.type === 'brand' ? p.old - p.price : p.normal - p.paid;
+const pctP = p => p.type === 'brand' ? pctOf(p.old, p.price) : pctOf(p.normal, p.paid);
+const likesOf = p => p.likes + (S.liked.has(p.id) ? 1 : 0);
+const toNum = v => parseFloat(String(v ?? '').replace(',', '.').replace(/[^\d.]/g, ''));
+
+function hav(a, b, c, d) {
+  const R = 6371, r = x => x * Math.PI / 180;
+  const h = Math.sin(r(c - a) / 2) ** 2 + Math.cos(r(a)) * Math.cos(r(c)) * Math.sin(r(d - b) / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+const refPoint = () => S.city === 'near' ? S.pos : CITY_REF[S.city];
+function dist(p) { const r = refPoint(); return r ? hav(r.lat, r.lng, p.lat, p.lng) : null; }
+const kmTxt = d => d == null ? '' : d < 1 ? (Math.round(d * 100) * 10) + ' m' : d.toLocaleString('fr-FR', { maximumFractionDigits:1 }) + ' km';
+const fmtH = h => Math.floor(h) + 'h' + (h % 1 ? String(Math.round(h % 1 * 60)).padStart(2, '0') : '');
+function isOpen(h) { const t = now.getHours() + now.getMinutes() / 60; return t >= h[0] && t < h[1]; }
+function endDate(d) { const x = new Date(now); x.setDate(x.getDate() + d); return x; }
+const endShort = d => d <= 0 ? 'Dernier jour' : d === 1 ? 'Encore 1 jour' : d <= 3 ? `Encore ${d} jours` : `Jusqu'au ${endDate(d).toLocaleDateString('fr-FR', { day:'numeric', month:'short' })}`;
+function agoText(h) { if (h <= 0) return "À l'instant"; if (h < 24) return `Il y a ${h} h`; const d = Math.floor(h / 24); return `Il y a ${d} jour${d > 1 ? 's' : ''}`; }
+function budgetPct(cat, sv) {
+  const v = sv / (BUDGET[cat] || 50) * 100;
+  return v < 1 ? 'moins de 1 %' : v > 100 ? 'plus de 100 %' : `≈ ${Math.round(v)} %`;
+}
+
+/* Icônes */
+const I = {
+  heart:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+  comment:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+  send:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
+  bookmark:'<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>',
+  pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+  map:'<polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>',
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  pie:'<path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>',
+  chev:'<polyline points="6 9 12 15 18 9"/>',
+  chevr:'<polyline points="9 18 15 12 9 6"/>',
+  back:'<polyline points="15 18 9 12 15 6"/>',
+  x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
+  sort:'<line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/>',
+  spark:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>'
+};
+const ic = (n, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${I[n]}</svg>`;
+const VB = `<span class="vb" title="Commerce vérifié"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+
+function avBrand(b, cls = '') {
+  return b.logo
+    ? `<span class="av ${cls}" style="background:#fff;border:1px solid var(--line)"><img src="${esc(b.logo)}" alt="${esc(b.name)}"></span>`
+    : `<span class="av ${cls}" style="background:${b.color}">${esc(b.ini)}</span>`;
+}
+const avUser = (u, cls = '') => `<span class="av ${cls}" style="background:${colorFor(u)}">${esc(initials(u))}</span>`;
+const tagsHTML = tags => (tags || []).map(t => `<span class="hashtag">#${esc(t)}</span>`).join(' ');
+const docHTML = d => `<div class="doc">📄 ${esc(d.name)}</div>`;
+
+let toastT;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* =========================================================
+   FILTRES ET TRI
+   ========================================================= */
+function sortOpts() {
+  return S.tab === 'brands'
+    ? [['pertinence','Pour toi'],['proche','Plus proches'],['economie','Grosse économie'],['fin','Bientôt fini']]
+    : [['pertinence','Pour toi'],['recent','Plus récents'],['proche','Plus proches'],['economie','Grosse économie'],['likes','Plus aimés']];
+}
+function score(p) {
+  if (p.mine) return -1e6;
+  return p.ago + (dist(p) || 0) * 2 - pctP(p) * 0.2 - (p.verified ? 3 : 0);
+}
+const SORTERS = {
+  pertinence:(a, b) => score(a) - score(b),
+  proche:(a, b) => (dist(a) ?? 0) - (dist(b) ?? 0),
+  economie:(a, b) => saving(b) - saving(a),
+  fin:(a, b) => a.end - b.end,
+  recent:(a, b) => a.ago - b.ago,
+  likes:(a, b) => likesOf(b) - likesOf(a)
+};
+function visible() {
+  let list = (S.tab === 'brands' ? OFFERS : POSTS).filter(p => S.city === 'near' || p.city === S.city);
+  if (S.cat !== 'Tout') list = list.filter(p => p.cat === S.cat);
+  if (S.student) list = list.filter(p => p.student);
+  if (S.big) list = list.filter(p => pctP(p) >= 50);
+  let fallback = false;
+  if (S.city === 'near' && S.pos) {
+    const within = list.filter(p => dist(p) <= 25);
+    if (within.length) list = within; else fallback = list.length > 0;
+  }
+  list = [...list].sort(SORTERS[S.sort] || SORTERS.pertinence);
+  return { list, fallback };
+}
+
+/* =========================================================
+   RENDU
+   ========================================================= */
+function render() { renderTop(); renderSavings(); renderStories(); renderControls(); renderFeed(); }
+
+function renderTop() {
+  $('#cityLabel').textContent = S.city === 'near' ? 'Près de moi' : S.city;
+  const c = $('#savedCount'); c.textContent = S.saved.size; c.style.display = S.saved.size ? 'grid' : 'none';
+  $$('#cityMenu button').forEach(b => b.classList.toggle('on', b.dataset.city === S.city));
+}
+
+function renderSavings() {
+  const goal = 60, v = S.monthSaved;
+  $('#savings').innerHTML = `<div class="sv-ic">💸</div>
+    <div class="sv-txt">Ce mois-ci, tu as économisé <b>${eur(v)}</b> grâce aux offres
+      <div class="bar"><i style="width:${Math.min(100, v / goal * 100)}%"></i></div></div>
+    <button class="sv-link" data-action="nav" data-nav="budget">Budget${ic('chevr')}</button>`;
+}
+
+function renderStories() {
+  const scope = OFFERS.filter(o => S.city === 'near' || o.city === S.city);
+  let keys = [...new Set(scope.map(o => o.brand))];
+  if (S.city === 'near') {
+    const md = k => Math.min(...scope.filter(o => o.brand === k).map(o => dist(o) ?? 0));
+    keys.sort((a, b) => md(a) - md(b));
+  }
+  $('#stories').innerHTML = `<button class="story add" data-action="publish"><span class="ring"><span class="av-in">${ic('plus')}</span></span><span class="lbl">Publier</span></button>` +
+    keys.map(k => {
+      const b = BRANDS[k];
+      const fresh = scope.some(o => o.brand === k && o.ago < 24) && !S.seen.has(k);
+      const inner = b.logo ? `<img src="${esc(b.logo)}" alt="">` : esc(b.ini);
+      return `<button class="story" data-action="brand" data-brand="${k}"><span class="ring ${fresh ? '' : 'seen'}"><span class="av-in" style="background:${b.color}">${inner}</span></span><span class="lbl">${esc(b.name)}</span></button>`;
+    }).join('');
+}
+
+function renderControls() {
+  $('#controls').innerHTML = `
+    <div class="seg ${S.tab === 'community' ? 'right' : ''}"><span class="thumb"></span>
+      <button class="${S.tab === 'brands' ? 'on' : ''}" data-action="tab" data-tab="brands">🏷️ Marques</button>
+      <button class="${S.tab === 'community' ? 'on' : ''}" data-action="tab" data-tab="community">💬 Communauté</button>
+    </div>
+    <div class="chips hs">${CATS.map(([c, e]) => `<button class="chip ${S.cat === c ? 'on' : ''}" data-action="cat" data-cat="${c}"><span>${e}</span>${c}</button>`).join('')}</div>
+    <div class="chips hs">
+      <button class="chip student ${S.student ? 'on' : ''}" data-action="student">🎓 Prix étudiant</button>
+      <button class="chip big ${S.big ? 'on' : ''}" data-action="big">🔥 -50 % et +</button>
+      <label class="chip sort">${ic('sort')}<select id="sort" aria-label="Trier">${sortOpts().map(([v, l]) => `<option value="${v}" ${S.sort === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+    </div>`;
+}
+
+function renderFeed() {
+  const { list, fallback } = visible();
+  let h = '';
+  if (fallback) h += `<div class="info">📍 Aucune offre à moins de 25 km de toi : voici les plus proches.</div>`;
+  if (!list.length) {
+    h += `<div class="empty"><div class="e">🔍</div><b>Aucun bon plan avec ces filtres</b><p>Essaie une autre catégorie ou une autre ville.</p><button class="btn-sec" data-action="reset">Réinitialiser les filtres</button></div>`;
+  } else {
+    h += list.map(postHTML).join('') + `<div class="end">✨ Tu es à jour !<br>De nouveaux bons plans arrivent chaque jour.</div>`;
+  }
+  $('#feed').innerHTML = h;
+  list.forEach(p => { if (p.fresh) setTimeout(() => { p.fresh = false; }, 2000); });
+}
+
+const postHTML = p => p.type === 'brand' ? brandPostHTML(p) : commuPostHTML(p);
+
+function actionsHTML(p) {
+  const liked = S.liked.has(p.id), saved = S.saved.has(p.id);
+  return `<div class="actions">
+    <button class="act ${liked ? 'liked' : ''}" data-action="like" data-id="${p.id}" aria-label="J'aime">${ic('heart')}</button>
+    <button class="act" data-action="comments" data-id="${p.id}" aria-label="Commenter">${ic('comment')}</button>
+    <button class="act" data-action="share" data-id="${p.id}" aria-label="Partager">${ic('send')}</button>
+    <button class="save-btn ${saved ? 'on' : ''}" data-action="save" data-id="${p.id}">${ic('bookmark')}${saved ? 'Sauvegardé' : 'Sauvegarder'}</button>
+  </div>`;
+}
+
+function commentsPreview(p) {
+  const c = p.comments;
+  if (!c.length) return `<button class="view-cmts" data-action="comments" data-id="${p.id}">Ajouter un commentaire…</button>`;
+  const last = c[c.length - 1];
+  return `<div class="cmt-prev"><b>${esc(last.u)}</b> ${esc(last.t)}</div>
+    <button class="view-cmts" data-action="comments" data-id="${p.id}">${c.length > 1 ? `Voir les ${c.length} commentaires` : 'Répondre…'}</button>`;
+}
+
+function visualHTML(p) {
+  const b = BRANDS[p.brand];
+  return `<div class="visual v-${CAT_SLUG[p.cat]}"><div class="v-emoji">${p.emoji}</div>
+    <div class="v-title">${esc(p.product)}</div>${p.detail ? `<div class="v-sub">${esc(p.detail)}</div>` : ''}
+    <div class="v-brand">${esc(b.name)} · ${esc(p.place)}</div></div>`;
+}
+
+function brandPostHTML(p) {
+  const b = BRANDS[p.brand], d = dist(p), pc = pctP(p), sv = saving(p), open = isOpen(p.hours);
+  return `<article class="post${p.fresh ? ' fresh' : ''}" data-post="${p.id}">
+    <header class="post-head">
+      <button data-action="brand" data-brand="${p.brand}" aria-label="${esc(b.name)}">${avBrand(b)}</button>
+      <div class="who">
+        <button class="nm" data-action="brand" data-brand="${p.brand}">${esc(b.name)} ${VB}</button>
+        <div class="sub">${esc(p.place)}${d != null ? ' · ' + kmTxt(d) : ''} · <span class="${open ? 'open' : 'closed'}">${open ? 'Ouvert' : 'Fermé'}</span></div>
+      </div>
+      <span class="kind">Offre officielle</span>
+    </header>
+    <div class="media" data-action="media" data-id="${p.id}">
+      ${p.photo ? `<img class="photo" src="${p.photo}" alt="${esc(p.product)}">` : visualHTML(p)}
+      <span class="m-pct">-${pc}%</span>
+      ${p.student ? '<span class="m-student">🎓 Prix étudiant</span>' : ''}
+      <div class="m-bottom">
+        <span class="m-chip ${p.end <= 1 ? 'hot' : ''}">${ic('clock')}${endShort(p.end)}</span>
+        ${p.stock ? `<span class="m-chip hot">Plus que ${p.stock} en stock</span>` : ''}
+      </div>
+      <div class="heart-pop">${ic('heart')}</div>
+    </div>
+    ${actionsHTML(p)}
+    <div class="likes">${num(likesOf(p))} j'aime</div>
+    <div class="price-row"><span class="price">${eur(p.price)}</span><span class="old">${eur(p.old)}</span><span class="pct">-${pc} %</span><span class="prod">${esc(p.product)}</span></div>
+    <p class="caption"><button class="u" data-action="brand" data-brand="${p.brand}">${esc(b.name)}</button> ${esc(p.caption)} ${tagsHTML(p.tags)}</p>
+    ${p.doc ? docHTML(p.doc) : ''}
+    <div class="hint">${ic('pie')}<span>Tu économises <b>${eur(sv)}</b> · ${budgetPct(p.cat, sv)} de ton budget ${p.cat} du mois</span></div>
+    ${commentsPreview(p)}
+    <div class="ago">${agoText(p.ago)}</div>
+  </article>`;
+}
+
+function receiptHTML(p) {
+  const b = BRANDS[p.brand];
+  const lines = p.lines || [[p.item, p.paid, p.normal]];
+  const dt = new Date(now.getTime() - p.ago * 3600e3);
+  return `<div class="receipt-bg"><div class="receipt">
+    <span class="stamp">-${pctP(p)}%</span>
+    <div class="r-store">${esc(b.name.toUpperCase())}</div>
+    <div class="r-date">${esc(p.place)} · ${dt.toLocaleDateString('fr-FR')}</div>
+    ${lines.slice(0, 4).map(l => `<div class="r-line"><span class="n">${esc(l[0])}</span><span>${l[2] > l[1] ? `<s>${eur(l[2])}</s>` : ''}${eur(l[1])}</span></div>`).join('')}
+    <div class="r-sep"></div>
+    <div class="r-total"><span>TOTAL</span><span>${eur(p.paid)}</span></div>
+    <div class="r-saved"><small>TU AS ÉCONOMISÉ</small><b>${eur(saving(p))}</b></div>
+  </div></div>`;
+}
+
+function commuPostHTML(p) {
+  const b = BRANDS[p.brand], d = dist(p), sv = saving(p);
+  return `<article class="post${p.fresh ? ' fresh' : ''}" data-post="${p.id}">
+    <header class="post-head">
+      <button data-action="user" data-user="${esc(p.user)}" aria-label="${esc(p.user)}">${avUser(p.user)}</button>
+      <div class="who">
+        <button class="nm" data-action="user" data-user="${esc(p.user)}">${esc(p.user)}</button>
+        <div class="sub">chez <button class="lk" data-action="brand" data-brand="${p.brand}">${esc(b.name)}</button> · ${esc(p.place)}${d != null ? ' · ' + kmTxt(d) : ''}</div>
+      </div>
+      <span class="kind perso">${esc(p.mood)}</span>
+    </header>
+    <div class="media" data-action="media" data-id="${p.id}">
+      ${p.photo ? `<img class="photo" src="${p.photo}" alt=""><div class="m-bottom"><span class="m-chip">💰 ${eur(sv)} économisés</span></div>` : receiptHTML(p)}
+      <div class="heart-pop">${ic('heart')}</div>
+    </div>
+    ${actionsHTML(p)}
+    <div class="likes">${num(likesOf(p))} j'aime</div>
+    <div class="saved-row"><span class="money">💰 ${eur(sv)} économisés</span><span class="pct">-${pctP(p)} %</span>${p.verified ? `<span class="verified">${ic('check')}Économie vérifiée</span>` : ''}</div>
+    <p class="caption"><button class="u" data-action="user" data-user="${esc(p.user)}">${esc(p.user)}</button> ${esc(p.text)} ${tagsHTML(p.tags)}</p>
+    ${p.doc ? docHTML(p.doc) : ''}
+    ${commentsPreview(p)}
+    <div class="ago">${agoText(p.ago)}</div>
+  </article>`;
+}
+
+function rerender(id) {
+  const p = get(id); if (!p) return;
+  $$(`[data-post="${id}"]`).forEach(el => { el.outerHTML = postHTML(p); });
+}
+
+/* =========================================================
+   SUPERPOSITIONS (feuilles et pages)
+   ========================================================= */
+const stack = [];
+function openOverlay(kind, html, name) {
+  const ov = document.createElement('div');
+  ov.className = 'ov'; if (name) ov.dataset.name = name;
+  ov.innerHTML = kind === 'sheet'
+    ? `<div class="backdrop" data-action="close"></div><div class="sheet">${html}</div>`
+    : `<div class="page">${html}</div>`;
+  $('#layer').appendChild(ov); stack.push(ov);
+  requestAnimationFrame(() => requestAnimationFrame(() => ov.classList.add('show')));
+  return ov;
+}
+function closeTop() {
+  const ov = stack.pop(); if (!ov) return;
+  ov.classList.remove('show'); setTimeout(() => ov.remove(), 330);
+}
+const findOv = name => stack.find(o => o.dataset.name === name);
+
+/* Commentaires */
+function commentsList(p) {
+  if (!p.comments.length) return `<div class="empty" style="padding:24px"><div class="e">💬</div><b>Aucun commentaire</b><p>Sois le premier à réagir à ce bon plan.</p></div>`;
+  return p.comments.map(c => `<div class="cmt">${avUser(c.u)}<div><p><b>${esc(c.u)}</b> ${esc(c.t)}</p><div class="meta">${esc(c.ago)}</div></div></div>`).join('');
+}
+function openComments(id) {
+  const p = get(id);
+  openOverlay('sheet', `<div class="grab"></div>
+    <div class="sheet-h"><span style="width:36px"></span><h3>Commentaires</h3><button class="ib" data-action="close" aria-label="Fermer">${ic('x')}</button></div>
+    <div class="sheet-b" id="cmtList">${commentsList(p)}</div>
+    <div class="emo-row">${['🔥','🙏','😍','👏','💸','😮‍💨'].map(e => `<button data-action="emo" data-e="${e}">${e}</button>`).join('')}</div>
+    <form class="cmt-input" data-id="${id}">${avUser(ME)}<input type="text" placeholder="Ajouter un commentaire…" maxlength="200" autocomplete="off"><button class="send" type="submit">Publier</button></form>`, 'comments');
+}
+function addComment(form) {
+  const id = form.dataset.id, inp = form.querySelector('input'), t = inp.value.trim();
+  if (!t) return;
+  const p = get(id); p.comments.push({ u:ME, t, ago:"À l'instant" });
+  inp.value = '';
+  const l = $('#cmtList'); l.innerHTML = commentsList(p); l.scrollTop = l.scrollHeight;
+  rerender(id);
+}
+
+/* Profil enseigne */
+function tileHTML(p) {
+  if (p.type === 'brand') {
+    return `<button class="tile v-${CAT_SLUG[p.cat]}" data-action="tile" data-id="${p.id}">${p.photo ? `<img src="${p.photo}" alt="">` : p.emoji}<span class="tp">-${pctP(p)}%</span><span class="tc">${esc(p.city)}</span></button>`;
+  }
+  return p.photo
+    ? `<button class="tile" data-action="tile" data-id="${p.id}"><img src="${p.photo}" alt=""><span class="tp">${eur(saving(p))}</span></button>`
+    : `<button class="tile t-commu" data-action="tile" data-id="${p.id}">💰 ${eur(saving(p))}<small>${esc(BRANDS[p.brand].name)}</small></button>`;
+}
+function openBrand(k) {
+  const b = BRANDS[k]; if (!b) return;
+  S.seen.add(k); renderStories();
+  const offers = OFFERS.filter(o => o.brand === k);
+  const scope = offers.filter(o => S.city === 'near' || o.city === S.city);
+  const storesSrc = scope.length ? scope : offers;
+  const seenP = new Set();
+  const stores = storesSrc.filter(o => { const key = o.city + o.place; if (seenP.has(key)) return false; seenP.add(key); return true; })
+    .map(o => ({ o, d: dist(o) })).sort((a, c) => (a.d ?? 0) - (c.d ?? 0));
+  const posts = POSTS.filter(p => p.brand === k);
+  const avg = offers.length ? offers.reduce((s, o) => s + saving(o), 0) / offers.length : 0;
+  const f = S.follow.has(k);
+  const cityTxt = S.city === 'near' ? 'autour de toi' : (scope.length ? 'à ' + S.city : '');
+  openOverlay('page', `
+    <div class="page-h"><button class="ib" data-action="close" aria-label="Retour">${ic('back')}</button><h3>${esc(b.name)}</h3></div>
+    <div class="page-b">
+      <div class="prof">
+        <div class="prof-top">${avBrand(b, 'big')}
+          <div class="stats"><div><b>${offers.length}</b><span>offres</span></div><div><b id="folN">${fmtK(b.followers + (f ? 1 : 0))}</b><span>abonnés</span></div><div><b>${eur(avg)}</b><span>éco. moy.</span></div></div>
+        </div>
+        <h4>${esc(b.name)} ${b.custom ? '' : VB}</h4>
+        <p>${esc(b.bio)}</p>
+        <div class="prof-btns">
+          <button class="btn-main ${f ? 'on' : ''}" data-action="follow" data-brand="${k}">${f ? 'Abonné ✓' : 'Suivre'}</button>
+          <button class="btn-out" data-action="nav" data-nav="carte">📍 Voir sur la carte</button>
+        </div>
+      </div>
+      ${stores.length ? `<div class="sec-t">Magasins ${cityTxt}</div><div class="stores">${stores.map(({ o, d }) => {
+        const op = isOpen(o.hours);
+        return `<div class="store-row"><span style="font-size:20px">🏪</span><div><b>${esc(b.name)} ${esc(o.place)}</b><small><span class="${op ? 'open' : 'closed'}">${op ? 'Ouvert' : 'Fermé'}</span> · ${fmtH(o.hours[0])} - ${fmtH(o.hours[1])}</small></div><span class="d">${kmTxt(d)}</span></div>`;
+      }).join('')}</div>` : ''}
+      <div class="sec-t">Offres en cours</div>
+      <div class="grid">${offers.map(tileHTML).join('') || '<p style="grid-column:1/-1;color:var(--muted);font-size:13px">Aucune offre pour le moment.</p>'}</div>
+      ${posts.length ? `<div class="sec-t">La communauté en parle</div><div class="grid">${posts.map(tileHTML).join('')}</div>` : ''}
+    </div>`, 'brand');
+}
+
+/* Profil utilisateur */
+function openUser(u) {
+  const posts = POSTS.filter(p => p.user === u);
+  const total = posts.reduce((s, p) => s + saving(p), 0) + (u === ME ? 0 : 140 + hash(u) % 260);
+  const likes = posts.reduce((s, p) => s + likesOf(p), 0);
+  const fol = u === ME ? 0 : 90 + hash(u) % 900;
+  const f = S.followU.has(u);
+  const city = posts[0] ? posts[0].city : '';
+  openOverlay('page', `
+    <div class="page-h"><button class="ib" data-action="close" aria-label="Retour">${ic('back')}</button><h3>${esc(u)}</h3></div>
+    <div class="page-b">
+      <div class="prof">
+        <div class="prof-top">${avUser(u, 'big')}
+          <div class="stats"><div><b>${posts.length}</b><span>bons plans</span></div><div><b>${eur(total)}</b><span>économisés</span></div><div><b id="folU">${fol + (f ? 1 : 0)}</b><span>abonnés</span></div></div>
+        </div>
+        <h4>${esc(u)}</h4>
+        <p>${u === ME ? 'Ton profil Capstone. Tes bons plans partagés apparaissent ici.' : `Chasseur de bons plans${city ? ' à ' + esc(city) : ''} · membre depuis ${3 + hash(u) % 14} mois`}</p>
+        ${likes > 400 ? '<span class="badge-top">🏅 Top contributeur du mois</span>' : ''}
+        ${u === ME ? '' : `<div class="prof-btns"><button class="btn-main ${f ? 'on' : ''}" data-action="followu" data-user="${esc(u)}">${f ? 'Abonné ✓' : 'Suivre'}</button></div>`}
+      </div>
+      <div class="sec-t">Bons plans partagés</div>
+      <div class="grid">${posts.map(tileHTML).join('') || '<p style="grid-column:1/-1;color:var(--muted);font-size:13px">Aucun bon plan partagé pour le moment.</p>'}</div>
+    </div>`, 'user');
+}
+
+/* Publication seule */
+function openPostDetail(id) {
+  const p = get(id); if (!p) return;
+  openOverlay('page', `<div class="page-h"><button class="ib" data-action="close" aria-label="Retour">${ic('back')}</button><h3>Publication</h3></div>
+    <div class="page-b">${postHTML(p)}</div>`, 'detail');
+}
+
+/* Mes bons plans sauvegardés */
+function savedHTML() {
+  const items = [...S.saved].map(get).filter(Boolean);
+  const head = `<div class="grab"></div><div class="sheet-h"><span style="width:36px"></span><h3>Mes bons plans</h3><button class="ib" data-action="close" aria-label="Fermer">${ic('x')}</button></div>`;
+  if (!items.length) return head + `<div class="sheet-b"><div class="empty"><div class="e">🔖</div><b>Aucun bon plan sauvegardé</b><p>Appuie sur « Sauvegarder » sous une offre pour la retrouver ici.</p></div></div>`;
+  const tot = items.reduce((s, p) => s + saving(p), 0);
+  return head + `<div class="sheet-b">
+    <div class="sv-sum"><small>Économie potentielle</small><b>${eur(tot)}</b><span>${items.length} bon${items.length > 1 ? 's' : ''} plan${items.length > 1 ? 's' : ''} · ${budgetPctTotal(tot)} de ton budget variable du mois</span></div>
+    ${items.map(p => {
+      const b = BRANDS[p.brand], isB = p.type === 'brand';
+      const thumb = p.photo ? `<img src="${p.photo}" alt="">` : (isB ? p.emoji : '🧾');
+      return `<div class="sv-item">
+        <button class="sv-thumb ${isB ? 'v-' + CAT_SLUG[p.cat] : 't-commu'}" data-action="tile" data-id="${p.id}">${thumb}</button>
+        <button class="sv-info" data-action="tile" data-id="${p.id}">
+          <b>${esc(isB ? p.product : p.item)}</b>
+          <span>${esc(b.name)} · ${esc(p.place)} (${esc(p.city)})</span>
+          <span class="sv-p">${isB ? `${eur(p.price)} <s>${eur(p.old)}</s>` : `Partagé par ${esc(p.user)}`} · <em>-${eur(saving(p))}</em></span>
+          ${isB ? `<span class="sv-end">${endShort(p.end)}</span>` : ''}
+        </button>
+        <button class="sv-rm" data-action="save" data-id="${p.id}" aria-label="Retirer">${ic('x')}</button>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+const budgetPctTotal = t => { const v = t / BUDGET_TOTAL * 100; return v < 1 ? 'moins de 1 %' : `≈ ${Math.round(v)} %`; };
+function refreshSaved() { const ov = findOv('saved'); if (ov) $('.sheet', ov).innerHTML = savedHTML(); }
+
+/* =========================================================
+   PUBLIER UN BON PLAN
+   ========================================================= */
+let P = null;
+const EMOJIS = ['🛒','🥑','🥐','🍕','🍝','☕','👕','👟','🎧','💻','💄','🧴','🛋️','📦','💡','🎁'];
+const MOODS = ['🔥 Pépite','🛒 Courses malines','🎓 Spécial étudiant','🌱 Anti-gaspi','🍕 Soirée colocs','✨ Déco'];
+const DURS = [[0,"Aujourd'hui"],[3,'3 jours'],[7,'1 semaine'],[14,'2 semaines'],[30,'1 mois']];
+
+function openPublish() {
+  P = { role:null, city: S.city === 'Paris' ? 'Paris' : 'Lille', cat:'Courses', mood:'🔥 Pépite', dur:7, student:false, stock:false, verify:true, file:null, emoji:null, v:{} };
+  const ov = openOverlay('page', `
+    <div class="page-h"><button class="ib" data-action="close" aria-label="Fermer">${ic('x')}</button><h3>Publier un bon plan</h3></div>
+    <div class="page-b pub-b" id="pubBody"></div>
+    <div class="pub-foot"><div class="pub-err" id="pubErr"></div><button class="btn-primary" id="pubBtn" data-action="pubsend" disabled>Publier</button></div>`, 'publish');
+  ov.addEventListener('input', e => {
+    const f = e.target.dataset.f; if (!f) return;
+    P.v[f] = e.target.value;
+    if (f === 'brand') drawPub(); else updatePub();
+  });
+  ov.addEventListener('change', e => { if (e.target.id === 'pubFile') readFile(e.target.files[0]); });
+  drawPub();
+}
+const fld = (label, inner) => `<div class="field"><label>${label}</label>${inner}</div>`;
+const inp = (f, ph, extra = '') => `<input class="inp" data-f="${f}" type="text" placeholder="${esc(ph)}" value="${esc(P.v[f] || '')}" ${extra}>`;
+const area = (f, ph) => `<textarea class="inp" data-f="${f}" placeholder="${esc(ph)}" maxlength="400">${esc(P.v[f] || '')}</textarea>`;
+const pick = (k, list) => `<div class="pick">${list.map(([v, l]) => `<button class="chip ${String(P[k]) === String(v) ? 'on' : ''}" data-action="pset" data-k="${k}" data-v="${esc(v)}">${l}</button>`).join('')}</div>`;
+const tgl = (k, title, sub) => `<button class="toggle-row" data-action="pset" data-k="${k}" data-v="toggle"><span>${title}${sub ? `<small>${sub}</small>` : ''}</span><span class="switch ${P[k] ? 'on' : ''}"></span></button>`;
+
+function drawPub() {
+  const body = $('#pubBody'); if (!body || !P) return;
+  const v = P.v, pro = P.role === 'pro';
+  const role = (r, e, t, s) => `<button class="role ${P.role === r ? 'on' : ''}" data-action="pset" data-k="role" data-v="${r}"><span class="role-ic">${e}</span><span><b>${t}</b><small>${s}</small></span><span class="radio"></span></button>`;
+  let h = `<p class="pub-q">Tu publies en tant que…</p>
+    ${role('pro','🏪','Commerçant','Publie une offre officielle pour ton magasin')}
+    ${role('perso','🙋','Particulier','Partage un bon plan que tu as trouvé')}`;
+  if (P.role) {
+    const opts = Object.values(BRANDS).map(b => `<option value="${b.key}" ${v.brand === b.key ? 'selected' : ''}>${esc(b.name)}</option>`).join('');
+    const file = P.file;
+    const dz = `<label class="dz ${file ? 'has' : ''}"><input type="file" id="pubFile" accept="image/*,application/pdf" hidden>
+      ${file && file.kind === 'img' ? `<img src="${file.url}" alt=""><div style="margin-top:8px">Appuie pour changer d'image</div>`
+        : file ? `📄 <b>${esc(file.name)}</b><div>Document ajouté · appuie pour changer</div>`
+        : `${ic('upload')}<b>${pro ? 'Ajoute une photo ou un document' : 'Ajoute une photo ou ton ticket de caisse'}</b><div>JPG, PNG ou PDF</div>`}</label>`;
+    h += `<div class="divider"></div>
+      ${fld('Enseigne', `<select class="inp" data-f="brand"><option value="">Choisir une enseigne…</option>${opts}<option value="__other" ${v.brand === '__other' ? 'selected' : ''}>${pro ? 'Mon commerce n\'est pas dans la liste' : 'Autre enseigne…'}</option></select>`)}
+      ${v.brand === '__other' ? fld(pro ? 'Nom de ton commerce' : "Nom de l'enseigne", inp('other', 'ex. Boulangerie du Marché')) : ''}
+      <div class="row2">${fld('Ville', pick('city', [['Lille','Lille'],['Paris','Paris']]))}${fld('Magasin', inp('place', 'ex. Wazemmes'))}</div>
+      ${fld(pro ? 'Produit en promo' : "Ce que tu as acheté", inp('product', pro ? 'ex. Avocats mûrs à point' : 'ex. Courses de la semaine'))}
+      ${pro ? fld('Précision (optionnel)', inp('detail', 'ex. Filet de 4, 250 g…')) : ''}
+      ${fld('Catégorie', pick('cat', CATS.slice(1).map(([c, e]) => [c, e + ' ' + c])))}
+      <div class="row2">
+        ${fld(pro ? 'Prix initial (€)' : 'Prix normal (€)', inp('old', '2,99', 'inputmode="decimal"'))}
+        ${fld(pro ? 'Prix réduit (€)' : 'Prix payé (€)', inp('price', '1,79', 'inputmode="decimal"'))}
+      </div>
+      <div class="calc idle" id="pubCalc"></div>
+      ${pro ? fld("Durée de l'offre", pick('dur', DURS)) : fld('Ton humeur', pick('mood', MOODS.map(m => [m, m])))}
+      ${pro ? tgl('student', '🎓 Prix étudiant', 'Réservé sur présentation de la carte étudiante') + tgl('stock', '📦 Stock limité', 'Affiche le nombre de pièces restantes') + (P.stock ? fld('Pièces disponibles', inp('stockN', 'ex. 20', 'inputmode="numeric"')) : '') : ''}
+      ${fld(pro ? 'Description' : 'Raconte ton bon plan', area('desc', pro ? "Ce qu'il faut savoir sur l'offre…" : "J'ai réussi à économiser… grâce à…"))}
+      ${fld('Hashtags', inp('tags', '#antigaspi #etudiant'))}
+      ${!file || file.kind !== 'img' ? `<div class="field"><span class="flabel">Visuel du post (si pas de photo)</span><div class="emo-pick">${EMOJIS.map(e => `<button class="${(P.emoji || CAT_EMOJI[P.cat]) === e ? 'on' : ''}" data-action="pset" data-k="emoji" data-v="${e}">${e}</button>`).join('')}</div></div>` : ''}
+      ${fld(pro ? 'Photo ou document' : 'Photo ou ticket de caisse', dz)}
+      ${pro ? '' : tgl('verify', '✅ Vérifier mon économie avec Linxo', 'Ajoute le badge « Économie vérifiée » à ton post')}`;
+  }
+  body.innerHTML = h;
+  updatePub();
+}
+function pubCheck() {
+  const v = P.v, old = toNum(v.old), price = toNum(v.price), miss = [];
+  if (!P.role) return { old, price, ok:false, miss:['ton profil (commerçant ou particulier)'] };
+  if (!v.brand || (v.brand === '__other' && !(v.other || '').trim())) miss.push('enseigne');
+  if (!(v.place || '').trim()) miss.push('magasin');
+  if (!(v.product || '').trim()) miss.push('produit');
+  if (!(old > 0) || !(price >= 0) || price >= old) miss.push('prix');
+  return { old, price, ok: !miss.length, miss };
+}
+function updatePub() {
+  if (!P) return;
+  const { old, price, ok, miss } = pubCheck();
+  const c = $('#pubCalc');
+  if (c) {
+    if (old > 0 && price >= 0 && !isNaN(price) && price < old) {
+      c.className = 'calc';
+      c.textContent = P.role === 'pro'
+        ? `Réduction de -${pctOf(old, price)} % · ${eur(old - price)} d'économie par client`
+        : `🎉 Tu as économisé ${eur(old - price)} (-${pctOf(old, price)} %)`;
+    } else if (old > 0 && price >= old) {
+      c.className = 'calc warn'; c.textContent = 'Le prix réduit doit être inférieur au prix initial.';
+    } else {
+      c.className = 'calc idle'; c.textContent = "Renseigne les deux prix pour calculer l'économie.";
+    }
+  }
+  $('#pubBtn').disabled = !ok;
+  $('#pubErr').textContent = ok ? 'Tout est bon, ton post est prêt ✨' : 'Il manque : ' + miss.join(', ');
+}
+function readFile(f) {
+  if (!f || !P) return;
+  if (f.type.startsWith('image/')) {
+    const r = new FileReader();
+    r.onload = () => { P.file = { kind:'img', url:r.result, name:f.name }; drawPub(); };
+    r.readAsDataURL(f);
+  } else { P.file = { kind:'doc', name:f.name }; drawPub(); }
+}
+function createBrand(name, cat) {
+  const key = 'x' + Date.now();
+  BRANDS[key] = { key, name, ini: initials(name), logo:'', color: PALETTE[hash(name) % PALETTE.length], followers: 0, custom: true,
+    bio: `Commerce ${cat ? cat.toLowerCase() + ' ' : ''}présent sur Capstone.` };
+  return key;
+}
+function publishPost() {
+  const { old, price, ok } = pubCheck(); if (!ok) return;
+  const v = P.v, pro = P.role === 'pro';
+  let bk = v.brand; if (bk === '__other') bk = createBrand(v.other.trim(), P.cat);
+  const r = CITY_REF[P.city];
+  const lat = r.lat + (Math.random() - .5) * .02, lng = r.lng + (Math.random() - .5) * .03;
+  const tags = (v.tags || '').split(/[\s,]+/).map(t => t.replace(/^#/, '')).filter(Boolean).slice(0, 5);
+  const photo = P.file && P.file.kind === 'img' ? P.file.url : null;
+  const doc = P.file && P.file.kind === 'doc' ? { name: P.file.name } : null;
+  let item;
+  if (pro) {
+    item = offer(bk, P.city, v.place.trim(), lat, lng, P.cat, v.product.trim(), (v.detail || '').trim(), P.emoji || CAT_EMOJI[P.cat], old, price, P.dur,
+      { student:P.student, stock: P.stock ? Math.max(1, parseInt(v.stockN) || 10) : 0, hours:[8, 21], likes:0, ago:0,
+        caption: (v.desc || '').trim() || `Nouvelle offre chez ${BRANDS[bk].name} !`, tags });
+    OFFERS.unshift(item); S.tab = 'brands';
+  } else {
+    item = post(ME, P.city, bk, v.place.trim(), lat, lng, P.cat, P.mood, price, old,
+      { verified:P.verify, likes:0, ago:0, item: v.product.trim(), text: (v.desc || '').trim() || `Bon plan trouvé chez ${BRANDS[bk].name} 🙌`, tags });
+    POSTS.unshift(item); S.tab = 'community'; S.monthSaved += old - price;
+  }
+  item.photo = photo; item.doc = doc; item.mine = true; item.fresh = true;
+  if (S.city !== 'near') S.city = P.city;
+  S.cat = 'Tout'; S.student = false; S.big = false; S.sort = 'pertinence';
+  P = null;
+  closeTop(); render(); scrollToFeed(true);
+  toast(pro ? '🎉 Ton offre est en ligne' : '🎉 Ton bon plan est partagé avec la communauté');
+}
+
+/* =========================================================
+   LOCALISATION
+   ========================================================= */
+function locate() {
+  toast('📍 Recherche de ta position…');
+  const done = (pos, simulated) => {
+    S.pos = pos; S.city = 'near'; S.sort = 'proche'; render();
+    toast(simulated ? '📍 Position simulée : Lille centre' : '📍 Voici les bons plans autour de toi');
+  };
+  const fallback = () => done({ lat:50.6330, lng:3.0590 }, true);
+  if (!navigator.geolocation) return fallback();
+  navigator.geolocation.getCurrentPosition(p => done({ lat:p.coords.latitude, lng:p.coords.longitude }), fallback, { timeout:6000, maximumAge:600000 });
+}
+
+/* =========================================================
+   ASSISTANT
+   ========================================================= */
+function botSay(text, me) {
+  const box = $('#botMsgs'), m = document.createElement('div');
+  m.className = 'msg' + (me ? ' me' : ''); m.textContent = text;
+  box.appendChild(m); box.scrollTop = box.scrollHeight;
+}
+function closeBotSoon() { setTimeout(() => $('#botPanel').classList.remove('show'), 1300); }
+function botQuery(raw) {
+  botSay(raw, true);
+  const q = norm(raw);
+  if (/proche|pres de moi|autour/.test(q)) { botSay('Je cherche les bons plans autour de toi 📍'); closeBotSoon(); setTimeout(locate, 500); return; }
+  S.cat = 'Tout'; S.student = false; S.big = false;
+  const applied = [];
+  const catMap = { course:'Courses', supermarche:'Courses', manger:'Courses', mode:'Mode', vetement:'Mode', sport:'Sport', running:'Sport', tech:'Tech', casque:'Tech', beaute:'Beauté', maquillage:'Beauté', maison:'Maison', deco:'Maison' };
+  for (const [k, c] of Object.entries(catMap)) if (q.includes(k)) { S.cat = c; applied.push(c); break; }
+  if (/etudiant/.test(q)) { S.student = true; applied.push('prix étudiant'); }
+  if (/50|moitie|grosse|enorme/.test(q)) { S.big = true; applied.push('-50 % et +'); }
+  if (/paris/.test(q)) { S.city = 'Paris'; applied.push('Paris'); } else if (/lille/.test(q)) { S.city = 'Lille'; applied.push('Lille'); }
+  if (/communaute|gens|avis/.test(q)) S.tab = 'community';
+  const bk = Object.keys(BRANDS).find(k => q.includes(k) || q.includes(norm(BRANDS[k].name)));
+  if (bk && !applied.length) {
+    botSay(`J'ouvre la page ${BRANDS[bk].name} 👇`);
+    setTimeout(() => { $('#botPanel').classList.remove('show'); openBrand(bk); }, 700); return;
+  }
+  if (!applied.length) { botSay("Je n'ai pas bien compris 🤔 Essaie par exemple « courses pas chères » ou « offres prix étudiant »."); return; }
+  if (!sortOpts().some(o => o[0] === S.sort)) S.sort = 'pertinence';
+  render();
+  const n = visible().list.length;
+  setTimeout(() => {
+    botSay(n ? `J'ai trouvé ${n} bon${n > 1 ? 's' : ''} plan${n > 1 ? 's' : ''} (${applied.join(', ')}) 👇` : `Aucun bon plan pour l'instant avec : ${applied.join(', ')}.`);
+    closeBotSoon(); scrollToFeed();
+  }, 450);
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+function scrollToFeed(instant) {
+  const sc = $('#scroll'), a = $('#ctrlAnchor').offsetTop;
+  $('#controls').classList.remove('hid');
+  if (sc.scrollTop > a) sc.scrollTo({ top:a, behavior: instant ? 'auto' : 'smooth' });
+}
+function popHeart(id) {
+  $$(`[data-post="${id}"] .media`).forEach(m => { m.classList.remove('pop'); void m.offsetWidth; m.classList.add('pop'); });
+}
+function toggleLike(id, forceOn) {
+  if (S.liked.has(id) && !forceOn) S.liked.delete(id); else S.liked.add(id);
+  rerender(id);
+  if (S.liked.has(id)) $$(`[data-post="${id}"] .act[data-action="like"]`).forEach(b => b.classList.add('bump'));
+}
+let lastTap = { id:null, t:0 };
+const NAV_NAMES = { carte:'Carte des bons plans', budget:'Budget', profil:'Profil' };
+
+const A = {
+  city: () => $('#cityMenu').classList.toggle('show'),
+  setcity: t => {
+    $('#cityMenu').classList.remove('show');
+    const c = t.dataset.city;
+    if (c === 'near') return locate();
+    S.city = c; if (S.sort === 'proche') S.sort = 'pertinence';
+    render(); scrollToFeed(); toast(`📍 Bons plans à ${c}`);
+  },
+  tab: t => {
+    if (S.tab === t.dataset.tab) return;
+    S.tab = t.dataset.tab;
+    if (!sortOpts().some(o => o[0] === S.sort)) S.sort = 'pertinence';
+    renderControls(); renderFeed(); scrollToFeed();
+  },
+  cat: t => { S.cat = t.dataset.cat; renderControls(); renderFeed(); scrollToFeed(); },
+  student: () => { S.student = !S.student; renderControls(); renderFeed(); },
+  big: () => { S.big = !S.big; renderControls(); renderFeed(); },
+  reset: () => { S.cat = 'Tout'; S.student = false; S.big = false; renderControls(); renderFeed(); },
+  like: t => toggleLike(t.dataset.id),
+  media: t => {
+    const id = t.dataset.id, n = Date.now();
+    if (lastTap.id === id && n - lastTap.t < 350) {
+      if (!S.liked.has(id)) toggleLike(id, true);
+      popHeart(id); lastTap = { id:null, t:0 };
+    } else lastTap = { id, t:n };
+  },
+  comments: t => openComments(t.dataset.id),
+  emo: t => { const i = $('.cmt-input input'); if (i) { i.value += t.dataset.e; i.focus(); } },
+  share: t => {
+    const p = get(t.dataset.id), b = BRANDS[p.brand];
+    const txt = p.type === 'brand' ? `Bon plan Capstone : ${p.product} à ${eur(p.price)} au lieu de ${eur(p.old)} chez ${b.name} ${p.place}` : `Bon plan Capstone : ${p.user} a économisé ${eur(saving(p))} chez ${b.name}`;
+    try { navigator.clipboard && navigator.clipboard.writeText(txt).catch(() => {}); } catch (e) {}
+    toast('🔗 Lien du bon plan copié, partage-le à tes amis');
+  },
+  save: t => {
+    const id = t.dataset.id, p = get(id);
+    if (S.saved.has(id)) { S.saved.delete(id); toast('Retiré de tes bons plans'); }
+    else {
+      S.saved.add(id);
+      toast(p.type === 'brand' ? `🔖 Sauvegardé · jusqu'à ${eur(saving(p))} en moins sur ton budget ${p.cat}` : '🔖 Bon plan sauvegardé');
+    }
+    rerender(id); renderTop(); refreshSaved();
+  },
+  saved: () => openOverlay('sheet', savedHTML(), 'saved'),
+  brand: t => openBrand(t.dataset.brand),
+  user: t => openUser(t.dataset.user),
+  tile: t => openPostDetail(t.dataset.id),
+  follow: t => {
+    const k = t.dataset.brand, b = BRANDS[k];
+    if (S.follow.has(k)) S.follow.delete(k); else { S.follow.add(k); toast(`Tu suis ${b.name}, tu verras ses offres en priorité`); }
+    const f = S.follow.has(k);
+    t.classList.toggle('on', f); t.textContent = f ? 'Abonné ✓' : 'Suivre';
+    const n = $('#folN'); if (n) n.textContent = fmtK(b.followers + (f ? 1 : 0));
+  },
+  followu: t => {
+    const u = t.dataset.user;
+    if (S.followU.has(u)) S.followU.delete(u); else S.followU.add(u);
+    const f = S.followU.has(u);
+    t.classList.toggle('on', f); t.textContent = f ? 'Abonné ✓' : 'Suivre';
+    const n = $('#folU'); if (n) n.textContent = 90 + hash(u) % 900 + (f ? 1 : 0);
+  },
+  publish: () => openPublish(),
+  pset: t => {
+    const k = t.dataset.k, v = t.dataset.v;
+    if (v === 'toggle') P[k] = !P[k];
+    else P[k] = k === 'dur' ? +v : v;
+    drawPub();
+  },
+  pubsend: () => publishPost(),
+  close: () => closeTop(),
+  top: () => { while (stack.length) closeTop(); $('#scroll').scrollTo({ top:0, behavior:'smooth' }); },
+  nav: t => {
+    const k = t.dataset.nav, href = NAV_LINKS[k];
+    if (!href) return toast(`La page ${NAV_NAMES[k] || k} arrive bientôt`);
+    /* Dans l'appli complète (iframe) : on demande à index.html de changer d'écran */
+    if (window.parent !== window) { window.parent.postMessage({ go: k }, '*'); return; }
+    location.href = href;
+  },
+  bot: () => $('#botPanel').classList.toggle('show'),
+  botsug: t => botQuery(t.textContent.replace(/^\S+\s/, ''))
+};
+
+/* =========================================================
+   ÉCOUTEURS
+   ========================================================= */
+document.addEventListener('click', e => {
+  if (!e.target.closest('.city-wrap')) $('#cityMenu').classList.remove('show');
+  const t = e.target.closest('[data-action]'); if (!t) return;
+  const f = A[t.dataset.action]; if (f) { e.preventDefault(); f(t, e); }
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'sort') { S.sort = e.target.value; renderFeed(); }
+});
+document.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.classList.contains('cmt-input')) addComment(f);
+  if (f.id === 'botForm') { const i = f.querySelector('input'), v = i.value.trim(); if (v) { i.value = ''; botQuery(v); } }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTop(); });
+
+/* Défilement horizontal à la souris (ordinateur) */
+let drag = null;
+document.addEventListener('pointerdown', e => {
+  if (e.pointerType !== 'mouse') return;
+  const el = e.target.closest('.hs'); if (!el || e.target.closest('select')) return;
+  drag = { el, x:e.clientX, s:el.scrollLeft, moved:false };
+});
+document.addEventListener('pointermove', e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x;
+  if (Math.abs(dx) > 5) drag.moved = true;
+  if (drag.moved) drag.el.scrollLeft = drag.s - dx;
+});
+document.addEventListener('pointerup', () => {
+  if (drag && drag.moved) {
+    const el = drag.el, block = ev => { ev.stopPropagation(); ev.preventDefault(); };
+    el.addEventListener('click', block, { capture:true, once:true });
+    setTimeout(() => el.removeEventListener('click', block, { capture:true }), 60);
+  }
+  drag = null;
+});
+
+/* Filtres qui se cachent en descendant, réapparaissent en remontant */
+let lastY = 0;
+$('#scroll').addEventListener('scroll', () => {
+  const y = $('#scroll').scrollTop, a = $('#ctrlAnchor').offsetTop, c = $('#controls');
+  const bot = $('.bot'), open = $('#botPanel').classList.contains('show');
+  if (y > a + 80 && y > lastY + 6) { c.classList.add('hid'); if (!open) bot.classList.add('hid'); }
+  else if (y < lastY - 6 || y <= a) { c.classList.remove('hid'); bot.classList.remove('hid'); }
+  lastY = y;
+}, { passive:true });
+
+/* =========================================================
+   INITIALISATION
+   ========================================================= */
+$$('[data-ic]').forEach(el => { el.outerHTML = ic(el.dataset.ic); });
+function tick() { const d = new Date(); $('#clock').textContent = d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0'); }
+tick(); setInterval(tick, 30000);
+botSay("Salut 👋 Je suis l'assistant Capstone. Dis-moi ce que tu cherches et je filtre le feed pour toi.");
+render();
+</script>
+</body>
+</html>
