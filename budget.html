@@ -5,21 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TODAY — Mon budget</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
 
   :root{
-    --cream:        #FBF6EC;
-    --cream-deep:   #F2E9D8;
-    --tan:          #E7D9BE;
-    --ink:          #2B241C;
-    --ink-soft:     #6B6052;
-    --ink-faint:    #A89C87;
-    --orange:       #E8632C;
-    --orange-deep:  #C44C1C;
-    --orange-pale:  #FBD9C4;
-    --olive:        #6E7A4F;
-    --olive-pale:   #E3E7D4;
-    --line:         #E3D7C2;
+    --cream:        #F6EADA;
+    --cream-deep:   #EFE2C9;
+    --tan:          #E9D2A8;
+    --ink:          #18140F;
+    --ink-soft:     #8C8273;
+    --ink-faint:    #B8AE9D;
+    --orange:       #F3752E;
+    --orange-deep:  #D9601D;
+    --orange-pale:  #FBDCC2;
+    --olive:        #18140F;
+    --olive-pale:   #EFE2C9;
+    --line:         #E8DAC0;
     color-scheme: light;
   }
 
@@ -28,7 +28,7 @@
   html,body{
     height:100%;
     background: #EDE4D3;
-    font-family:'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    font-family:'Fredoka', ui-sans-serif, system-ui, sans-serif;
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
   }
@@ -82,7 +82,7 @@
     display:flex; align-items:center; justify-content:space-between;
     padding: 16px 28px 4px;
     font-size: 15px;
-    font-weight:600;
+    font-weight:500;
     color: var(--ink);
     flex-shrink:0;
   }
@@ -91,16 +91,29 @@
   .app-header{
     padding: 10px 22px 14px;
     flex-shrink:0;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .app-header .avatar{
+    width:40px; height:40px;
+    border-radius:50%;
+    background: var(--orange);
+    color: var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:500;
+    font-size:16px;
+    flex-shrink:0;
   }
   .app-header .greeting{
-    font-family:'Fraunces', serif;
-    font-size: 25px;
-    font-weight: 600;
+    font-family:'Fredoka', sans-serif;
+    font-size: 23px;
+    font-weight:600;
     letter-spacing: -0.01em;
   }
   .app-header .sub{
-    margin-top:2px;
-    font-size: 13px;
+    margin-top:1px;
+    font-size: 12.5px;
     color: var(--ink-soft);
   }
 
@@ -118,9 +131,9 @@
     border-radius: 100px;
     background: var(--cream-deep);
     color: var(--ink-soft);
-    font-family:'Space Grotesk', sans-serif;
+    font-family:'Fredoka', sans-serif;
     font-size: 12.5px;
-    font-weight:600;
+    font-weight:500;
     cursor:pointer;
   }
   .subnav button.active{
@@ -168,20 +181,20 @@
   }
   .balance-card .label{ font-size: 13px; color: #CBC0AC; }
   .balance-card .amount{
-    font-family:'Fraunces', serif;
+    font-family:'Fredoka', sans-serif;
     font-size: 38px;
     font-weight:600;
     margin-top: 6px;
     letter-spacing: -0.01em;
   }
-  .balance-card .amount span{ font-size: 21px; color: #CBC0AC; font-family:'Space Grotesk'; }
+  .balance-card .amount span{ font-size: 21px; color: #CBC0AC; font-family:'Fredoka'; }
   .balance-card .delta{
     display:inline-flex;
     align-items:center;
     gap:5px;
     margin-top: 12px;
     font-size: 12.5px;
-    font-weight:600;
+    font-weight:500;
     background: rgba(232,99,44,.22);
     color: #FFB088;
     padding: 5px 10px;
@@ -209,9 +222,9 @@
   .acc-icon.joint{   background: var(--tan); color: var(--ink); }
 
   .acc-info{ flex:1; min-width:0; }
-  .acc-info .name{ font-size: 14px; font-weight:600; }
+  .acc-info .name{ font-size: 14px; font-weight:500; }
   .acc-info .meta{ font-size: 11.5px; color: var(--ink-soft); margin-top:1px; }
-  .acc-amount{ font-size: 14.5px; font-weight:600; font-variant-numeric: tabular-nums; }
+  .acc-amount{ font-size: 14.5px; font-weight:500; font-variant-numeric: tabular-nums; }
 
   .goal-card{
     background: var(--olive-pale);
@@ -219,9 +232,9 @@
     padding: 18px 20px;
   }
   .goal-card .row-top{ display:flex; justify-content:space-between; align-items:baseline; }
-  .goal-card .name{ font-size:14px; font-weight:600; }
+  .goal-card .name{ font-size:14px; font-weight:500; }
   .goal-card .tag{
-    font-size:11px; font-weight:600;
+    font-size:11px; font-weight:500;
     background: var(--olive); color: var(--cream);
     padding: 3px 9px; border-radius: 100px;
   }
@@ -247,14 +260,14 @@
   .due-date{
     width:42px; flex-shrink:0;
     text-align:center;
-    font-family:'Fraunces', serif;
+    font-family:'Fredoka', sans-serif;
   }
-  .due-date .d{ font-size:18px; font-weight:600; line-height:1; }
+  .due-date .d{ font-size:18px; font-weight:500; line-height:1; }
   .due-date .m{ font-size:10px; text-transform:lowercase; color: var(--ink-soft); }
   .due-info{ flex:1; min-width:0; }
-  .due-info .name{ font-size:13.5px; font-weight:600; }
+  .due-info .name{ font-size:13.5px; font-weight:500; }
   .due-info .meta{ font-size:11.5px; color: var(--ink-soft); margin-top:1px; }
-  .due-amount{ font-size:14px; font-weight:600; font-variant-numeric: tabular-nums; }
+  .due-amount{ font-size:14px; font-weight:500; font-variant-numeric: tabular-nums; }
 
   /* ---------- Bandeau synchronisation automatique ---------- */
   .auto-banner{
@@ -268,7 +281,7 @@
     margin-bottom: 4px;
     background: #FFFDF8;
   }
-  .auto-banner-title{ font-size:12.5px; font-weight:600; }
+  .auto-banner-title{ font-size:12.5px; font-weight:500; }
   .auto-banner-sub{ font-size:11px; color: var(--ink-soft); margin-top:2px; line-height:1.4; }
   .auto-dot{
     width:9px; height:9px; border-radius:50%;
@@ -291,9 +304,9 @@
     border: 1px dashed var(--line);
     background: transparent;
     color: var(--ink-soft);
-    font-family:'Space Grotesk', sans-serif;
+    font-family:'Fredoka', sans-serif;
     font-size: 11.5px;
-    font-weight:600;
+    font-weight:500;
     cursor:pointer;
   }
   .last-payment{
@@ -322,7 +335,7 @@
     text-align:center;
   }
   .donut-svg .amt{
-    font-family:'Fraunces', serif;
+    font-family:'Fredoka', sans-serif;
     font-size: 24px; font-weight:600;
     fill: var(--ink);
   }
@@ -336,9 +349,9 @@
   .cat-top{ display:flex; align-items:center; justify-content:space-between; font-size:13px; gap:10px; }
   .cat-top .name-wrap{ display:flex; align-items:center; gap:9px; min-width:0; }
   .cat-dot{ width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-  .cat-top .name{ font-weight:600; }
+  .cat-top .name{ font-weight:500; }
   .cat-top .vals{ color: var(--ink-soft); font-variant-numeric: tabular-nums; flex-shrink:0; }
-  .cat-top .over{ color: var(--orange-deep); font-weight:600; }
+  .cat-top .over{ color: var(--orange-deep); font-weight:500; }
   .cat-top .cat-chevron{
     width:14px; height:14px; flex-shrink:0;
     stroke: var(--ink-faint); fill:none; stroke-width:1.8;
@@ -353,11 +366,11 @@
     color: var(--cream);
   }
   .streak-top{ display:flex; justify-content:space-between; align-items:flex-start; }
-  .streak-top .ttl{ font-size:14px; font-weight:600; }
+  .streak-top .ttl{ font-size:14px; font-weight:500; }
   .streak-top .sub{ font-size:11.5px; color: #FBD9C4; margin-top:3px; max-width: 200px; }
   .streak-badge{
-    font-family:'Fraunces', serif;
-    font-size: 24px; font-weight:700;
+    font-family:'Fredoka', sans-serif;
+    font-size: 24px; font-weight:500;
     background: rgba(255,255,255,.16);
     width:48px; height:48px;
     border-radius:50%;
@@ -385,7 +398,7 @@
   .compare-top{ display:flex; justify-content:space-between; align-items:center; }
   .compare-top .cat{ font-size:11.5px; color: var(--ink-soft); }
   .compare-top .save{
-    font-size:11px; font-weight:700;
+    font-size:11px; font-weight:500;
     color: var(--olive);
     background: var(--olive-pale);
     padding: 3px 9px; border-radius: 100px;
@@ -398,10 +411,10 @@
   .op-dot.better{ background: var(--orange); }
   .compare-op .nm{ font-size:13px; }
   .compare-op .nm.current{ color: var(--ink-soft); }
-  .compare-op .nm.better{ font-weight:600; }
+  .compare-op .nm.better{ font-weight:500; }
   .compare-price{ font-size:13px; font-variant-numeric: tabular-nums; }
   .compare-price.current{ color: var(--ink-soft); text-decoration: line-through; }
-  .compare-price.better{ font-weight:700; color: var(--orange-deep); }
+  .compare-price.better{ font-weight:500; color: var(--orange-deep); }
   .compare-cta{
     margin-top: 14px;
     width:100%;
@@ -410,9 +423,9 @@
     border:none;
     background: var(--ink);
     color: var(--cream);
-    font-family:'Space Grotesk', sans-serif;
+    font-family:'Fredoka', sans-serif;
     font-size: 13px;
-    font-weight:600;
+    font-weight:500;
     cursor:pointer;
     transition: background .18s ease, color .18s ease;
   }
@@ -426,7 +439,7 @@
   .compare-card.done{ border-color: var(--olive); background: #FBFDF8; }
   .compare-card.done .compare-top::after{
     content: "Appliquée";
-    font-size:11px; font-weight:700;
+    font-size:11px; font-weight:500;
     color: var(--olive);
     background: var(--olive-pale);
     padding: 3px 9px; border-radius:100px;
@@ -455,9 +468,9 @@
     border:none;
     background: var(--orange);
     color: var(--cream);
-    font-family:'Space Grotesk', sans-serif;
+    font-family:'Fredoka', sans-serif;
     font-size: 12.5px;
-    font-weight:600;
+    font-weight:500;
     cursor:pointer;
   }
 
@@ -494,7 +507,7 @@
   }
   .acc-detail .tx:not(:last-child){ border-bottom: 1px dashed var(--line); }
   .acc-detail .tx span:first-child{ color: var(--ink); }
-  .acc-detail .tx span:last-child{ font-weight:600; font-variant-numeric: tabular-nums; flex-shrink:0; }
+  .acc-detail .tx span:last-child{ font-weight:500; font-variant-numeric: tabular-nums; flex-shrink:0; }
   .acc-detail .tx .neg{ color: var(--orange-deep); }
   .acc-detail .tx .pos{ color: var(--olive); }
 
@@ -508,9 +521,9 @@
     border: none;
     background: var(--olive);
     color: var(--cream);
-    font-family:'Space Grotesk', sans-serif;
+    font-family:'Fredoka', sans-serif;
     font-size:12.5px;
-    font-weight:600;
+    font-weight:500;
     cursor:pointer;
   }
   .goal-card .add-btn:disabled{ opacity:.45; cursor:default; }
@@ -533,7 +546,7 @@
   /* ---------- Interactions : prélèvements / rappel ---------- */
   .due-row{ cursor:pointer; }
   .remind-pill{
-    font-size:10.5px; font-weight:600;
+    font-size:10.5px; font-weight:500;
     padding: 3px 8px; border-radius:100px;
     background: var(--cream-deep); color: var(--ink-faint);
     white-space:nowrap;
@@ -553,11 +566,11 @@
   }
   .savings-summary .lab{ font-size:12.5px; color:#CBC0AC; }
   .savings-summary .val{
-    font-family:'Fraunces', serif;
+    font-family:'Fredoka', sans-serif;
     font-size: 30px; font-weight:600;
     margin-top:4px;
   }
-  .savings-summary .val span{ font-size:17px; color:#CBC0AC; font-family:'Space Grotesk'; }
+  .savings-summary .val span{ font-size:17px; color:#CBC0AC; font-family:'Fredoka'; }
   .savings-summary .hint{ margin-top:8px; font-size:11.5px; color:#CBC0AC; }
 
   .streak-sim{
@@ -568,9 +581,9 @@
     border: 1px solid rgba(255,255,255,.35);
     background: rgba(255,255,255,.12);
     color: var(--cream);
-    font-family:'Space Grotesk', sans-serif;
+    font-family:'Fredoka', sans-serif;
     font-size:12.5px;
-    font-weight:600;
+    font-weight:500;
     cursor:pointer;
   }
   .streak-sim:disabled{ opacity:.5; cursor:default; }
@@ -590,7 +603,7 @@
   .tab{
     background:none; border:none;
     display:flex; flex-direction:column; align-items:center; gap:4px;
-    font-family:'Space Grotesk', sans-serif;
+    font-family:'Fredoka', sans-serif;
     font-size: 10px;
     color: var(--ink-faint);
     padding: 4px 6px;
@@ -598,7 +611,7 @@
     cursor:default;
   }
   .tab svg{ width:20px; height:20px; stroke: var(--ink-faint); fill:none; stroke-width:1.7; }
-  .tab.active{ color: var(--orange-deep); font-weight:600; }
+  .tab.active{ color: var(--orange-deep); font-weight:500; }
   .tab.active svg{ stroke: var(--orange-deep); }
 </style>
 </head>
@@ -615,8 +628,11 @@
     </div>
 
     <div class="app-header">
-      <div class="greeting">Mon budget</div>
-      <div class="sub">Comptes, dépenses et économies, en un coup d'œil</div>
+      <div class="avatar">R</div>
+      <div>
+        <div class="greeting">Mon budget</div>
+        <div class="sub">Comptes, dépenses et économies, en un coup d'œil</div>
+      </div>
     </div>
 
     <div class="subnav">
@@ -890,16 +906,16 @@
         Accueil
       </button>
       <button class="tab">
+        <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        Feed
+      </button>
+      <button class="tab">
         <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
         Carte
       </button>
       <button class="tab active">
         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9h18"/><path d="M8 13h2M8 17h2M14 13h2M14 17h2"/></svg>
         Budget
-      </button>
-      <button class="tab">
-        <svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h12"/></svg>
-        Bons plans
       </button>
       <button class="tab">
         <svg viewBox="0 0 24 24"><path d="M4 18l5-6 4 4 7-9"/><path d="M15 7h5v5"/></svg>
@@ -991,13 +1007,13 @@
 
   // ---------- Dépenses par domaine : données + rendu dynamique ----------
   const categories = {
-    logement:    { name: 'Logement',          color: '#2B241C', budget: 480, amount: 480,
+    logement:    { name: 'Logement',          color: '#18140F', budget: 480, amount: 480,
                    tx: [{ name:'Loyer', amount:480 }] },
-    sorties:     { name: 'Sorties & restos',  color: '#C44C1C', budget: 150, amount: 164,
+    sorties:     { name: 'Sorties & restos',  color: '#F3752E', budget: 150, amount: 164,
                    tx: [{ name:'Soirée jeudi', amount:38 }, { name:'Resto avec Camille', amount:27.5 }, { name:'Bar + autres sorties', amount:98.5 }] },
-    abonnements: { name: 'Abonnements',       color: '#6E7A4F', budget: 70,  amount: 52,
+    abonnements: { name: 'Abonnements',       color: '#C9A876', budget: 70,  amount: 52,
                    tx: [{ name:'Salle de sport', amount:29.9 }, { name:'Forfait mobile', amount:19.99 }, { name:'Spotify', amount:5.99 }] },
-    autres:      { name: 'Autres',            color: '#A6763D', budget: 50,  amount: 0,
+    autres:      { name: 'Autres',            color: '#8C8273', budget: 50,  amount: 0,
                    tx: [] },
   };
   const openCats = new Set();
