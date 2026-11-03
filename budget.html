@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TODAY — Mon budget</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+
+  :root{
+    --cream:        #EADFD2;
+    --cream-deep:   #DFD2C0;
+    --tan:          #E9D2A8;
+    --ink:          #18140F;
+    --ink-soft:     #8C8273;
+    --ink-faint:    #B8AE9D;
+    --orange:       #F3752E;
+    --orange-deep:  #D9601D;
+    --orange-pale:  #FBDCC2;
+    --olive:        #18140F;
+    --olive-pale:   #EFE2C9;
+    --line:         #E8DAC0;
+    color-scheme: light;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  html,body{
+    height:100%;
+    background: #EDE4D3;
+    font-family:'Quicksand', ui-sans-serif, system-ui, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.015em;
+  }
+
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding: 16px;
+    overflow:hidden;
+  }
+
+  .phone-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .phone{
+    position:relative;
+    width:390px;
+    height:844px;
+    transform-origin: center center;
+    flex-shrink:0;
+    background: var(--ink);
+    border-radius: 54px;
+    padding: 14px;
+    box-shadow: 0 30px 60px -20px rgba(43,36,28,.45), 0 2px 0 rgba(255,255,255,.04) inset;
+  }
+  .screen{
+    position:relative;
+    width:100%;
+    height:100%;
+    background: var(--cream);
+    border-radius: 40px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  .notch{
+    position:absolute;
+    top:14px; left:50%;
+    transform:translateX(-50%);
+    width:120px; height:28px;
+    background: var(--ink);
+    border-radius: 16px;
+    z-index: 50;
+  }
+  .statusbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 28px 4px;
+    font-size: 15px;
+    font-weight:500;
+    color: var(--ink);
+    flex-shrink:0;
+  }
+  .statusbar .icons{ display:flex; gap:6px; align-items:center; }
+
+  .app-header{
+    padding: 10px 22px 14px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .app-header .avatar{
+    width:40px; height:40px;
+    border-radius:50%;
+    background: var(--orange);
+    color: var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:500;
+    font-size:16px;
+    flex-shrink:0;
+  }
+  .app-header .greeting{
+    font-family:'Quicksand', sans-serif;
+    font-size: 23px;
+    font-weight:700;
+    letter-spacing: -0.025em;
+  }
+  .app-header .sub{
+    margin-top:1px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- Sous-sections (pilules) ---------- */
+  .subnav{
+    display:flex;
+    gap:8px;
+    padding: 2px 22px 14px;
+    flex-shrink:0;
+  }
+  .subnav button{
+    flex:1;
+    border:none;
+    padding: 9px 0;
+    border-radius: 100px;
+    background: var(--cream-deep);
+    color: var(--ink-soft);
+    font-family:'Quicksand', sans-serif;
+    font-size: 12.5px;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .subnav button.active{
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .content{
+    flex:1;
+    overflow-y:auto;
+    padding: 2px 22px 110px;
+    scrollbar-width:none;
+  }
+  .content::-webkit-scrollbar{ display:none; }
+
+  .pane{ display:none; }
+  .pane.active{ display:block; animation: rise .28s ease; }
+  @keyframes rise{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform:none;} }
+
+  .section-label{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin: 24px 0 10px;
+  }
+  .section-label .t{ font-size: 13px; color: var(--ink-soft); }
+  .pane > .section-label:first-child{ margin-top: 2px; }
+
+  .balance-card{
+    background: var(--ink);
+    border-radius: 26px;
+    padding: 22px 22px 20px;
+    color: var(--cream);
+    position:relative;
+    overflow:hidden;
+  }
+  .balance-card::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-50px;
+    width:160px; height:160px;
+    border-radius:50%;
+    background: radial-gradient(circle, var(--orange) 0%, transparent 70%);
+    opacity:.5;
+  }
+  .balance-card .label{ font-size: 13px; color: #CBC0AC; }
+  .balance-card .amount{
+    font-family:'Quicksand', sans-serif;
+    font-size: 38px;
+    font-weight:700;
+    margin-top: 6px;
+    letter-spacing: -0.01em;
+  }
+  .balance-card .amount span{ font-size: 21px; color: #CBC0AC; font-family:'Quicksand'; }
+  .balance-card .delta{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    margin-top: 12px;
+    font-size: 12.5px;
+    font-weight:500;
+    background: rgba(232,99,44,.22);
+    color: #FFB088;
+    padding: 5px 10px;
+    border-radius: 100px;
+  }
+
+  .accounts-list{ margin-top: 2px; }
+  .account-row{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .account-row:last-child{ border-bottom:none; }
+  .acc-icon{
+    width:38px; height:38px;
+    border-radius: 11px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px;
+    flex-shrink:0;
+  }
+  .acc-icon.courant{ background: var(--orange-pale); color: var(--orange-deep); }
+  .acc-icon.livret{  background: var(--olive-pale); color: var(--olive); }
+  .acc-icon.joint{   background: var(--tan); color: var(--ink); }
+
+  .acc-info{ flex:1; min-width:0; }
+  .acc-info .name{ font-size: 14px; font-weight:500; }
+  .acc-info .meta{ font-size: 11.5px; color: var(--ink-soft); margin-top:1px; }
+  .acc-amount{ font-size: 14.5px; font-weight:500; font-variant-numeric: tabular-nums; }
+
+  .goal-card{
+    background: var(--olive-pale);
+    border-radius: 22px;
+    padding: 18px 20px;
+  }
+  .goal-card .row-top{ display:flex; justify-content:space-between; align-items:baseline; }
+  .goal-card .name{ font-size:14px; font-weight:500; }
+  .goal-card .tag{
+    font-size:11px; font-weight:500;
+    background: var(--olive); color: var(--cream);
+    padding: 3px 9px; border-radius: 100px;
+  }
+  .bar-track{
+    margin-top:12px;
+    height:8px; border-radius:6px;
+    background: rgba(110,122,79,.18);
+    overflow:hidden;
+  }
+  .bar-fill{ height:100%; background: var(--olive); border-radius:6px; }
+  .goal-card .nums{
+    margin-top:8px; font-size:12px; color: var(--ink-soft);
+    display:flex; justify-content:space-between;
+  }
+
+  .due-list{ margin-top: 0; }
+  .due-row{
+    display:flex; align-items:center; gap:13px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .due-row:last-child{ border-bottom:none; }
+  .due-date{
+    width:42px; flex-shrink:0;
+    text-align:center;
+    font-family:'Quicksand', sans-serif;
+  }
+  .due-date .d{ font-size:18px; font-weight:500; line-height:1; }
+  .due-date .m{ font-size:10px; text-transform:lowercase; color: var(--ink-soft); }
+  .due-info{ flex:1; min-width:0; }
+  .due-info .name{ font-size:13.5px; font-weight:500; }
+  .due-info .meta{ font-size:11.5px; color: var(--ink-soft); margin-top:1px; }
+  .due-amount{ font-size:14px; font-weight:500; font-variant-numeric: tabular-nums; }
+
+  /* ---------- Bandeau synchronisation automatique ---------- */
+  .auto-banner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 13px 16px;
+    margin-bottom: 4px;
+    background: #FFFDF8;
+  }
+  .auto-banner-title{ font-size:12.5px; font-weight:500; }
+  .auto-banner-sub{ font-size:11px; color: var(--ink-soft); margin-top:2px; line-height:1.4; }
+  .auto-dot{
+    width:9px; height:9px; border-radius:50%;
+    background: var(--olive);
+    flex-shrink:0;
+    box-shadow: 0 0 0 0 rgba(110,122,79,.5);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow: 0 0 0 0 rgba(110,122,79,.45); }
+    70%{ box-shadow: 0 0 0 7px rgba(110,122,79,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(110,122,79,0); }
+  }
+
+  .sim-banner{
+    width:100%;
+    margin-top:10px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px dashed var(--line);
+    background: transparent;
+    color: var(--ink-soft);
+    font-family:'Quicksand', sans-serif;
+    font-size: 11.5px;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .last-payment{
+    margin-top: 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:12px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: var(--olive-pale);
+    color: var(--olive);
+    opacity:0;
+    transform: translateY(-4px);
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  .last-payment.show{ opacity:1; transform:none; }
+
+  /* ---------- Donut dépenses par domaine ---------- */
+  .donut-wrap{
+    display:flex; align-items:center; justify-content:center;
+    padding: 10px 0 6px;
+  }
+  .donut-svg{ width:168px; height:168px; }
+  .donut-center{
+    text-align:center;
+  }
+  .donut-svg .amt{
+    font-family:'Quicksand', sans-serif;
+    font-size: 24px; font-weight:700;
+    fill: var(--ink);
+  }
+  .donut-svg .lab{
+    font-size: 10px;
+    fill: var(--ink-soft);
+  }
+
+  .cat-row{ padding: 11px 0; border-bottom:1px solid var(--line); cursor:pointer; }
+  .cat-row:last-child{ border-bottom:none; }
+  .cat-top{ display:flex; align-items:center; justify-content:space-between; font-size:13px; gap:10px; }
+  .cat-top .name-wrap{ display:flex; align-items:center; gap:9px; min-width:0; }
+  .cat-dot{ width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .cat-top .name{ font-weight:500; }
+  .cat-top .vals{ color: var(--ink-soft); font-variant-numeric: tabular-nums; flex-shrink:0; }
+  .cat-top .over{ color: var(--orange-deep); font-weight:500; }
+  .cat-top .cat-chevron{
+    width:14px; height:14px; flex-shrink:0;
+    stroke: var(--ink-faint); fill:none; stroke-width:1.8;
+    transition: transform .22s ease;
+  }
+  .cat-row.open .cat-chevron{ transform: rotate(180deg); }
+
+  .streak-card{
+    background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+    border-radius: 22px;
+    padding: 18px 20px 17px;
+    color: var(--cream);
+  }
+  .streak-top{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .streak-top .ttl{ font-size:14px; font-weight:500; }
+  .streak-top .sub{ font-size:11.5px; color: #FBD9C4; margin-top:3px; max-width: 200px; }
+  .streak-badge{
+    font-family:'Quicksand', sans-serif;
+    font-size: 24px; font-weight:500;
+    background: rgba(255,255,255,.16);
+    width:48px; height:48px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .dots{ display:flex; gap:5px; margin-top:15px; }
+  .dot{ flex:1; height:6px; border-radius:4px; background: rgba(255,255,255,.22); }
+  .dot.on{ background: #FFFFFF; }
+  .streak-foot{
+    margin-top:13px;
+    font-size:12px;
+    display:flex; justify-content:space-between;
+    color: #FBD9C4;
+  }
+
+  .compare-card{
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    background: #FFFDF8;
+  }
+  .compare-card:last-child{ margin-bottom:0; }
+  .compare-top{ display:flex; justify-content:space-between; align-items:center; }
+  .compare-top .cat{ font-size:11.5px; color: var(--ink-soft); }
+  .compare-top .save{
+    font-size:11px; font-weight:500;
+    color: var(--olive);
+    background: var(--olive-pale);
+    padding: 3px 9px; border-radius: 100px;
+  }
+  .compare-rows{ margin-top:12px; display:flex; flex-direction:column; gap:10px; }
+  .compare-row{ display:flex; align-items:center; justify-content:space-between; }
+  .compare-op{ display:flex; align-items:center; gap:10px; }
+  .op-dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .op-dot.current{ background: var(--ink-soft); }
+  .op-dot.better{ background: var(--orange); }
+  .compare-op .nm{ font-size:13px; }
+  .compare-op .nm.current{ color: var(--ink-soft); }
+  .compare-op .nm.better{ font-weight:500; }
+  .compare-price{ font-size:13px; font-variant-numeric: tabular-nums; }
+  .compare-price.current{ color: var(--ink-soft); text-decoration: line-through; }
+  .compare-price.better{ font-weight:500; color: var(--orange-deep); }
+  .compare-cta{
+    margin-top: 14px;
+    width:100%;
+    padding: 10.5px;
+    border-radius: 12px;
+    border:none;
+    background: var(--ink);
+    color: var(--cream);
+    font-family:'Quicksand', sans-serif;
+    font-size: 13px;
+    font-weight:600;
+    cursor:pointer;
+    transition: background .18s ease, color .18s ease;
+  }
+  .compare-cta.applied{
+    background: var(--olive-pale);
+    color: var(--olive);
+    cursor:default;
+  }
+  .compare-card.done .compare-cta,
+  .compare-card.done .offer-detail{ display:none; }
+  .compare-card.done{ border-color: var(--olive); background: #FBFDF8; }
+  .compare-card.done .compare-top::after{
+    content: "Appliquée";
+    font-size:11px; font-weight:500;
+    color: var(--olive);
+    background: var(--olive-pale);
+    padding: 3px 9px; border-radius:100px;
+  }
+  .compare-card.done .compare-top{ display:flex; }
+
+  .offer-detail{
+    max-height:0;
+    overflow:hidden;
+    transition: max-height .28s ease;
+  }
+  .offer-detail.open{ max-height: 320px; }
+  .offer-spec{
+    display:flex; justify-content:space-between; gap:14px;
+    font-size:12px;
+    padding: 9px 0;
+    border-top: 1px dashed var(--line);
+  }
+  .offer-spec span:first-child{ color: var(--ink-soft); flex-shrink:0; }
+  .offer-spec span:last-child{ text-align:right; font-weight:500; }
+  .confirm-btn{
+    margin-top: 12px;
+    width:100%;
+    padding: 10.5px;
+    border-radius: 12px;
+    border:none;
+    background: var(--orange);
+    color: var(--cream);
+    font-family:'Quicksand', sans-serif;
+    font-size: 12.5px;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  /* ---------- Interactions : comptes dépliables ---------- */
+  .account-row{ cursor:pointer; }
+  .acc-chevron{
+    width:16px; height:16px;
+    flex-shrink:0;
+    stroke: var(--ink-faint);
+    fill:none; stroke-width:1.8;
+    transition: transform .22s ease;
+  }
+  .account-row.open .acc-chevron{ transform: rotate(180deg); }
+  .acc-detail{
+    max-height:0;
+    overflow:hidden;
+    transition: max-height .25s ease;
+  }
+  .acc-detail-inner{
+    margin: 2px 0 10px 51px;
+    background: var(--cream-deep);
+    border-radius: 14px;
+    padding: 10px 14px;
+  }
+  .acc-detail-label{
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+  }
+  .acc-detail .tx{
+    display:flex; justify-content:space-between; gap:10px;
+    font-size:12.5px;
+    padding: 6px 0;
+  }
+  .acc-detail .tx:not(:last-child){ border-bottom: 1px dashed var(--line); }
+  .acc-detail .tx span:first-child{ color: var(--ink); }
+  .acc-detail .tx span:last-child{ font-weight:500; font-variant-numeric: tabular-nums; flex-shrink:0; }
+  .acc-detail .tx .neg{ color: var(--orange-deep); }
+  .acc-detail .tx .pos{ color: var(--olive); }
+
+  /* ---------- Interactions : objectif ---------- */
+  .goal-card{ margin-bottom:14px; }
+  .goal-card .add-btn{
+    margin-top:14px;
+    width:100%;
+    padding:9px;
+    border-radius:10px;
+    border: none;
+    background: var(--olive);
+    color: var(--cream);
+    font-family:'Quicksand', sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .goal-card .add-btn:disabled{ opacity:.45; cursor:default; }
+  .goal-card.done{ background: var(--orange-pale); }
+  .goal-card.done .bar-fill{ background: var(--orange-deep); }
+  .goal-card.done .tag{ background: var(--orange-deep); }
+
+  /* ---------- Interactions : catégories dépliables ---------- */
+  .cat-row{ cursor:pointer; }
+  .cat-detail{
+    max-height:0; overflow:hidden;
+    transition: max-height .25s ease;
+  }
+  .cat-detail .tx{
+    display:flex; justify-content:space-between;
+    font-size:12px; color: var(--ink-soft);
+    padding: 6px 0;
+  }
+
+  /* ---------- Interactions : prélèvements / rappel ---------- */
+  .due-row{ cursor:pointer; }
+  .remind-pill{
+    font-size:10.5px; font-weight:500;
+    padding: 3px 8px; border-radius:100px;
+    background: var(--cream-deep); color: var(--ink-faint);
+    white-space:nowrap;
+    margin-left:8px;
+    transition: background .18s ease, color .18s ease;
+  }
+  .remind-pill.on{ background: var(--orange-pale); color: var(--orange-deep); }
+  .due-row .due-right{ display:flex; align-items:center; }
+
+  /* ---------- Résumé économies (dynamique) ---------- */
+  .savings-summary{
+    background: var(--ink);
+    border-radius: 22px;
+    padding: 18px 20px;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+  .savings-summary .lab{ font-size:12.5px; color:#CBC0AC; }
+  .savings-summary .val{
+    font-family:'Quicksand', sans-serif;
+    font-size: 30px; font-weight:700;
+    margin-top:4px;
+  }
+  .savings-summary .val span{ font-size:17px; color:#CBC0AC; font-family:'Quicksand'; }
+  .savings-summary .hint{ margin-top:8px; font-size:11.5px; color:#CBC0AC; }
+
+  .streak-sim{
+    margin-top:14px;
+    width:100%;
+    padding:10px;
+    border-radius:12px;
+    border: 1px solid rgba(255,255,255,.35);
+    background: rgba(255,255,255,.12);
+    color: var(--cream);
+    font-family:'Quicksand', sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .streak-sim:disabled{ opacity:.5; cursor:default; }
+
+  .bottom-spacer{ height: 6px; }
+
+  .tabbar{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    padding: 9px 10px calc(16px + env(safe-area-inset-bottom, 0px));
+    background: rgba(251,246,236,.94);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+  }
+  .tab{
+    background:none; border:none;
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    font-family:'Quicksand', sans-serif;
+    font-size: 10px;
+    color: var(--ink-faint);
+    padding: 4px 6px;
+    flex:1;
+    cursor:default;
+  }
+  .tab svg{ width:20px; height:20px; stroke: var(--ink-faint); fill:none; stroke-width:1.7; }
+  .tab.active{ color: var(--orange-deep); font-weight:600; }
+  .tab.active svg{ stroke: var(--orange-deep); }
+</style>
+</head>
+<body>
+
+<div class="phone-wrap">
+<div class="phone">
+  <div class="screen">
+    <div class="notch"></div>
+
+    <div class="statusbar">
+      <span>9:41</span>
+      <span class="icons">●●●●  𝇴  🔋</span>
+    </div>
+
+    <div class="app-header">
+      <div class="avatar">R</div>
+      <div>
+        <div class="greeting">Mon budget</div>
+        <div class="sub">Comptes, dépenses et économies, en un coup d'œil</div>
+      </div>
+    </div>
+
+    <div class="subnav">
+      <button class="active" data-pane="comptes">Comptes</button>
+      <button data-pane="depenses">Dépenses</button>
+      <button data-pane="eco">Économies</button>
+    </div>
+
+    <div class="content">
+
+      <!-- ===== Sous-section : Comptes ===== -->
+      <div class="pane active" id="pane-comptes">
+
+      <div class="balance-card">
+        <div class="label">Solde total</div>
+        <div class="amount" id="totalBalance">1&nbsp;248<span>,30&nbsp;€</span></div>
+        <div class="delta" id="balanceDelta">+64&nbsp;€ cette semaine</div>
+      </div>
+
+      <div class="section-label"><span class="t">Comptes reliés</span><span class="x">appuie pour voir le détail</span></div>
+      <div class="accounts-list">
+        <div class="account-row" data-acc="courant">
+          <div class="acc-icon courant">◆</div>
+          <div class="acc-info">
+            <div class="name">Compte courant</div>
+            <div class="meta">Crédit Agricole · dispo. aujourd'hui</div>
+          </div>
+          <div class="acc-amount" id="amt-courant">612,40&nbsp;€</div>
+          <svg class="acc-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="acc-detail">
+          <div class="acc-detail-inner">
+            <div class="acc-detail-label">Dernières opérations · Compte courant</div>
+            <div class="tx-list" id="tx-courant">
+              <div class="tx"><span>Carrefour City</span><span class="neg">−18,40&nbsp;€</span></div>
+              <div class="tx"><span>Virement reçu · job étudiant</span><span class="pos">+180,00&nbsp;€</span></div>
+              <div class="tx"><span>Spotify</span><span class="neg">−5,99&nbsp;€</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="account-row" data-acc="livret">
+          <div class="acc-icon livret">●</div>
+          <div class="acc-info">
+            <div class="name">Livret A</div>
+            <div class="meta">Épargne · taux 3&nbsp;%</div>
+          </div>
+          <div class="acc-amount" id="amt-livret">530,00&nbsp;€</div>
+          <svg class="acc-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="acc-detail">
+          <div class="acc-detail-inner">
+            <div class="acc-detail-label">Dernières opérations · Livret A</div>
+            <div class="tx-list" id="tx-livret">
+              <div class="tx"><span>Versement mensuel</span><span class="pos">+50,00&nbsp;€</span></div>
+              <div class="tx"><span>Intérêts versés</span><span class="pos">+1,20&nbsp;€</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="account-row" data-acc="joint">
+          <div class="acc-icon joint">▲</div>
+          <div class="acc-info">
+            <div class="name">Compte commun</div>
+            <div class="meta">Avec Camille · colocation</div>
+          </div>
+          <div class="acc-amount" id="amt-joint">105,90&nbsp;€</div>
+          <svg class="acc-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="acc-detail">
+          <div class="acc-detail-inner">
+            <div class="acc-detail-label">Dernières opérations · Compte commun</div>
+            <div class="tx-list" id="tx-joint">
+              <div class="tx"><span>Électricité</span><span class="neg">−42,00&nbsp;€</span></div>
+              <div class="tx"><span>Part de Camille reçue</span><span class="pos">+55,00&nbsp;€</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+      <!-- ===== Sous-section : Dépenses ===== -->
+      <div class="pane" id="pane-depenses">
+
+      <div class="section-label"><span class="t">Objectifs d'épargne</span></div>
+
+      <div class="goal-card done">
+        <div class="row-top">
+          <span class="name">Voyage à Lisbonne</span>
+          <span class="tag">Atteint</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+        <div class="nums"><span>500&nbsp;€ épargnés</span><span>500&nbsp;€ visés</span></div>
+      </div>
+
+      <div class="goal-card" id="goal2">
+        <div class="row-top">
+          <span class="name">Nouveau MacBook</span>
+          <span class="tag" id="goal2tag">En cours</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="goal2bar" style="width:40%"></div></div>
+        <div class="nums"><span id="goal2cur">180&nbsp;€ épargnés</span><span>450&nbsp;€ visés</span></div>
+        <button class="add-btn" id="goal2btn" onclick="addToGoal2()">+ Ajouter 20&nbsp;€ depuis le surplus de la semaine</button>
+      </div>
+
+      <div class="section-label"><span class="t">Prélèvements à venir</span><span class="x">appuie pour activer un rappel</span></div>
+      <div class="due-list">
+        <div class="due-row">
+          <div class="due-date"><div class="d">28</div><div class="m">oct.</div></div>
+          <div class="due-info">
+            <div class="name">Loyer</div>
+            <div class="meta">Récurrent · tous les 28</div>
+          </div>
+          <div class="due-right">
+            <div class="due-amount">−480,00&nbsp;€</div>
+            <span class="remind-pill">Rappeler</span>
+          </div>
+        </div>
+        <div class="due-row">
+          <div class="due-date"><div class="d">01</div><div class="m">nov.</div></div>
+          <div class="due-info">
+            <div class="name">Abonnement salle de sport</div>
+            <div class="meta">Récurrent · mensuel</div>
+          </div>
+          <div class="due-right">
+            <div class="due-amount">−29,90&nbsp;€</div>
+            <span class="remind-pill">Rappeler</span>
+          </div>
+        </div>
+        <div class="due-row">
+          <div class="due-date"><div class="d">03</div><div class="m">nov.</div></div>
+          <div class="due-info">
+            <div class="name">Forfait mobile</div>
+            <div class="meta">Récurrent · mensuel</div>
+          </div>
+          <div class="due-right">
+            <div class="due-amount">−19,99&nbsp;€</div>
+            <span class="remind-pill">Rappeler</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label"><span class="t">Dépenses par domaine</span><span class="x">mise à jour automatique</span></div>
+
+      <div class="auto-banner">
+        <div class="auto-banner-text">
+          <div class="auto-banner-title">Synchronisé avec ton compte</div>
+          <div class="auto-banner-sub">Chaque paiement par carte est classé et réparti automatiquement, sans rien à saisir</div>
+        </div>
+        <div class="auto-dot"></div>
+      </div>
+      <div class="last-payment" id="lastPayment"></div>
+      <button class="sim-banner" id="simPayment">Simuler la réception d'un paiement par carte</button>
+
+      <div class="donut-wrap">
+        <svg class="donut-svg" viewBox="0 0 160 160">
+          <g id="donutArcs" transform="rotate(-90 80 80)"></g>
+          <text x="80" y="76" text-anchor="middle" class="amt" id="donutTotal">696&nbsp;€</text>
+          <text x="80" y="94" text-anchor="middle" class="lab">dépensés ce mois</text>
+        </svg>
+      </div>
+
+      <div id="catLegend"></div>
+
+      </div>
+      <!-- ===== Sous-section : Économies ===== -->
+      <div class="pane" id="pane-eco">
+
+      <div class="savings-summary">
+        <div class="lab">Économies débloquées ce mois</div>
+        <div class="val" id="savingsVal">0<span>,00&nbsp;€</span></div>
+        <div class="hint" id="savingsHint">Tiens ton streak et change d'offre pour faire grimper ce chiffre</div>
+      </div>
+
+      <div class="section-label"><span class="t">Cashback</span></div>
+      <div class="streak-card">
+        <div class="streak-top">
+          <div>
+            <div class="ttl" id="streakTtl">Pas de commande Uber&nbsp;Eats</div>
+            <div class="sub" id="streakSub">Tiens 30 jours sans commander pour débloquer 5&nbsp;€ de cashback</div>
+          </div>
+          <div class="streak-badge" id="streakBadge">22</div>
+        </div>
+        <div class="dots" id="streakDots"></div>
+        <div class="streak-foot">
+          <span id="streakCount">22 / 30 jours</span>
+          <span id="streakLeft">8 jours restants</span>
+        </div>
+        <button class="streak-sim" id="streakBtn" onclick="simulateDay()">Simuler un jour sans commande</button>
+      </div>
+
+      <div class="section-label"><span class="t">Comparateur de prix</span><span class="x">compare puis confirme</span></div>
+
+      <div class="compare-card" id="offer-mobile">
+        <div class="compare-top">
+          <span class="cat">Forfait mobile</span>
+          <span class="save">−9,99&nbsp;€/mois</span>
+        </div>
+        <div class="compare-rows">
+          <div class="compare-row">
+            <div class="compare-op">
+              <span class="op-dot current"></span>
+              <span class="nm current">Orange · ton forfait actuel</span>
+            </div>
+            <span class="compare-price current">19,99&nbsp;€</span>
+          </div>
+          <div class="compare-row">
+            <div class="compare-op">
+              <span class="op-dot better"></span>
+              <span class="nm better">Free · forfait équivalent</span>
+            </div>
+            <span class="compare-price better">10,00&nbsp;€</span>
+          </div>
+        </div>
+
+        <div class="offer-detail">
+          <div class="offer-spec"><span>Data</span><span>100&nbsp;Go, identique à ton forfait actuel</span></div>
+          <div class="offer-spec"><span>Appels &amp; SMS</span><span>Illimités en France</span></div>
+          <div class="offer-spec"><span>Engagement</span><span>Sans engagement</span></div>
+          <div class="offer-spec"><span>Réseau</span><span>Couverture Orange, via itinérance</span></div>
+          <div class="offer-spec"><span>Résiliation actuelle</span><span>Gratuite, portabilité du numéro incluse</span></div>
+          <button class="confirm-btn" onclick="confirmOffer('mobile', 9.99, this)">Confirmer le changement vers Free</button>
+        </div>
+
+        <button class="compare-cta" onclick="toggleOffer('offer-mobile', this, 'Voir le détail de l\'offre Free', 'Masquer le détail')">Voir le détail de l'offre Free</button>
+      </div>
+
+      <div class="compare-card" id="offer-assurance">
+        <div class="compare-top">
+          <span class="cat">Assurance habitation</span>
+          <span class="save">−4,20&nbsp;€/mois</span>
+        </div>
+        <div class="compare-rows">
+          <div class="compare-row">
+            <div class="compare-op">
+              <span class="op-dot current"></span>
+              <span class="nm current">MAIF · ton contrat actuel</span>
+            </div>
+            <span class="compare-price current">14,20&nbsp;€</span>
+          </div>
+          <div class="compare-row">
+            <div class="compare-op">
+              <span class="op-dot better"></span>
+              <span class="nm better">Luko · couverture équivalente</span>
+            </div>
+            <span class="compare-price better">10,00&nbsp;€</span>
+          </div>
+        </div>
+
+        <div class="offer-detail">
+          <div class="offer-spec"><span>Couverture</span><span>Dégâts des eaux, incendie, vol</span></div>
+          <div class="offer-spec"><span>Franchise</span><span>150&nbsp;€, identique à ton contrat</span></div>
+          <div class="offer-spec"><span>Engagement</span><span>Résiliable à tout moment</span></div>
+          <div class="offer-spec"><span>Avis des utilisateurs Linxo</span><span>4,6/5 sur 1&nbsp;200 avis</span></div>
+          <div class="offer-spec"><span>Résiliation MAIF</span><span>Gérée automatiquement par l'app</span></div>
+          <button class="confirm-btn" onclick="confirmOffer('assurance', 4.20, this)">Confirmer le changement vers Luko</button>
+        </div>
+
+        <button class="compare-cta" onclick="toggleOffer('offer-assurance', this, 'Voir le détail de l\'offre Luko', 'Masquer le détail')">Voir le détail de l'offre Luko</button>
+      </div>
+
+      <div class="bottom-spacer"></div>
+
+      </div>
+
+    </div>
+
+    <div class="tabbar">
+      <button class="tab">
+        <svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+        Accueil
+      </button>
+      <button class="tab">
+        <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        Feed
+      </button>
+      <button class="tab">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        Carte
+      </button>
+      <button class="tab active">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9h18"/><path d="M8 13h2M8 17h2M14 13h2M14 17h2"/></svg>
+        Budget
+      </button>
+      <button class="tab">
+        <svg viewBox="0 0 24 24"><path d="M4 18l5-6 4 4 7-9"/><path d="M15 7h5v5"/></svg>
+        Invest
+      </button>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+  // Fit the phone mockup within the viewport, no cropping
+  function fitPhone(){
+    const phone = document.querySelector('.phone');
+    const wrap = document.querySelector('.phone-wrap');
+    const margin = 40;
+    const scale = Math.min(1, (window.innerHeight - margin) / 844, (window.innerWidth - margin) / 390);
+    phone.style.transform = 'scale(' + scale + ')';
+    wrap.style.width = (390 * scale) + 'px';
+    wrap.style.height = (844 * scale) + 'px';
+  }
+  window.addEventListener('resize', fitPhone);
+  fitPhone();
+
+  // ---------- Streak cashback ----------
+  let streakDays = 22;
+  const STREAK_TARGET = 30;
+  const dotsWrap = document.getElementById('streakDots');
+
+  function renderStreak(){
+    dotsWrap.innerHTML = '';
+    for (let i = 0; i < STREAK_TARGET; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i < streakDays ? ' on' : '');
+      dotsWrap.appendChild(d);
+    }
+    document.getElementById('streakBadge').textContent = streakDays;
+    document.getElementById('streakCount').textContent = streakDays + ' / ' + STREAK_TARGET + ' jours';
+    const left = STREAK_TARGET - streakDays;
+    document.getElementById('streakLeft').textContent = left > 0 ? left + ' jours restants' : 'Objectif atteint';
+  }
+  renderStreak();
+
+  function simulateDay(){
+    if (streakDays >= STREAK_TARGET) return;
+    streakDays++;
+    renderStreak();
+    if (streakDays === STREAK_TARGET){
+      document.getElementById('streakTtl').textContent = 'Cashback débloqué';
+      document.getElementById('streakSub').textContent = '5 € ont été ajoutés sur ton compte courant';
+      document.getElementById('streakBtn').disabled = true;
+      document.getElementById('streakBtn').textContent = 'Streak terminé';
+      addSavings(5, 'une');
+    }
+  }
+
+  // ---------- Sous-navigation (Comptes / Dépenses / Économies) ----------
+  const subBtns = document.querySelectorAll('.subnav button');
+  const panes = document.querySelectorAll('.pane');
+  const contentEl = document.querySelector('.content');
+
+  subBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      subBtns.forEach(b => b.classList.remove('active'));
+      panes.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('pane-' + btn.dataset.pane).classList.add('active');
+      contentEl.scrollTop = 0;
+    });
+  });
+
+  // ---------- Comptes dépliables ----------
+  document.querySelectorAll('.account-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const detail = row.nextElementSibling;
+      const isOpen = row.classList.contains('open');
+      // referme les autres comptes ouverts
+      document.querySelectorAll('.account-row.open').forEach(r => {
+        if (r !== row){
+          r.classList.remove('open');
+          r.nextElementSibling.style.maxHeight = null;
+        }
+      });
+      row.classList.toggle('open', !isOpen);
+      detail.style.maxHeight = isOpen ? null : detail.scrollHeight + 'px';
+    });
+  });
+
+  // ---------- Dépenses par domaine : données + rendu dynamique ----------
+  const categories = {
+    logement:    { name: 'Logement',          color: '#18140F', budget: 480, amount: 480,
+                   tx: [{ name:'Loyer', amount:480 }] },
+    sorties:     { name: 'Sorties & restos',  color: '#F3752E', budget: 150, amount: 164,
+                   tx: [{ name:'Soirée jeudi', amount:38 }, { name:'Resto avec Camille', amount:27.5 }, { name:'Bar + autres sorties', amount:98.5 }] },
+    abonnements: { name: 'Abonnements',       color: '#C9A876', budget: 70,  amount: 52,
+                   tx: [{ name:'Salle de sport', amount:29.9 }, { name:'Forfait mobile', amount:19.99 }, { name:'Spotify', amount:5.99 }] },
+    autres:      { name: 'Autres',            color: '#8C8273', budget: 50,  amount: 0,
+                   tx: [] },
+  };
+  const openCats = new Set();
+
+  function fmt(n){
+    return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function renderDonut(){
+    const g = document.getElementById('donutArcs');
+    const total = Object.values(categories).reduce((s,c) => s + c.amount, 0);
+    const r = 70, circ = 2 * Math.PI * r;
+    g.innerHTML = '';
+    let offset = 0;
+    Object.values(categories).forEach(cat => {
+      if (cat.amount <= 0) return;
+      const len = circ * (cat.amount / (total || 1));
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', 80); circle.setAttribute('cy', 80); circle.setAttribute('r', r);
+      circle.setAttribute('fill', 'none');
+      circle.setAttribute('stroke', cat.color);
+      circle.setAttribute('stroke-width', 20);
+      circle.setAttribute('stroke-dasharray', len.toFixed(2) + ' ' + (circ - len).toFixed(2));
+      circle.setAttribute('stroke-dashoffset', (-offset).toFixed(2));
+      g.appendChild(circle);
+      offset += len;
+    });
+    document.getElementById('donutTotal').innerHTML = Math.round(total) + '&nbsp;€';
+  }
+
+  function renderLegend(){
+    const wrap = document.getElementById('catLegend');
+    wrap.innerHTML = '';
+    Object.entries(categories).forEach(([key, cat]) => {
+      if (cat.amount <= 0 && key === 'autres') return; // cachée tant que vide
+      const over = cat.amount > cat.budget;
+      const row = document.createElement('div');
+      row.className = 'cat-row' + (openCats.has(key) ? ' open' : '');
+      row.innerHTML =
+        '<div class="cat-top">' +
+          '<div class="name-wrap">' +
+            '<span class="cat-dot" style="background:' + cat.color + '"></span>' +
+            '<span class="name">' + cat.name + '</span>' +
+          '</div>' +
+          '<span class="vals' + (over ? ' over' : '') + '">' + Math.round(cat.amount) + '&nbsp;€ / ' + Math.round(cat.budget) + '&nbsp;€</span>' +
+          '<svg class="cat-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>' +
+        '</div>';
+      row.addEventListener('click', () => {
+        if (openCats.has(key)) openCats.delete(key); else openCats.add(key);
+        renderLegend();
+      });
+      wrap.appendChild(row);
+
+      const detail = document.createElement('div');
+      detail.className = 'cat-detail';
+      const inner = document.createElement('div');
+      inner.className = 'acc-detail-inner';
+      let txHtml = '<div class="acc-detail-label">Transactions · ' + cat.name + '</div>';
+      if (cat.tx.length === 0){
+        txHtml += '<div class="tx"><span>Aucune dépense pour l\'instant</span><span></span></div>';
+      } else {
+        cat.tx.slice().reverse().forEach(t => {
+          txHtml += '<div class="tx"><span>' + t.name + '</span><span class="neg">' + fmt(t.amount) + '&nbsp;€</span></div>';
+        });
+      }
+      inner.innerHTML = txHtml;
+      detail.appendChild(inner);
+      wrap.appendChild(detail);
+      if (openCats.has(key)) detail.style.maxHeight = detail.scrollHeight + 'px';
+    });
+  }
+
+  renderDonut();
+  renderLegend();
+
+  // ---------- Ajout de dépense : formulaire interactif ----------
+  const accounts = { courant: 612.40, livret: 530.00, joint: 105.90 };
+
+  function renderAccounts(){
+    document.getElementById('amt-courant').innerHTML = fmt(accounts.courant) + '&nbsp;€';
+    document.getElementById('amt-livret').innerHTML  = fmt(accounts.livret)  + '&nbsp;€';
+    document.getElementById('amt-joint').innerHTML   = fmt(accounts.joint)   + '&nbsp;€';
+    const total = accounts.courant + accounts.livret + accounts.joint;
+    const [euros, cents] = fmt(total).split(',');
+    document.getElementById('totalBalance').innerHTML = euros + '<span>,' + cents + '&nbsp;€</span>';
+  }
+
+  // File de paiements réalistes, injectés automatiquement un à un
+  const incomingPayments = [
+    { cat:'sorties',     label:'Deliveroo',           amount: 16.90 },
+    { cat:'abonnements', label:'Netflix',              amount: 13.49 },
+    { cat:'autres',      label:'Pharmacie',            amount: 8.20  },
+    { cat:'sorties',     label:'Café entre cours',     amount: 4.50  },
+    { cat:'autres',      label:'Fnac',                 amount: 22.00 },
+    { cat:'sorties',     label:'Cinéma',               amount: 11.90 },
+  ];
+  let paymentIndex = 0;
+
+  function applyPayment(p){
+    categories[p.cat].amount += p.amount;
+    categories[p.cat].tx.push({ name: p.label, amount: p.amount });
+    openCats.add(p.cat);
+
+    accounts.courant -= p.amount;
+    const txCourant = document.getElementById('tx-courant');
+    const row = document.createElement('div');
+    row.className = 'tx';
+    row.innerHTML = '<span>' + p.label + '</span><span class="neg">−' + fmt(p.amount) + '&nbsp;€</span>';
+    txCourant.insertBefore(row, txCourant.firstChild);
+
+    renderAccounts();
+    renderDonut();
+    renderLegend();
+
+    const toast = document.getElementById('lastPayment');
+    toast.innerHTML = '<span>💳&nbsp; ' + p.label + ' détecté</span><span>−' + fmt(p.amount) + '&nbsp;€ → ' + categories[p.cat].name + '</span>';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  document.getElementById('simPayment').addEventListener('click', () => {
+    if (paymentIndex >= incomingPayments.length){
+      const btn = document.getElementById('simPayment');
+      btn.textContent = 'Tous les paiements du jour sont classés';
+      btn.disabled = true;
+      return;
+    }
+    applyPayment(incomingPayments[paymentIndex]);
+    paymentIndex++;
+  });
+
+  // ---------- Rappels sur prélèvements ----------
+  document.querySelectorAll('.due-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const pill = row.querySelector('.remind-pill');
+      const on = pill.classList.toggle('on');
+      pill.textContent = on ? 'Rappel activé' : 'Rappeler';
+    });
+  });
+
+  // ---------- Objectif 2 : ajout manuel ----------
+  let goal2 = 180;
+  const GOAL2_TARGET = 450;
+  function addToGoal2(){
+    goal2 = Math.min(GOAL2_TARGET, goal2 + 20);
+    const pct = Math.round((goal2 / GOAL2_TARGET) * 100);
+    document.getElementById('goal2bar').style.width = pct + '%';
+    document.getElementById('goal2cur').textContent = goal2 + '\u00A0€ épargnés';
+    if (goal2 >= GOAL2_TARGET){
+      document.getElementById('goal2tag').textContent = 'Atteint';
+      document.getElementById('goal2').classList.add('done');
+      document.getElementById('goal2btn').disabled = true;
+      document.getElementById('goal2btn').textContent = 'Objectif atteint';
+    }
+  }
+
+  // ---------- Comparateur : voir le détail / confirmer ----------
+  function toggleOffer(cardId, btn, showLabel, hideLabel){
+    const card = document.getElementById(cardId);
+    const detail = card.querySelector('.offer-detail');
+    const open = detail.classList.toggle('open');
+    btn.textContent = open ? hideLabel : showLabel;
+  }
+
+  function confirmOffer(kind, monthlyAmount, btn){
+    const cardId = kind === 'mobile' ? 'offer-mobile' : 'offer-assurance';
+    const card = document.getElementById(cardId);
+    card.classList.add('done');
+    addSavings(monthlyAmount, 'mensuelle');
+  }
+
+  // ---------- Compteur d'économies cumulées ----------
+  let totalSavings = 0;
+  function addSavings(amount, type){
+    totalSavings += amount;
+    const el = document.getElementById('savingsVal');
+    const [euros, cents] = totalSavings.toFixed(2).split('.');
+    el.innerHTML = euros + '<span>,' + cents + '\u00A0€</span>';
+    document.getElementById('savingsHint').textContent =
+      type === 'une' ? 'Cashback débloqué, et deux offres encore à comparer' : 'Nouvelle économie mensuelle prise en compte dans ton budget';
+  }
+</script>
+
+</body>
+</html>
