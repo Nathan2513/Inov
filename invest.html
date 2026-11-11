@@ -1162,6 +1162,7 @@ avoid:{actions:'Horizon trop court',crypto:'Trop volatil pour un projet proche',
 grow:{title:'Faire grandir mon épargne',saved:5000,target:20000,date:'2036',end:'2036-01',monthly:120,short:'faire grandir ton épargne',hz:'10 ans',em:'🌱',
 recs:[['diversif','La règle d’or avant tout'],['etf','Le cœur d’un portefeuille long terme'],['actions','Comprendre ce qui fait monter ton argent'],['crowdlending','Diversifier hors bourse'],['pe','Pour une petite part plus dynamique'],['compare','Bien choisir tes plateformes']],avoid:{}}
 };
+try{const P=JSON.parse(localStorage.getItem('kapi-profile')||'null');if(P&&GOALS[P.goal]){const g=GOALS[P.goal];if(P.saved>=0)g.saved=+P.saved;if(P.target>0)g.target=+P.target;if(P.monthly>0)g.monthly=+P.monthly;}}catch(e){}
 const G=()=>GOALS[S.goal]||GOALS.appart;
 const BADGES = [{d:3,n:'Petit lynx'},{d:7,n:'Lynx régulier'},{d:14,n:'Lynx malin'},{d:30,n:'Lynx légendaire'}];
 
