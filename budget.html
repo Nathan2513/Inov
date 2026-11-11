@@ -1017,6 +1017,9 @@
     autres:      { name: 'Autres',            color: '#8C8273', budget: 50,  amount: 0,
                    tx: [] },
   };
+  let KP=null;try{KP=JSON.parse(localStorage.getItem('kapi-profile')||'null')}catch(e){}
+  if(KP&&KP.income>0){const r={logement:.35,sorties:.12,abonnements:.06,autres:.05};
+    Object.keys(categories).forEach(k=>{categories[k].budget=Math.round(KP.income*r[k]);categories[k].amount=0;categories[k].tx=[]});}
   const openCats = new Set();
 
   function fmt(n){
@@ -1042,6 +1045,7 @@
       g.appendChild(circle);
       offset += len;
     });
+    try{localStorage.setItem('kapi-budget',JSON.stringify({spent:total}))}catch(e){}
     document.getElementById('donutTotal').innerHTML = Math.round(total) + '&nbsp;€';
   }
 
@@ -1091,7 +1095,7 @@
   renderLegend();
 
   // ---------- Ajout de dépense : formulaire interactif ----------
-  const accounts = { courant: 612.40, livret: 530.00, joint: 105.90 };
+  const accounts = KP&&KP.income>0 ? { courant: +KP.income, livret: +KP.saved||0, joint: 0 } : { courant: 612.40, livret: 530.00, joint: 105.90 };
 
   function renderAccounts(){
     document.getElementById('amt-courant').innerHTML = fmt(accounts.courant) + '&nbsp;€';
