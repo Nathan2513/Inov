@@ -5,79 +5,123 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F2E6D3">
 <title>Kapi</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* =====================================================
-   COQUE DE L'APPLI (index.html)
-   Les 3 modules restent dans leurs fichiers séparés :
-   on les charge simplement dans des iframes.
-   ===================================================== */
 :root{
-  --bg:#F2E6D3; --surface:#FFFFFF; --ink:#2A1C12; --muted:#A89C87;
-  --orange:#F2661B; --orange-soft:#FFE2CC; --line:#E3D6C2; --deep:#3A2618;
+  --bg:#F2E6D3; --surface:#FFFFFF; --ink:#2A1C12; --muted:#A89C87; --soft:#806A54;
+  --orange:#F2661B; --orange-soft:#FFE2CC; --line:#E3D6C2; --deep:#3A2618; --good:#2E8B57; --bad:#C8402E;
+  --font:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#E9DCC7;
-  display:grid;place-items:center;overflow:hidden}
+body{font-family:var(--font);color:var(--ink);background:#E9DCC7;display:grid;place-items:center;overflow:hidden}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit;color:inherit}
 
-/* Téléphone (affiché uniquement sur ordinateur) */
 .phone{width:390px;height:844px;border-radius:54px;background:#1A120C;padding:12px;flex:none;
   box-shadow:0 40px 80px -30px rgba(40,22,8,.55),inset 0 0 0 2px #3a2a1e;transform-origin:center}
-.app{position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:var(--bg);
-  display:flex;flex-direction:column}
-
-/* Sur un vrai téléphone : plein écran, sans cadre */
+.app{position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
 @media (max-width:500px){
   body{display:block}
   .phone{width:100%;height:100vh;height:100dvh;border-radius:0;padding:0;box-shadow:none;transform:none!important}
   .app{border-radius:0}
 }
 
-/* Zone des écrans */
 .stage{position:relative;flex:1;min-height:0;background:var(--bg)}
 .screen{position:absolute;inset:0;display:none;background:var(--bg)}
 .screen.on{display:block}
 iframe{width:100%;height:100%;border:0;display:block;background:var(--bg)}
 
-/* Barre de navigation commune */
 .tabbar{flex:none;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);
   border-top:1px solid var(--line);padding:8px 6px calc(12px + env(safe-area-inset-bottom,0px))}
 .tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--muted)}
 .tab svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .tab.on{color:var(--orange)}
 
-/* Écran d'accueil (à remplacer par ta vraie page d'accueil) */
-.home{padding:calc(env(safe-area-inset-top,0px) + 26px) 20px 20px;overflow-y:auto;height:100%}
-.home h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
-.home p.sub{color:#806A54;margin:6px 0 22px;font-size:15px}
-.cards{display:grid;gap:12px}
-.hcard{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);
-  border-radius:22px;padding:16px}
-.hcard i{width:50px;height:50px;border-radius:16px;background:var(--orange-soft);color:var(--orange);
-  display:grid;place-items:center;flex:none}
-.hcard i svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.hcard b{display:block;font-size:17px}
-.hcard small{color:#806A54;font-size:13px}
-.hcard.main{background:var(--orange);color:#fff}
-.hcard.main i{background:rgba(255,255,255,.2);color:#fff}
-.hcard.main small{color:rgba(255,255,255,.85)}
+/* ---------- DASHBOARD ---------- */
+.home{padding:calc(env(safe-area-inset-top,0px) + 22px) 18px 96px;overflow-y:auto;height:100%}
+.dh{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;position:relative}
+.dh small{color:var(--soft);font-size:14px;font-weight:500}
+.dh h1{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--deep);color:#fff;font-weight:800;font-size:18px;display:grid;place-items:center;flex:none;text-transform:uppercase}
+.menu{position:absolute;right:0;top:54px;z-index:20;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:6px;min-width:210px;
+  box-shadow:0 16px 36px -10px rgba(42,28,18,.3);display:none}
+.menu.on{display:block}
+.menu button{display:block;width:100%;text-align:left;padding:12px 14px;border-radius:12px;font-weight:600;font-size:15px}
+.menu button:active{background:var(--orange-soft)}
+.menu .out{color:var(--bad)}
 
-/* Bulle Lynx (assistant IA) : visible sur toutes les pages */
-.home{padding-bottom:90px}
+.card{width:100%;display:block;text-align:left;border-radius:26px;padding:18px;margin-bottom:12px}
+.card .lbl{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;opacity:.8;margin-bottom:6px}
+.card .lbl i{font-style:normal;font-size:12px;opacity:.9}
+.card .big{font-size:38px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.card .big span{font-size:20px;font-weight:600;opacity:.8;margin-left:2px}
+.card .sub{font-size:14px;margin-top:6px;opacity:.85}
+.bar{height:10px;border-radius:99px;background:rgba(255,255,255,.2);margin:14px 0 12px;overflow:hidden}
+.bar b{display:block;height:100%;border-radius:99px;background:var(--orange);width:0;transition:width .6s}
+.c-budget{background:var(--deep);color:#fff}
+.c-budget .bar b.over{background:#E4584A}
+.c-invest{background:var(--orange);color:#fff}
+.c-invest .bar b{background:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stats div{background:rgba(255,255,255,.12);border-radius:14px;padding:9px 10px}
+.stats small{display:block;font-size:11px;opacity:.75;font-weight:500}
+.stats b{font-size:15px;font-weight:700}
+.sec{font-size:13px;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:.06em;margin:20px 4px 10px}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.q{background:var(--surface);border-radius:20px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:10px}
+.q i{width:40px;height:40px;border-radius:13px;background:var(--orange-soft);color:var(--orange);display:grid;place-items:center}
+.q i svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.q b{font-size:15px;line-height:1.15;display:block}
+.q small{color:var(--soft);font-size:12px}
+.ask{margin-top:12px;width:100%;display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:20px;padding:12px 14px;text-align:left}
+.ask svg.l{width:34px;height:34px;flex:none;background:var(--deep);border-radius:50%;padding:3px}
+.ask b{display:block;font-size:15px}.ask small{color:var(--soft);font-size:13px}
+
+/* ---------- LYNX ---------- */
 .lynx-fab{position:absolute;right:14px;bottom:14px;z-index:40;width:48px;height:48px;border-radius:50%;
-  background:var(--deep);display:grid;place-items:center;box-shadow:0 10px 24px rgba(31,26,23,.35);
-  transition:transform .2s,opacity .2s}
+  background:var(--deep);display:grid;place-items:center;box-shadow:0 10px 24px rgba(42,28,18,.35);transition:transform .2s,opacity .2s}
 .lynx-fab svg{width:30px;height:30px}
 .lynx-fab:active{transform:scale(.92)}
 .lynx-fab.hid{transform:scale(.4);opacity:0;pointer-events:none}
 .lynx-scrim{position:absolute;inset:0;z-index:50;background:rgba(42,28,18,.45);opacity:0;pointer-events:none;transition:opacity .25s}
 .lynx-scrim.on{opacity:1;pointer-events:auto}
-.lynx-sheet{position:absolute;left:0;right:0;bottom:0;z-index:51;height:min(82%,680px);background:#0C1017;
+.lynx-sheet{position:absolute;left:0;right:0;bottom:0;z-index:51;height:min(82%,680px);background:var(--bg);
   border-radius:28px 28px 0 0;overflow:hidden;transform:translateY(105%);visibility:hidden;
-  transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s .32s;box-shadow:0 -10px 40px rgba(0,0,0,.3)}
+  transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s .32s;box-shadow:0 -10px 40px rgba(42,28,18,.3)}
 .lynx-sheet.on{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s}
-.lynx-sheet iframe{background:#0C1017}
+
+/* ---------- CONNEXION + QUESTIONNAIRE ---------- */
+.auth{position:absolute;inset:0;z-index:100;background:var(--bg);display:none;flex-direction:column;
+  padding:calc(env(safe-area-inset-top,0px) + 28px) 22px calc(env(safe-area-inset-bottom,0px) + 22px);overflow-y:auto}
+.auth.on{display:flex}
+.mascot{width:84px;height:84px;background:var(--deep);border-radius:28px;display:grid;place-items:center;margin-bottom:22px}
+.mascot svg{width:58px;height:58px}
+.auth h1{font-size:32px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.auth p.lead{color:var(--soft);margin:8px 0 22px;font-size:16px}
+.field{display:block;margin-bottom:14px}
+.field span{display:block;font-size:13px;font-weight:600;color:var(--soft);margin-bottom:6px}
+.inp{width:100%;background:var(--surface);border:2px solid transparent;border-radius:18px;padding:15px 16px;font-size:18px;font-weight:600;outline:none}
+.inp:focus{border-color:var(--orange)}
+.err{color:var(--bad);font-size:14px;min-height:20px;margin:-4px 2px 8px;font-weight:500}
+.btn{width:100%;background:var(--orange);color:#fff;border-radius:18px;padding:16px;font-size:17px;font-weight:700}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:none;color:var(--soft);font-weight:600;padding:12px}
+.users{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.users small{width:100%;color:var(--soft);font-size:13px;font-weight:500}
+.chip{background:var(--surface);border-radius:99px;padding:9px 15px;font-weight:600;font-size:15px}
+.chip.on{background:var(--orange);color:#fff}
+.note{margin-top:auto;padding-top:20px;color:var(--soft);font-size:12.5px;line-height:1.4}
+.prog{display:flex;gap:6px;margin-bottom:26px}
+.prog i{flex:1;height:5px;border-radius:9px;background:var(--line)}
+.prog i.on{background:var(--orange)}
+.auth h2{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.opts{display:grid;gap:10px;margin-top:20px}
+.opt{display:flex;align-items:center;gap:14px;background:var(--surface);border:2px solid transparent;border-radius:20px;padding:15px 16px;text-align:left;font-weight:700;font-size:17px}
+.opt em{font-style:normal;font-size:26px}
+.opt.on{border-color:var(--orange);background:#FFF4E6}
+.onb-nav{margin-top:auto;padding-top:18px;display:grid;gap:4px}
+.hint{color:var(--soft);font-size:13px;margin:-6px 2px 14px}
 </style>
 </head>
 <body>
@@ -85,34 +129,58 @@ iframe{width:100%;height:100%;border:0;display:block;background:var(--bg)}
   <div class="app">
 
     <div class="stage" id="stage">
-      <!-- Accueil -->
+      <!-- ============ DASHBOARD ============ -->
       <section class="screen on" id="screen-home">
         <div class="home">
-          <h1>Salut !<br>Ton argent, simplement.</h1>
-          <p class="sub">Choisis par où commencer.</p>
-          <div class="cards">
-            <button class="hcard main" data-go="invest">
-              <i><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M5 16l5-5 4 3 6-7"/></svg></i>
-              <span><b>Apprendre &amp; investir</b><small>Leçons, quiz et simulateur</small></span>
-            </button>
-            <button class="hcard" data-go="budget">
-              <i><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9h18"/></svg></i>
-              <span><b>Mon budget</b><small>Comptes, dépenses, économies</small></span>
-            </button>
-            <button class="hcard" data-go="feed">
-              <i><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></i>
-              <span><b>Feed des bons plans</b><small>Offres des marques et de la communauté</small></span>
-            </button>
-            <button class="hcard" data-go="plans">
-              <i><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg></i>
-              <span><b>Bons plans autour de moi</b><small>La carte des offres du moment</small></span>
-            </button>
+          <div class="dh">
+            <div><small id="hDate"></small><h1>Salut <span id="hName"></span> 👋</h1></div>
+            <button class="avatar" id="avatar" aria-label="Mon compte"></button>
+            <div class="menu" id="menu">
+              <button id="mRedo">Refaire mon profil</button>
+              <button class="out" id="mOut">Se déconnecter</button>
+            </div>
           </div>
+
+          <button class="card c-budget" data-go="budget">
+            <div class="lbl">Budget du mois <i>Voir le détail ›</i></div>
+            <div class="big" id="bLeft">0<span>€</span></div>
+            <div class="sub" id="bSub"></div>
+            <div class="bar"><b id="bBar"></b></div>
+            <div class="stats">
+              <div><small>Revenus</small><b id="bInc"></b></div>
+              <div><small>Dépensé</small><b id="bSpent"></b></div>
+              <div><small>À épargner</small><b id="bSave"></b></div>
+            </div>
+          </button>
+
+          <button class="card c-invest" data-go="invest">
+            <div class="lbl"><span id="iTitle"></span> <i>Continuer ›</i></div>
+            <div class="big" id="iPct">0<span>%</span></div>
+            <div class="sub" id="iSub"></div>
+            <div class="bar"><b id="iBar"></b></div>
+            <div class="stats">
+              <div><small>Série</small><b id="iStreak"></b></div>
+              <div><small>Leçons</small><b id="iDone"></b></div>
+              <div><small>Il reste</small><b id="iMonths"></b></div>
+            </div>
+          </button>
+
+          <div class="sec">Accès rapide</div>
+          <div class="quick">
+            <button class="q" data-go="invest"><i><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M5 16l5-5 4 3 6-7"/></svg></i><span><b>Apprendre</b><small>Leçons et quiz</small></span></button>
+            <button class="q" data-go="budget"><i><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9h18"/></svg></i><span><b>Mes dépenses</b><small>Comptes et budget</small></span></button>
+            <button class="q" data-go="feed"><i><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></i><span><b>Bons plans</b><small>Feed des offres</small></span></button>
+            <button class="q" data-go="plans"><i><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg></i><span><b>Autour de moi</b><small>La carte des offres</small></span></button>
+          </div>
+
+          <button class="ask" id="askLynx">
+            <svg class="l" viewBox="0 0 120 130" aria-hidden="true"><path d="M24 54L30 12 52 38ZM96 54L90 12 68 38Z" fill="#E8843F"/><ellipse cx="60" cy="70" rx="44" ry="40" fill="#F08A3E"/><ellipse cx="60" cy="88" rx="24" ry="16" fill="#FFF4E6"/><ellipse cx="44" cy="66" rx="7" ry="9" fill="#2A1C12"/><ellipse cx="76" cy="66" rx="7" ry="9" fill="#2A1C12"/><path d="M54 80h12l-6 6z" fill="#C75B6B"/></svg>
+            <span><b>Demande à Lynx</b><small>Solde, dépenses, objectif…</small></span>
+          </button>
         </div>
       </section>
       <!-- Les modules sont ajoutés ici par le script (chargés au premier clic) -->
 
-      <!-- Bulle Lynx : s'ouvre par-dessus n'importe quelle page -->
       <button class="lynx-fab" id="lynxFab" aria-label="Ouvrir l'assistant Lynx">
         <svg viewBox="0 0 120 130" aria-hidden="true"><path d="M24 54L30 12 52 38ZM96 54L90 12 68 38Z" fill="#E8843F"/><path d="M30 12l-2-8M90 12l2-8" stroke="#F6A35E" stroke-width="5" stroke-linecap="round"/><ellipse cx="60" cy="70" rx="44" ry="40" fill="#F08A3E"/><ellipse cx="60" cy="88" rx="24" ry="16" fill="#FFF4E6"/><ellipse cx="44" cy="66" rx="7" ry="9" fill="#2A1C12"/><ellipse cx="76" cy="66" rx="7" ry="9" fill="#2A1C12"/><circle cx="46" cy="63" r="2.5" fill="#fff"/><circle cx="78" cy="63" r="2.5" fill="#fff"/><path d="M54 80h12l-6 6z" fill="#C75B6B"/></svg>
       </button>
@@ -121,30 +189,207 @@ iframe{width:100%;height:100%;border:0;display:block;background:var(--bg)}
     </div>
 
     <nav class="tabbar" id="tabbar">
-      <button class="tab on" data-go="home">
-        <svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Accueil
-      </button>
-      <button class="tab" data-go="feed">
-        <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>Feed
-      </button>
-      <button class="tab" data-go="plans">
-        <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>Carte
-      </button>
-      <button class="tab" data-go="budget">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9h18"/><path d="M8 13h2M8 17h2M14 13h2M14 17h2"/></svg>Budget
-      </button>
-      <button class="tab" data-go="invest">
-        <svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M5 16l5-5 4 3 6-7"/></svg>Invest
-      </button>
+      <button class="tab on" data-go="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Accueil</button>
+      <button class="tab" data-go="feed"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.7 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>Feed</button>
+      <button class="tab" data-go="plans"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>Carte</button>
+      <button class="tab" data-go="budget"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9h18"/><path d="M8 13h2M8 17h2M14 13h2M14 17h2"/></svg>Budget</button>
+      <button class="tab" data-go="invest"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M5 16l5-5 4 3 6-7"/></svg>Invest</button>
     </nav>
+
+    <!-- ============ CONNEXION / QUESTIONNAIRE ============ -->
+    <div class="auth" id="auth">
+      <div id="pLogin">
+        <div class="mascot"><svg viewBox="0 0 120 130" aria-hidden="true"><path d="M24 54L30 12 52 38ZM96 54L90 12 68 38Z" fill="#E8843F"/><ellipse cx="60" cy="70" rx="44" ry="40" fill="#F08A3E"/><ellipse cx="60" cy="88" rx="24" ry="16" fill="#FFF4E6"/><ellipse cx="44" cy="66" rx="7" ry="9" fill="#2A1C12"/><ellipse cx="76" cy="66" rx="7" ry="9" fill="#2A1C12"/><circle cx="46" cy="63" r="2.5" fill="#fff"/><circle cx="78" cy="63" r="2.5" fill="#fff"/><path d="M54 80h12l-6 6z" fill="#C75B6B"/></svg></div>
+        <h1>Bienvenue sur Kapi</h1>
+        <p class="lead">Choisis un pseudo pour commencer. Si tu en as déjà un, tu retrouveras ton espace.</p>
+        <label class="field"><span>Ton pseudo</span><input class="inp" id="pseudo" maxlength="16" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ex : nathan"></label>
+        <div class="err" id="pErr"></div>
+        <button class="btn" id="pGo">Continuer</button>
+        <div class="users" id="pUsers"></div>
+        <p class="note">Pas de mot de passe : ton espace est enregistré sur cet appareil uniquement.</p>
+      </div>
+      <div id="pOnb" style="display:none;flex:1;flex-direction:column">
+        <div class="prog" id="oProg"></div>
+        <h2 id="oTitle"></h2>
+        <p class="lead" id="oSub" style="margin-bottom:0"></p>
+        <div id="oBody"></div>
+        <div class="onb-nav"><button class="btn" id="oNext">Suivant</button><button class="btn ghost" id="oBack">Retour</button></div>
+      </div>
+    </div>
 
   </div>
 </div>
 
 <script>
 /* =====================================================
-   CONFIGURATION : un module = un fichier HTML séparé.
-   Pour changer un nom de fichier, modifie seulement "src".
+   DONNÉES, COMPTES (pseudo seul) ET STOCKAGE
+   Tout reste dans le navigateur (localStorage).
+   Les modules lisent 'kapi-profile', 'kapi-learn-v3', 'kapi-budget'.
+   ===================================================== */
+const $ = s => document.querySelector(s);
+const jget = k => { try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } };
+const jset = (k,v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+const eur = n => Math.round(n).toLocaleString('fr-FR') + ' €';
+
+const PER_USER = ['kapi-learn-v3', 'kapi-budget'];          // données propres à chaque pseudo
+const GOALS = {
+  appart:  { em:'🏠', label:'Acheter un appartement',  title:'Apport appartement',   target:10000, monthly:180 },
+  retraite:{ em:'🌅', label:'Préparer ma retraite',    title:'Retraite',             target:60000, monthly:150 },
+  voyage:  { em:'✈️', label:'Financer un voyage',      title:'Voyage',               target:3000,  monthly:250 },
+  grow:    { em:'🌱', label:'Faire grandir mon épargne', title:'Épargne',            target:20000, monthly:120 }
+};
+const STATUS = { etu:['🎓','Étudiant·e'], alt:['🛠️','En alternance'], sal:['💼','Salarié·e'], autre:['✨','Autre'] };
+
+let users = jget('kapi-users') || {};
+let uid = null, noPersist = false;
+const me = () => users[uid];
+const profile = () => me() && me().profile;
+
+function persist(){
+  if (noPersist || !uid) return;
+  const d = {}; PER_USER.forEach(k => d[k] = localStorage.getItem(k));
+  jset('kapi-ud:' + uid, d);
+}
+function restore(){
+  const d = jget('kapi-ud:' + uid) || {};
+  PER_USER.forEach(k => d[k] ? localStorage.setItem(k, d[k]) : localStorage.removeItem(k));
+  const p = profile();
+  p ? jset('kapi-profile', p) : localStorage.removeItem('kapi-profile');
+}
+function saveProfile(p){
+  me().profile = p; jset('kapi-users', users); jset('kapi-profile', p);
+}
+addEventListener('pagehide', persist);
+document.addEventListener('visibilitychange', () => { if (document.hidden) persist(); });
+
+/* ---------- Connexion par pseudo ---------- */
+const auth = $('#auth'), pLogin = $('#pLogin'), pOnb = $('#pOnb');
+
+function showLogin(){
+  auth.classList.add('on'); pLogin.style.display = ''; pOnb.style.display = 'none';
+  const ids = Object.keys(users);
+  $('#pUsers').innerHTML = ids.length ? '<small>Déjà sur cet appareil :</small>' : '';
+  ids.forEach(id => {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = users[id].pseudo;
+    b.onclick = () => login(id); $('#pUsers').appendChild(b);
+  });
+}
+function submitPseudo(){
+  const raw = $('#pseudo').value.trim();
+  if (raw.length < 2){ $('#pErr').textContent = 'Ton pseudo doit faire au moins 2 caractères.'; return; }
+  if (!/^[\p{L}\p{N}_.\- ]+$/u.test(raw)){ $('#pErr').textContent = 'Lettres, chiffres, _ . - uniquement.'; return; }
+  const id = raw.toLowerCase();
+  if (!users[id]){ users[id] = { pseudo: raw, profile: null }; jset('kapi-users', users); }
+  login(id);
+}
+function login(id){
+  uid = id; jset('kapi-session', id); restore();
+  profile() ? enterApp() : startOnb();
+}
+function logout(){
+  persist(); noPersist = true;
+  PER_USER.concat(['kapi-profile','kapi-session']).forEach(k => localStorage.removeItem(k));
+  try{ history.replaceState(null,'',location.pathname); }catch(e){}
+  location.reload();
+}
+$('#pGo').onclick = submitPseudo;
+$('#pseudo').addEventListener('keydown', e => { if (e.key === 'Enter') submitPseudo(); });
+$('#pseudo').addEventListener('input', () => $('#pErr').textContent = '');
+
+/* ---------- Questionnaire (4 questions) ---------- */
+let step = 0, ans = {};
+const STEPS = 4;
+function startOnb(){
+  const p = profile();
+  ans = p ? Object.assign({}, p) : { goal:'appart', status:'etu', income:'', monthly:'', saved:'', target:'' };
+  step = 0; auth.classList.add('on'); pLogin.style.display = 'none'; pOnb.style.display = 'flex'; renderOnb();
+}
+function optsHtml(map, key, fmt){
+  return '<div class="opts">' + Object.entries(map).map(([k,v]) =>
+    `<button class="opt${ans[key]===k?' on':''}" data-k="${k}"><em>${fmt(v)[0]}</em>${fmt(v)[1]}</button>`).join('') + '</div>';
+}
+function renderOnb(){
+  $('#oProg').innerHTML = Array.from({length:STEPS}, (_,i) => `<i class="${i<=step?'on':''}"></i>`).join('');
+  const body = $('#oBody'), t = $('#oTitle'), s = $('#oSub'), next = $('#oNext');
+  $('#oBack').style.visibility = step ? 'visible' : 'hidden';
+  next.textContent = step === STEPS-1 ? "C'est parti !" : 'Suivant';
+  const g = GOALS[ans.goal];
+  if (step === 0){
+    t.textContent = 'Quel est ton objectif principal ?'; s.textContent = 'Tu pourras le changer plus tard.';
+    body.innerHTML = optsHtml(GOALS, 'goal', v => [v.em, v.label]);
+  } else if (step === 1){
+    t.textContent = 'Tu es plutôt…'; s.textContent = 'Pour adapter les conseils à ta situation.';
+    body.innerHTML = optsHtml(STATUS, 'status', v => v);
+  } else if (step === 2){
+    t.textContent = 'Combien rentre chaque mois ?'; s.textContent = 'Salaire, aides, argent de poche : une estimation suffit.';
+    body.innerHTML = `<label class="field" style="margin-top:20px"><span>Revenus mensuels (€)</span><input class="inp" id="fIncome" type="number" inputmode="numeric" min="0" placeholder="1000" value="${ans.income||''}"></label>
+      <div class="users" style="margin-top:0">${[500,800,1200,1800].map(v=>`<button class="chip" data-v="${v}">${v} €</button>`).join('')}</div>`;
+  } else {
+    t.textContent = 'Ton plan d’épargne'; s.textContent = `Pour « ${g.label.toLowerCase()} ». On a prérempli, ajuste si besoin.`;
+    body.innerHTML = `<div style="margin-top:20px">
+      <label class="field"><span>Je veux mettre de côté par mois (€)</span><input class="inp" id="fMonthly" type="number" inputmode="numeric" min="0" value="${ans.monthly||g.monthly}"></label>
+      <label class="field"><span>J’ai déjà de côté (€)</span><input class="inp" id="fSaved" type="number" inputmode="numeric" min="0" placeholder="0" value="${ans.saved||''}"></label>
+      <label class="field"><span>Montant à atteindre (€)</span><input class="inp" id="fTarget" type="number" inputmode="numeric" min="1" value="${ans.target||g.target}"></label></div>`;
+  }
+}
+$('#oBody').addEventListener('click', e => {
+  const o = e.target.closest('.opt');
+  if (o){ ans[step === 0 ? 'goal' : 'status'] = o.dataset.k;
+    if (step === 0){ ans.monthly = ''; ans.target = ''; }
+    renderOnb(); setTimeout(nextStep, 180); return; }
+  const c = e.target.closest('.chip[data-v]');
+  if (c){ $('#fIncome').value = c.dataset.v; }
+});
+function readFields(){
+  const v = id => { const el = $(id); return el ? el.value : undefined; };
+  if (step === 2) ans.income = v('#fIncome');
+  if (step === 3){ ans.monthly = v('#fMonthly'); ans.saved = v('#fSaved'); ans.target = v('#fTarget'); }
+}
+function nextStep(){
+  readFields();
+  if (step < STEPS-1){ step++; renderOnb(); return; }
+  const g = GOALS[ans.goal], n = (x, d) => (x !== '' && x != null && !isNaN(+x) && +x >= 0) ? +x : d;
+  const p = { pseudo: me().pseudo, goal: ans.goal, status: ans.status,
+    income: n(ans.income, 1000) || 1000, monthly: n(ans.monthly, g.monthly), saved: n(ans.saved, 0), target: n(ans.target, g.target) || g.target };
+  saveProfile(p);
+  const L = jget('kapi-learn-v3') || {}; L.goal = p.goal; jset('kapi-learn-v3', L);   // objectif repris dans le module Invest
+  resetModules(); persist(); enterApp();
+}
+$('#oNext').onclick = nextStep;
+$('#oBack').onclick = () => { readFields(); if (step > 0){ step--; renderOnb(); } };
+
+/* ---------- Dashboard ---------- */
+function renderHome(){
+  const P = profile(); if (!P) return;
+  const B = jget('kapi-budget') || {}, L = jget('kapi-learn-v3') || {}, g = GOALS[P.goal] || GOALS.grow;
+  $('#hName').textContent = P.pseudo;
+  $('#avatar').textContent = P.pseudo.charAt(0);
+  $('#hDate').textContent = new Date().toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+
+  const plan = Math.max(0, P.income - P.monthly), spent = Math.round(B.spent || 0), left = plan - spent;
+  $('#bLeft').innerHTML = Math.round(Math.abs(left)).toLocaleString('fr-FR') + '<span>€</span>';
+  $('#bSub').textContent = left >= 0 ? `restants sur ton budget de ${eur(plan)}` : `de dépassement sur ton budget de ${eur(plan)}`;
+  const bb = $('#bBar'); bb.style.width = Math.min(100, plan ? spent / plan * 100 : 100) + '%'; bb.classList.toggle('over', left < 0);
+  $('#bInc').textContent = eur(P.income); $('#bSpent').textContent = eur(spent); $('#bSave').textContent = eur(P.monthly);
+
+  const pct = Math.min(100, Math.round(P.saved / P.target * 100));
+  $('#iTitle').textContent = g.em + ' ' + g.title;
+  $('#iPct').innerHTML = pct + '<span>%</span>';
+  $('#iSub').textContent = `${eur(P.saved)} sur ${eur(P.target)}`;
+  $('#iBar').style.width = pct + '%';
+  $('#iStreak').textContent = '🔥 ' + (L.streak || 0) + ' j';
+  $('#iDone').textContent = (L.done ? L.done.length : 0);
+  const months = P.monthly > 0 ? Math.ceil(Math.max(0, P.target - P.saved) / P.monthly) : null;
+  $('#iMonths').textContent = months === null ? '—' : months === 0 ? 'Atteint !' : months > 24 ? Math.round(months/12*10)/10 + ' ans' : months + ' mois';
+}
+$('#avatar').onclick = e => { e.stopPropagation(); $('#menu').classList.toggle('on'); };
+document.addEventListener('click', () => $('#menu').classList.remove('on'));
+$('#mOut').onclick = logout;
+$('#mRedo').onclick = () => { $('#menu').classList.remove('on'); startOnb(); };
+$('#askLynx').onclick = () => openLynx();
+
+/* =====================================================
+   MODULES : un module = un fichier HTML séparé.
    ===================================================== */
 const MODULES = {
   feed:   { src: 'feed.html' },
@@ -152,13 +397,8 @@ const MODULES = {
   budget: { src: 'budget.html' },
   invest: { src: 'invest.html' }
 };
-
-/* CSS injecté dans chaque module (sans modifier ses fichiers) pour :
-   - retirer sa barre du bas (la coque a la sienne)
-   - retirer le faux cadre de téléphone du module Budget */
 const COMMON = `.tabbar{display:none!important}`;
 const INJECT = {
-  /* Feed : on garde seulement le bouton + (publier), le reste de sa barre est remplacé par celle de la coque */
   feed: COMMON + `
     .nav > button:not(.plus){display:none!important}
     .nav{background:none!important;border:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
@@ -186,35 +426,29 @@ function mount(key){
   const m = MODULES[key];
   if (m.el) return;
   const sec = document.createElement('section');
-  sec.className = 'screen';
-  sec.id = 'screen-' + key;
+  sec.className = 'screen'; sec.id = 'screen-' + key;
   const f = document.createElement('iframe');
-  f.title = key;
-  f.addEventListener('load', () => tweak(f, key));
-  f.src = m.src;
-  sec.appendChild(f);
-  stage.appendChild(sec);
-  m.el = sec;
+  f.title = key; f.addEventListener('load', () => tweak(f, key)); f.src = m.src;
+  sec.appendChild(f); stage.appendChild(sec); m.el = sec;
 }
-
-/* Fonctionne quand le site est servi en http(s) (GitHub Pages, serveur local). */
+function resetModules(){      // recharge les modules pour qu'ils relisent le profil
+  Object.values(MODULES).forEach(m => { if (m.el){ m.el.remove(); m.el = null; } });
+  if (lFrame){ lFrame.remove(); lFrame = null; }
+}
 function tweak(frame, key){
   try{
     const d = frame.contentDocument;
-    const st = d.createElement('style');
-    st.textContent = INJECT[key] || '';
-    d.head.appendChild(st);
-    // Un lien vers index.html dans un module ramène à l'accueil de la coque
+    const st = d.createElement('style'); st.textContent = INJECT[key] || ''; d.head.appendChild(st);
     d.addEventListener('click', e => {
       const a = e.target.closest && e.target.closest('a[href="index.html"]');
       if (a){ e.preventDefault(); go('home'); }
     }, true);
-  }catch(err){ /* ouverture en file:// : injection impossible */ }
+  }catch(err){}
 }
-
 function go(key){
   if (typeof closeLynx === 'function') closeLynx();
-  if (key !== 'home') mount(key);
+  persist();
+  if (key !== 'home') mount(key); else renderHome();
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
   const target = key === 'home' ? document.getElementById('screen-home') : MODULES[key].el;
   target.classList.add('on');
@@ -222,19 +456,17 @@ function go(key){
   current = key;
   try{ history.replaceState(null, '', key === 'home' ? location.pathname : '#' + key); }catch(e){}
 }
-
-/* Les modules peuvent demander un changement d'écran : parent.postMessage({go:'budget'}) */
 const ALIAS = { carte:'plans', budget:'budget', feed:'feed', invest:'invest', home:'home' };
 addEventListener('message', e => {
-  const k = e.data && ALIAS[e.data.go];
-  if (k) go(k);
+  const d = e.data || {};
+  const k = ALIAS[d.go]; if (k) go(k);
+  if (d.kapi === 'saved' && profile()){ const p = profile(); p.saved = +d.v || 0; saveProfile(p); renderHome(); }   // virement fait via Lynx
+  if (d.lynx === 'close') closeLynx();
 });
-
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-go]');
   if (b) go(b.dataset.go);
 });
-
 
 /* =====================================================
    LYNX : assistant IA (lynx-app.html) dans une feuille
@@ -245,15 +477,11 @@ const lSheet = document.getElementById('lynxSheet');
 const lScrim = document.getElementById('lynxScrim');
 let lFrame = null, lOpen = false;
 
-function lynxSync(){
-  try{ lFrame && lFrame.contentWindow.postMessage({lynx:'vis', on:lOpen}, '*'); }catch(e){}
-}
+function lynxSync(){ try{ lFrame && lFrame.contentWindow.postMessage({lynx:'vis', on:lOpen}, '*'); }catch(e){} }
 function openLynx(){
   if (!lFrame){
     lFrame = document.createElement('iframe');
-    lFrame.title = 'Lynx';
-    lFrame.addEventListener('load', lynxSync);
-    lFrame.src = LYNX_SRC;
+    lFrame.title = 'Lynx'; lFrame.addEventListener('load', lynxSync); lFrame.src = LYNX_SRC;
     lSheet.appendChild(lFrame);
   }
   lOpen = true;
@@ -269,9 +497,7 @@ function closeLynx(){
 lFab.addEventListener('click', openLynx);
 lScrim.addEventListener('click', closeLynx);
 addEventListener('keydown', e => { if (e.key === 'Escape') closeLynx(); });
-addEventListener('message', e => { if (e.data && e.data.lynx === 'close') closeLynx(); });
 
-/* Cadre téléphone mis à l'échelle sur ordinateur */
 function fit(){
   const p = document.getElementById('phone');
   if (innerWidth <= 500){ p.style.transform = ''; return; }
@@ -279,9 +505,20 @@ function fit(){
 }
 addEventListener('resize', fit); fit();
 
-/* Ouverture directe : monsite/#budget */
-const first = location.hash.slice(1);
-if (MODULES[first]) go(first);
+/* =====================================================
+   DÉMARRAGE
+   ===================================================== */
+function enterApp(){
+  auth.classList.remove('on');
+  renderHome();
+  const first = location.hash.slice(1);
+  if (MODULES[first]) go(first); else go('home');
+}
+(function boot(){
+  const s = jget('kapi-session');
+  if (s && users[s]){ uid = s; restore(); profile() ? enterApp() : startOnb(); }
+  else showLogin();
+})();
 </script>
 </body>
 </html>
