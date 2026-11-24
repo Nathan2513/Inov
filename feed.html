@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Capstone · Feed bons plans</title>
+<title>MaLynx · Feed bons plans</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --orange:#E8672A; --orange-dk:#C9531B; --orange-soft:#FCE3D2; --orange-50:#FFF4EC;
-  --beige:#F6EFE6; --beige-2:#EFE4D6; --sand:#E3D3BF;
-  --white:#FFFFFF; --ink:#2B211B; --ink-2:#5B4D42; --muted:#8C7D70; --line:#EADFD2;
+  --orange:#F2661B; --orange-dk:#C9531B; --orange-soft:#FCE3D2; --orange-50:#FFF4EC;
+  --beige:#F2E6D3; --beige-2:#EFE4D6; --sand:#E3D3BF;
+  --white:#FFFFFF; --ink:#2A1C12; --ink-2:#5B4D42; --muted:#8C7D70; --line:#E3D6C2;
   --green:#2E9E5B; --red:#E2552B; --dark:#1F1A17;
   --shadow:0 6px 20px rgba(91,60,30,.09);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
 body{
-  font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);
+  font-family:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);
   background:radial-gradient(1200px 700px at 20% 10%,#FBF6F0 0%,#F1E6D8 55%,#E9DBC8 100%);
   min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
 }
@@ -153,7 +153,7 @@ input,textarea,select{font:inherit;color:inherit}
   background:radial-gradient(circle at 1px 1px,rgba(176,137,104,.28) 1px,transparent 0) 0 0/16px 16px,linear-gradient(160deg,#FAF1E6,#EED9C2)}
 .receipt{width:70%;background:#fff;padding:18px 16px 20px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#3a2f28;transform:rotate(-2.5deg);box-shadow:0 16px 30px rgba(90,55,25,.2);position:relative}
 .receipt::after{content:'';position:absolute;left:0;right:0;bottom:-8px;height:8px;background:radial-gradient(circle at 6px 8px,transparent 6px,#fff 6.5px) 0 0/12px 8px repeat-x}
-.stamp{position:absolute;top:-16px;right:-16px;width:56px;height:56px;border-radius:50%;background:var(--orange);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:14px;display:grid;place-items:center;transform:rotate(14deg);box-shadow:0 6px 14px rgba(232,103,42,.4);border:3px dashed rgba(255,255,255,.55)}
+.stamp{position:absolute;top:-16px;right:-16px;width:56px;height:56px;border-radius:50%;background:var(--orange);color:#fff;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:14px;display:grid;place-items:center;transform:rotate(14deg);box-shadow:0 6px 14px rgba(232,103,42,.4);border:3px dashed rgba(255,255,255,.55)}
 .r-store{text-align:center;font-weight:700;letter-spacing:.1em;font-size:12px}
 .r-date{text-align:center;color:#8c7d70;font-size:10px;margin:3px 0 10px}
 .r-line{display:flex;justify-content:space-between;gap:8px;margin:4px 0}
@@ -164,7 +164,7 @@ input,textarea,select{font:inherit;color:inherit}
 .r-total{display:flex;justify-content:space-between;font-weight:700}
 .r-saved{margin-top:10px;text-align:center;background:var(--orange-50);border-radius:8px;padding:7px 6px 6px}
 .r-saved small{display:block;font-size:9px;letter-spacing:.14em;color:var(--orange-dk);font-weight:700}
-.r-saved b{font-family:'Plus Jakarta Sans',sans-serif;font-size:23px;color:var(--orange);letter-spacing:-.02em}
+.r-saved b{font-family:'Bricolage Grotesque',sans-serif;font-size:23px;color:var(--orange);letter-spacing:-.02em}
 
 .actions{display:flex;align-items:center;gap:15px;padding:10px 12px 2px 13px}
 .act .ic{width:25px;height:25px}
@@ -374,7 +374,7 @@ select.inp{-webkit-appearance:none;appearance:none;background:#fff url("data:ima
   </div>
 
   <header class="topbar">
-    <div class="logo"><span class="logo-mark">C</span>Capstone</div>
+    <div class="logo"><span class="logo-mark">M</span>MaLynx</div>
     <div class="city-wrap">
       <button class="city-btn" data-action="city"><i data-ic="pin"></i><span id="cityLabel">Lille</span><i data-ic="chev"></i></button>
       <div class="city-menu" id="cityMenu">
@@ -398,7 +398,7 @@ select.inp{-webkit-appearance:none;appearance:none;background:#fff url("data:ima
   <div class="bot-panel" id="botPanel">
     <div class="bp-h">
       <span class="av"><i data-ic="spark"></i></span>
-      <div><b>Assistant Capstone</b><small>● En ligne</small></div>
+      <div><b>Assistant MaLynx</b><small>● En ligne</small></div>
       <button class="ib" data-action="bot" aria-label="Fermer"><i data-ic="x"></i></button>
     </div>
     <div class="bp-msgs" id="botMsgs"></div>
@@ -443,8 +443,8 @@ const CATS = [['Tout','✨'],['Courses','🛒'],['Mode','👕'],['Sport','👟']
 const CAT_SLUG = { Courses:'courses', Mode:'mode', Sport:'sport', Tech:'tech', 'Beauté':'beaute', Maison:'maison' };
 const CAT_EMOJI = { Courses:'🛒', Mode:'👕', Sport:'👟', Tech:'🎧', 'Beauté':'💄', Maison:'🛋️' };
 const CITY_REF = { Lille:{ lat:50.6370, lng:3.0633 }, Paris:{ lat:48.8584, lng:2.3470 } };
-const PALETTE = ['#E8672A','#2B211B','#B85A2E','#A47551','#7A5C45','#D9894F','#5E4636','#C9531B'];
-const ME = 'mon.profil';
+const PALETTE = ['#F2661B','#2A1C12','#B85A2E','#A47551','#7A5C45','#D9894F','#5E4636','#C9531B'];
+const ME = (function(){try{var p=JSON.parse(localStorage.getItem('kapi-profile'));return (p&&p.pseudo)||''}catch(e){return ''}})() || 'mon.profil';
 
 /* =========================================================
    ENSEIGNES
@@ -946,7 +946,7 @@ function openUser(u) {
           <div class="stats"><div><b>${posts.length}</b><span>bons plans</span></div><div><b>${eur(total)}</b><span>économisés</span></div><div><b id="folU">${fol + (f ? 1 : 0)}</b><span>abonnés</span></div></div>
         </div>
         <h4>${esc(u)}</h4>
-        <p>${u === ME ? 'Ton profil Capstone. Tes bons plans partagés apparaissent ici.' : `Chasseur de bons plans${city ? ' à ' + esc(city) : ''} · membre depuis ${3 + hash(u) % 14} mois`}</p>
+        <p>${u === ME ? 'Ton profil MaLynx. Tes bons plans partagés apparaissent ici.' : `Chasseur de bons plans${city ? ' à ' + esc(city) : ''} · membre depuis ${3 + hash(u) % 14} mois`}</p>
         ${likes > 400 ? '<span class="badge-top">🏅 Top contributeur du mois</span>' : ''}
         ${u === ME ? '' : `<div class="prof-btns"><button class="btn-main ${f ? 'on' : ''}" data-action="followu" data-user="${esc(u)}">${f ? 'Abonné ✓' : 'Suivre'}</button></div>`}
       </div>
@@ -1049,7 +1049,7 @@ function drawPub() {
       ${fld('Hashtags', inp('tags', '#antigaspi #etudiant'))}
       ${!file || file.kind !== 'img' ? `<div class="field"><span class="flabel">Visuel du post (si pas de photo)</span><div class="emo-pick">${EMOJIS.map(e => `<button class="${(P.emoji || CAT_EMOJI[P.cat]) === e ? 'on' : ''}" data-action="pset" data-k="emoji" data-v="${e}">${e}</button>`).join('')}</div></div>` : ''}
       ${fld(pro ? 'Photo ou document' : 'Photo ou ticket de caisse', dz)}
-      ${pro ? '' : tgl('verify', '✅ Vérifier mon économie avec Linxo', 'Ajoute le badge « Économie vérifiée » à ton post')}`;
+      ${pro ? '' : tgl('verify', '✅ Vérifier mon économie avec MaLynx', 'Ajoute le badge « Économie vérifiée » à ton post')}`;
   }
   body.innerHTML = h;
   updatePub();
@@ -1093,7 +1093,7 @@ function readFile(f) {
 function createBrand(name, cat) {
   const key = 'x' + Date.now();
   BRANDS[key] = { key, name, ini: initials(name), logo:'', color: PALETTE[hash(name) % PALETTE.length], followers: 0, custom: true,
-    bio: `Commerce ${cat ? cat.toLowerCase() + ' ' : ''}présent sur Capstone.` };
+    bio: `Commerce ${cat ? cat.toLowerCase() + ' ' : ''}présent sur MaLynx.` };
   return key;
 }
 function publishPost() {
@@ -1224,7 +1224,7 @@ const A = {
   emo: t => { const i = $('.cmt-input input'); if (i) { i.value += t.dataset.e; i.focus(); } },
   share: t => {
     const p = get(t.dataset.id), b = BRANDS[p.brand];
-    const txt = p.type === 'brand' ? `Bon plan Capstone : ${p.product} à ${eur(p.price)} au lieu de ${eur(p.old)} chez ${b.name} ${p.place}` : `Bon plan Capstone : ${p.user} a économisé ${eur(saving(p))} chez ${b.name}`;
+    const txt = p.type === 'brand' ? `Bon plan MaLynx : ${p.product} à ${eur(p.price)} au lieu de ${eur(p.old)} chez ${b.name} ${p.place}` : `Bon plan MaLynx : ${p.user} a économisé ${eur(saving(p))} chez ${b.name}`;
     try { navigator.clipboard && navigator.clipboard.writeText(txt).catch(() => {}); } catch (e) {}
     toast('🔗 Lien du bon plan copié, partage-le à tes amis');
   },
@@ -1333,7 +1333,7 @@ $('#scroll').addEventListener('scroll', () => {
 $$('[data-ic]').forEach(el => { el.outerHTML = ic(el.dataset.ic); });
 function tick() { const d = new Date(); $('#clock').textContent = d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0'); }
 tick(); setInterval(tick, 30000);
-botSay("Salut 👋 Je suis l'assistant Capstone. Dis-moi ce que tu cherches et je filtre le feed pour toi.");
+botSay("Salut 👋 Je suis l'assistant MaLynx. Dis-moi ce que tu cherches et je filtre le feed pour toi.");
 render();
 </script>
 </body>
