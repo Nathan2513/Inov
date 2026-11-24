@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Carte Bons Plans</title>
+<title>MaLynx · Carte des bons plans</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --beige:#F6EFE4;
+    --beige:#F2E6D3;
     --beige-2:#EADFCC;
     --white:#FFFFFF;
-    --orange:#F2711C;
+    --orange:#F2661B;
     --orange-dark:#D85F0C;
     --orange-soft:#FDE6D5;
-    --text:#3A2E22;
+    --text:#2A1C12;
     --muted:#8C7B68;
     --line:#E3D6C2;
     --green:#2E9E5B;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
-  body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--text);background:var(--beige);}
+  body{font-family:'Bricolage Grotesque',system-ui,sans-serif;color:var(--text);background:var(--beige);}
   button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
   a{color:inherit;text-decoration:none}
 
@@ -143,7 +143,7 @@
   <!-- HEADER -->
   <header class="header">
     <div class="search" id="searchBox">
-      <div class="logo">L</div>
+      <div class="logo" id="meAv">M</div>
       <input id="q" type="search" placeholder="Produit, magasin ou adresse…" autocomplete="off">
       <button class="clear" id="clearQ" aria-label="Effacer">✕</button>
     </div>
@@ -184,13 +184,13 @@
     <div class="list" id="list"></div>
 
     <button class="locate" id="locate" aria-label="Me localiser">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F2711C" stroke-width="2.4"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5" fill="#F2711C"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4" stroke-linecap="round"/></svg>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F2661B" stroke-width="2.4"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5" fill="#F2661B"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4" stroke-linecap="round"/></svg>
     </button>
 
     <div class="card" id="card"></div>
 
     <button class="sheet" id="sheet">
-      <svg class="grab" viewBox="0 0 24 24" fill="none" stroke="#3A2E22" stroke-width="2.6" stroke-linecap="round"><path d="M6 15l6-6 6 6"/></svg>
+      <svg class="grab" viewBox="0 0 24 24" fill="none" stroke="#2A1C12" stroke-width="2.6" stroke-linecap="round"><path d="M6 15l6-6 6 6"/></svg>
       <strong>Offres du moment</strong><span id="count"></span>
     </button>
 
@@ -233,6 +233,9 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
+/* ===== Initiale de l'utilisateur ===== */
+try{var _p=JSON.parse(localStorage.getItem('kapi-profile'));if(_p&&_p.pseudo)document.getElementById('meAv').textContent=_p.pseudo.charAt(0).toUpperCase();}catch(e){}
+
 /* ===== Offres fictives ===== */
 const OFFERS = [
   {id:1, store:"Apple Store Opéra", city:"Paris", ico:"🍏", cat:"tech", product:"Écouteurs sans fil", price:89, old:149, cur:"€", lat:48.8714, lng:2.3326, addr:"12 rue Halévy, Paris 9e", endsH:5, student:true, h:[10,20]},
