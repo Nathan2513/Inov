@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F2E6D3">
-<title>Kapi</title>
+<title>MaLynx</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -175,17 +175,17 @@ iframe{width:100%;height:100%;border:0;display:block;background:var(--bg)}
 
           <button class="ask" id="askLynx">
             <svg class="l" viewBox="0 0 120 130" aria-hidden="true"><path d="M24 54L30 12 52 38ZM96 54L90 12 68 38Z" fill="#E8843F"/><ellipse cx="60" cy="70" rx="44" ry="40" fill="#F08A3E"/><ellipse cx="60" cy="88" rx="24" ry="16" fill="#FFF4E6"/><ellipse cx="44" cy="66" rx="7" ry="9" fill="#2A1C12"/><ellipse cx="76" cy="66" rx="7" ry="9" fill="#2A1C12"/><path d="M54 80h12l-6 6z" fill="#C75B6B"/></svg>
-            <span><b>Demande à Lynx</b><small>Solde, dépenses, objectif…</small></span>
+            <span><b>Demande à MaLynx</b><small>Solde, dépenses, objectif…</small></span>
           </button>
         </div>
       </section>
       <!-- Les modules sont ajoutés ici par le script (chargés au premier clic) -->
 
-      <button class="lynx-fab" id="lynxFab" aria-label="Ouvrir l'assistant Lynx">
+      <button class="lynx-fab" id="lynxFab" aria-label="Ouvrir l'assistant MaLynx">
         <svg viewBox="0 0 120 130" aria-hidden="true"><path d="M24 54L30 12 52 38ZM96 54L90 12 68 38Z" fill="#E8843F"/><path d="M30 12l-2-8M90 12l2-8" stroke="#F6A35E" stroke-width="5" stroke-linecap="round"/><ellipse cx="60" cy="70" rx="44" ry="40" fill="#F08A3E"/><ellipse cx="60" cy="88" rx="24" ry="16" fill="#FFF4E6"/><ellipse cx="44" cy="66" rx="7" ry="9" fill="#2A1C12"/><ellipse cx="76" cy="66" rx="7" ry="9" fill="#2A1C12"/><circle cx="46" cy="63" r="2.5" fill="#fff"/><circle cx="78" cy="63" r="2.5" fill="#fff"/><path d="M54 80h12l-6 6z" fill="#C75B6B"/></svg>
       </button>
       <div class="lynx-scrim" id="lynxScrim"></div>
-      <div class="lynx-sheet" id="lynxSheet" role="dialog" aria-modal="true" aria-label="Assistant Lynx"></div>
+      <div class="lynx-sheet" id="lynxSheet" role="dialog" aria-modal="true" aria-label="Assistant MaLynx"></div>
     </div>
 
     <nav class="tabbar" id="tabbar">
@@ -200,7 +200,7 @@ iframe{width:100%;height:100%;border:0;display:block;background:var(--bg)}
     <div class="auth" id="auth">
       <div id="pLogin">
         <div class="mascot"><svg viewBox="0 0 120 130" aria-hidden="true"><path d="M24 54L30 12 52 38ZM96 54L90 12 68 38Z" fill="#E8843F"/><ellipse cx="60" cy="70" rx="44" ry="40" fill="#F08A3E"/><ellipse cx="60" cy="88" rx="24" ry="16" fill="#FFF4E6"/><ellipse cx="44" cy="66" rx="7" ry="9" fill="#2A1C12"/><ellipse cx="76" cy="66" rx="7" ry="9" fill="#2A1C12"/><circle cx="46" cy="63" r="2.5" fill="#fff"/><circle cx="78" cy="63" r="2.5" fill="#fff"/><path d="M54 80h12l-6 6z" fill="#C75B6B"/></svg></div>
-        <h1>Bienvenue sur Kapi</h1>
+        <h1>Bienvenue sur MaLynx</h1>
         <p class="lead">Choisis un pseudo pour commencer. Si tu en as déjà un, tu retrouveras ton espace.</p>
         <label class="field"><span>Ton pseudo</span><input class="inp" id="pseudo" maxlength="16" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ex : nathan"></label>
         <div class="err" id="pErr"></div>
@@ -481,7 +481,7 @@ function lynxSync(){ try{ lFrame && lFrame.contentWindow.postMessage({lynx:'vis'
 function openLynx(){
   if (!lFrame){
     lFrame = document.createElement('iframe');
-    lFrame.title = 'Lynx'; lFrame.addEventListener('load', lynxSync); lFrame.src = LYNX_SRC;
+    lFrame.title = 'MaLynx'; lFrame.addEventListener('load', lynxSync); lFrame.src = LYNX_SRC;
     lSheet.appendChild(lFrame);
   }
   lOpen = true;
