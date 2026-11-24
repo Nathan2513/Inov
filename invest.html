@@ -1371,7 +1371,7 @@ function recList(){ return G().recs.map(([id,why])=>({l:byId(id),why})).filter(x
 function actuHtml(){ const a=todayActu(), d=S.done.includes(a.id);
   if(!d&&!actuAlive()) return '';
   return `<button class="actu ${d?'done':''}" data-open="${a.id}">${picSvg(a.i,6)}<span><span class="tg">L’actu du jour${d?', faite':''}</span><b>${a.t}</b><small>${d?'2 minutes, avec sources':'Disparaît dans <span class="js-tleft">'+fmtLeft(actuLeft())+'</span>'}</small></span></button>`; }
-const USER='Camille'; /* prénom issu du KYC */
+const USER=(function(){try{var p=JSON.parse(localStorage.getItem('kapi-profile'));return (p&&p.pseudo)||''}catch(e){return ''}})() || 'Camille'; /* pseudo saisi à la connexion */
 const ICS={
   book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2z"/><path d="M4 21V5"/></svg>',
   invest:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 16l5-5 4 3 6-7"/></svg>',
@@ -1409,7 +1409,7 @@ function renderSimple(){
   $('#homeSimple').innerHTML=`
     <div class="row" style="justify-content:space-between;margin-top:6px">
       <span class="pill">${FLAME}<span>${S.streak}</span></span>
-      <button class="iconbtn" data-go="vSettings" aria-label="Paramètres"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></button>
+      <button class="iconbtn" data-go="vSettings" aria-label="Paramètres"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button>
     </div>
     <div style="height:4px"></div>
     <div class="goal big">
