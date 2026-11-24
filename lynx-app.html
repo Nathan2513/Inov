@@ -74,14 +74,29 @@ const spent=()=>Math.round((jget('kapi-budget')||{}).spent||0);
 $('#hi').textContent='Bonjour'+(P.pseudo?', '+P.pseudo:'')+' ! Comment puis-je t\'aider ?';
 /* --- animation : détourage de l'écran vert --- */
 const v=$('#v'),cv=$('#cv'),cx=cv.getContext('2d',{willReadFrequently:true});let last=-1,onChat=true,woke=0;
+/* --- boucle : une fois réveillé, seul le clignement des yeux tourne, sans coupure --- */
+const FPS=24,FA=182,FB=239,K=8;                 /* images 182→239 de la vidéo (≈7,6 s → 10 s), fondu de K images au raccord */
+const FR=new Array(FB-FA+1);let loopMode=false,lt0=0,lastIdx=-1;
+const cached=()=>{for(let i=0;i<FR.length;i++)if(!FR[i])return false;return true};
+function startLoop(){v.pause();loopMode=true;lt0=performance.now();lastIdx=-1}
+function endOfSegment(){if(cached())startLoop();else{v.currentTime=FA/FPS;v.play().catch(()=>{})}}
+function stepLoop(){const n=FR.length,L=n-K,p=Math.floor((performance.now()-lt0)*FPS/1000)%L;if(p===lastIdx)return;lastIdx=p;
+ if(p>=K){cx.putImageData(FR[p],0,0);return}
+ const w=(p+1)/(K+1),A=FR[L+p].data,B=FR[p].data,o=cx.createImageData(480,420),d=o.data;
+ for(let i=0;i<d.length;i++)d[i]=A[i]+(B[i]-A[i])*w;cx.putImageData(o,0,0)}
 function wake(){if(woke)return;woke=1;$('#wel').classList.add('on');$('#dot').classList.add('ok');$('#st').textContent='En ligne'}
-function draw(){if(!hid&&onChat&&v.readyState>=2&&v.currentTime!==last){last=v.currentTime;cx.drawImage(v,0,0,480,420);const im=cx.getImageData(0,0,480,420),d=im.data;
- for(let i=0;i<d.length;i+=4){const m=d[i]>d[i+2]?d[i]:d[i+2],e=d[i+1]-m;if(e>34)d[i+3]=0;else{if(e>10)d[i+3]=255*(34-e)/24;if(e>0)d[i+1]=m}}cx.putImageData(im,0,0)}
+function draw(){
+ if(!hid&&onChat){
+  if(loopMode)stepLoop();
+  else if(v.readyState>=2&&v.currentTime!==last){last=v.currentTime;cx.drawImage(v,0,0,480,420);const im=cx.getImageData(0,0,480,420),d=im.data;
+   for(let i=0;i<d.length;i+=4){const m=d[i]>d[i+2]?d[i]:d[i+2],e=d[i+1]-m;if(e>34)d[i+3]=0;else{if(e>10)d[i+3]=255*(34-e)/24;if(e>0)d[i+1]=m}}cx.putImageData(im,0,0);
+   const fi=Math.round(v.currentTime*FPS);if(fi>=FA&&fi<=FB)FR[fi-FA]=im;if(fi>=FB)endOfSegment()}
+ }
  if(v.currentTime>3.4)wake();requestAnimationFrame(draw)}
-v.addEventListener('ended',()=>{v.currentTime=6.6;v.play()});
-if(matchMedia('(prefers-reduced-motion:reduce)').matches)v.addEventListener('loadedmetadata',()=>{v.currentTime=6.6;wake()});
-v.play().catch(()=>{});addEventListener('pointerdown',()=>v.paused&&v.play().catch(()=>{}),{once:true});setTimeout(wake,4600);draw();
-addEventListener('message',e=>{if(e.data&&e.data.lynx==='vis'){hid=!e.data.on;if(!hid){last=-1;v.play().catch(()=>{})}}});
+v.addEventListener('ended',()=>{if(!loopMode)endOfSegment()});
+if(matchMedia('(prefers-reduced-motion:reduce)').matches)v.addEventListener('loadedmetadata',()=>{v.currentTime=FA/FPS;wake()});
+v.play().catch(()=>{});addEventListener('pointerdown',()=>!loopMode&&v.paused&&v.play().catch(()=>{}),{once:true});setTimeout(wake,4600);draw();
+addEventListener('message',e=>{if(e.data&&e.data.lynx==='vis'){hid=!e.data.on;if(!hid){last=-1;lastIdx=-1;if(!loopMode)v.play().catch(()=>{})}}});
 $('#close').onclick=()=>{if(parent!==window)parent.postMessage({lynx:'close'},'*')};
 /* --- onglets --- */
 /* --- chat --- */
